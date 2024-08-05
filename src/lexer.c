@@ -62,15 +62,20 @@ void	lexer_collect_operators(t_lexer *lexer, char *value, t_tokenlist *tokenlist
 	if (op_type == TOKEN_OP_REDIRECTION_APPEND)
 	{
 		value = malloc(3);
+		if (!value)
+			return ;
+		//strncpy would null terminated the dest
 		strncpy(value, lexer->input + lexer->position, 2);
-        value[2] = '\0';
+		value[2] = '\0';
 		lexer->position += 2;
 	}
 	else
 	{
 		value = malloc(2);
+		if (!value)
+			return ;
 		value[0] = lexer->input[lexer->position++];
-        value[1] = '\0';
+		value[1] = '\0';
 	}
 	if (!*value)
 		return ;
@@ -105,12 +110,12 @@ void	lexer_process_input(t_lexer *lexer)
 
 void print_token_list(t_token *head)
 {
-    t_token *current = head;
-    while (current != NULL)
+	t_token *current = head;
+	while (current != NULL)
 	{
-        printf("Token Type: %d, Token Value: %s\n", current->type, current->value);
-        current = current->next;
-    }
+		printf("Token Type: %d, Token Value: %s\n", current->type, current->value);
+		current = current->next;
+	}
 }
 
 /* Initialize lexer with the given input */
@@ -122,6 +127,8 @@ t_lexer	*lexer_init(char *input)
 	if (!lexer)
 		return (NULL);
 	lexer->input = ft_strdup(input);
+	if (!lexer->input)
+		return (NULL);
 	lexer->tokens = NULL;
 	lexer->position = 0;
 	lexer->length = ft_strlen(input);
@@ -132,7 +139,7 @@ t_lexer	*lexer_init(char *input)
 void	lexer_free(t_lexer *lexer)
 {
 	if (!lexer)
-		return;
+		return ;
 	free(lexer->input);
 	free(lexer);
 }

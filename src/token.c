@@ -9,6 +9,8 @@ t_token	*token_create(token_type type, char *value)
 		return (NULL);
 	token->type = type;
 	token->value = ft_strdup(value);
+	if (!token->value)
+		return (NULL);
 	token->next = NULL;
 	//printf("token created. type: %d, value: %s.\n", token->type, token->value);
 	return (token);

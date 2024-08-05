@@ -10,7 +10,6 @@ void	lexer_collect_dquote(t_lexer *lexer, t_tokenlist *tokenlist, size_t len)
 {
 	create_word_token(lexer->position, len, lexer, tokenlist);
 	lexer->position += len + 1;
-
 }
 
 void	lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist)
