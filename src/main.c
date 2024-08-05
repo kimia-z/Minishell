@@ -10,7 +10,7 @@ int main()
 	lexer = lexer_init(input);
 	printf("input: %s\n", lexer->input);
 	lexer_process_input(lexer);
-	
+	lexer_free(lexer);
 	
 	return (0);
 }

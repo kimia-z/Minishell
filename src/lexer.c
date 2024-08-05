@@ -81,6 +81,7 @@ void	lexer_collect_operators(t_lexer *lexer, char *value, t_tokenlist *tokenlist
 		return ;
 	token = token_create(op_type, value);
 	tokenlist_add(tokenlist, token);
+	free(value);
 }
 
 
@@ -106,6 +107,7 @@ void	lexer_process_input(t_lexer *lexer)
 		}
 	}
 	print_token_list(tokenlist->head);
+	tokenlist_free(tokenlist);
 }
 
 void print_token_list(t_token *head)

@@ -30,7 +30,7 @@ void	lexer_skip_whitespace(t_lexer *lexer)
 
 // void	lexer_skip_metacharacters(t_lexer *lexer)
 // {
-//  while (lexer->position < lexer->length && (isspace(lexer->input[lexer->position])\
+//  while (lexer->position < lexer->length && (isspace(lexer->input[lexer->position])
 //         || is_metacharacter(lexer->input[lexer->position])))
 //     lexer_get_next_character(lexer);
 // }
