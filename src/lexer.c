@@ -9,11 +9,17 @@ void	create_word_token(size_t start, size_t len, t_lexer *lexer, t_tokenlist *to
 
 	word = strndup(lexer->input + start, len);
 	if (!word)
+	{
+		lexer_free(lexer);
+		tokenlist_free(tokenlist);
+		// if any token for opeator created before should be free
+		// token_free(token);
+		error_msg("");
 		return ; // also print sth
+	}
 	token = token_create(TOKEN_WORD, word);
 	lexer_skip_whitespace(lexer);
 	tokenlist_add(tokenlist, token);
-	free(word);
 }
 
 void lexer_collect_word(t_lexer *lexer, t_tokenlist *tokenlist)
@@ -56,6 +62,7 @@ void	lexer_collect_operators(t_lexer *lexer, char *value, t_tokenlist *tokenlist
 	t_token	*token;
 	int	op_type;
 
+	// I dont get these 2 line
 	if (ft_isspace(*value))
 		return ;
 	op_type = get_operator_type(value);
@@ -63,7 +70,12 @@ void	lexer_collect_operators(t_lexer *lexer, char *value, t_tokenlist *tokenlist
 	{
 		value = malloc(3);
 		if (!value)
+		{
+			lexer_free(lexer);
+			tokenlist_free(tokenlist);
+			error_msg("");
 			return ;
+		}
 		//strncpy would null terminated the dest
 		strncpy(value, lexer->input + lexer->position, 2);
 		value[2] = '\0';
@@ -73,7 +85,12 @@ void	lexer_collect_operators(t_lexer *lexer, char *value, t_tokenlist *tokenlist
 	{
 		value = malloc(2);
 		if (!value)
+		{
+			lexer_free(lexer);
+			tokenlist_free(tokenlist);
+			error_msg("");
 			return ;
+		}
 		value[0] = lexer->input[lexer->position++];
 		value[1] = '\0';
 	}
@@ -89,6 +106,11 @@ void	lexer_process_input(t_lexer *lexer)
 	t_tokenlist	*tokenlist;
 
 	tokenlist = tokenlist_init();
+	if (!tokenlist)
+	{
+		lexer_free(lexer);
+		error_msg("");
+	}
 	while (lexer->position < lexer->length)
 	{
 		lexer_skip_whitespace(lexer);
@@ -125,10 +147,17 @@ t_lexer	*lexer_init(char *input)
 
 	lexer = malloc(sizeof(t_lexer));
 	if (!lexer)
+	{
+		error_msg("");
 		return (NULL);
+	}
 	lexer->input = ft_strdup(input);
 	if (!lexer->input)
+	{
+		lexer_free(lexer);
+		error_msg("");
 		return (NULL);
+	}
 	lexer->tokens = NULL;
 	lexer->position = 0;
 	lexer->length = ft_strlen(input);
@@ -140,7 +169,8 @@ void	lexer_free(t_lexer *lexer)
 {
 	if (!lexer)
 		return ;
-	free(lexer->input);
+	if (lexer->input)
+		free(lexer->input);
 	free(lexer);
 }
 
