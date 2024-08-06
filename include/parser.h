@@ -10,7 +10,7 @@
 /* nodes on the tree */
 // typedef struct s_node
 // {
-// 	what rule to followcommand/pipe
+// 	what rule to follow command/pipe
 // 	**args // does command have args
 // 	*exec path
 // 	fds[2]

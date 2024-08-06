@@ -5,7 +5,7 @@ bool is_metacharacter(char c)
 {
     if (c == '\0')
 		return (false);
-    if (ft_strchr("|<>; \t\n", c) == NULL)
+    if (ft_strchr("|<> \t\n", c) == NULL)
 		return (false);
 	return (true);
 }
