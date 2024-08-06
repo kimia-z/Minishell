@@ -25,11 +25,6 @@ void lexer_collect_word(t_lexer *lexer, t_tokenlist *tokenlist)
 	start = lexer->position;
 	while (lexer->position < lexer->length && !is_metacharacter(lexer->input[lexer->position]))
 	{
-		// if (is_quote(lexer->input[lexer->position]))
-		// {
-		// 	ignore quotes
-
-		// }
 		lexer->position++;
 	}
 	len = lexer->position - start;
@@ -101,7 +96,7 @@ void	lexer_process_input(t_lexer *lexer)
 			lexer_collect_quotes(lexer, &lexer->input[lexer->position], tokenlist);
 		else
 		{
-			printf("Unknown token\n");
+			//printf("Unknown token\n");
 			lexer->position++;
 			continue;
 		}
