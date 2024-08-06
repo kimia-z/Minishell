@@ -6,7 +6,7 @@ int main()
 	t_lexer 	*lexer;
 	t_tokenlist	*tokenlist;
 
-	char input[70] = "   hello 'echo $PATH' meow \"bah $LOGNAME bah\" bye p < >";
+	char input[70] = "   hello meow hi \"kimia\" bye";
 
 	lexer = lexer_init(input);
 	printf("input: %s\n", lexer->input);

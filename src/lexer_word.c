@@ -15,3 +15,10 @@ void lexer_collect_word(t_lexer *lexer, t_tokenlist *tokenlist)
 	create_word_token(start, len, lexer, tokenlist);
 }
 
+/* 
+$echo hi"kimia"bye
+$hilimiabye
+
+$echo hi "kimia" bye
+$hi kimia bye
+*/
