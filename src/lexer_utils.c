@@ -18,7 +18,6 @@ void	lexer_skip_whitespace(t_lexer *lexer)
 		lexer->position++;
 }
 
-
 bool	is_quotes(char c)
 {
 	if (c == '\'' || c == '"')

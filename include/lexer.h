@@ -13,7 +13,6 @@
 /* **************************************************************************** */ 
 /* Structs */
 
-
 typedef enum e_token_type
 {
 	TOKEN_WORD,
@@ -31,6 +30,7 @@ typedef struct s_token
 {
 	token_type		type;
 	char			*value;
+	size_t			size;
 	struct s_token	*next;
 }				t_token;
 
@@ -41,7 +41,7 @@ typedef struct s_tokenlist
 	t_token			*head;
 }				t_tokenlist;
 
-
+/* members of this struct need to be updated later on */
 typedef struct s_lexer
 {
 	t_token			**tokens; // an array of tokens
@@ -49,19 +49,24 @@ typedef struct s_lexer
 	char			*input; // contents of commandline
 	size_t			length;
 	char			start;
+
 }			t_lexer;
 
 
 /* **************************************************************************** */ 
 
 /* Lexer functions */
-void		lexer_process_input(t_lexer *lexer);
+void		lexer_process_input(t_lexer *lexer, t_tokenlist *tokenlist);
 t_lexer		*lexer_init(char *input);
 void		lexer_collect_operators(t_lexer *lexer, char *value, t_tokenlist *tokenlist);
 void		lexer_collect_word(t_lexer *lexer, t_tokenlist *tokenlist);
 token_type	get_operator_type(char *value);
 void		lexer_free(t_lexer *lexer);
 void		create_word_token(size_t start, size_t len, t_lexer *lexer, t_tokenlist *tokenlist);
+
+/* Quotes */
+void		lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist);
+
 
 /* Utils */
 bool		is_quotes(char c);
@@ -73,14 +78,14 @@ void		lexer_skip_whitespace(t_lexer *lexer);
 
 /* Token functions */
 t_token		*token_create(token_type type, char *value);
+void		token_free(t_token *token);
+
+/* Tokenlist functions */
 t_tokenlist	*tokenlist_init(void);
 void		tokenlist_free(t_tokenlist *list);
 void		tokenlist_add(t_tokenlist *list, t_token *token);
-void		token_free(t_token *token);
 void		print_token_list(t_token *head);
 
-/* Quotes */
-void		lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist);
 
 #endif
 
