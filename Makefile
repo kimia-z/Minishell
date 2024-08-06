@@ -33,7 +33,7 @@ fclean: clean
 
 re: fclean all
 
-test:
-	valgrind --leak-check=full --show-leak-kinds=all
+memcheck:
+	valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
 
 .PHONY: $(LIBFT) all clean fclean re
