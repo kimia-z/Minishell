@@ -1,66 +1,52 @@
-// #include "parser.h"
-
-
-// t_node *parse_pipeline(t_tokenlist *tokenlist)
-// {
-//     t_node *root;
-//     t_node *left;
-//     t_node *right;
-//     t_node *redirect;
-
-//     root = create_node(pipe, );
-//     root->left = parse_command(); // get the first command
-//     root->right = parse_comamnd(); // get the second command
-//     if (is_redirection(tokenlist))
-//     {
-//         redirect = create_node(redirection, );
-//         redirect->left = root->left;
-//         redirect->right = create_node(file, get_filename(tokenlist));
-//         root->right = redirect->right;
-
-
-//     }
-    
-
-// }
+#include "parser.h"
 
 
 
-// t_node *parse_redirection(t_tokenlist *tokenlist)
-// {
-//     t_node *root;
-//     t_node *right;
-//     t_node *left;
-//     root = create_node(redirection, NULL);
-//     root->left = parse_command(tokenlist);
-//     root->right = create_node(file, get_filename(tokenlist));
-// }
+bool is_pipeline(t_tokenlist *tokenlist)
+{
+	t_token	*temp;
 
-// t_node *parse_command(t_tokenlist *tokenlsit)
-// {
-//     is_command()
-//         printf("no command");
-//     parse_arguments();
+	temp = tokenlist->head;
+	while (temp != NULL)
+	{
+		if (temp->type == TOKEN_OP_PIPE)
+			return (true);
+		temp = temp->next;
+	}
+	return (false);
+}
+bool is_redirection(t_tokenlist *tokenlist)
+{
+	t_token	*temp;
 
-// }
+	temp = tokenlist->head;
+	while (temp != NULL)
+	{
+		if (temp->type == TOKEN_OP_REDIRECTION_APPEND || temp->type == TOKEN_OP_REDIRECTION_IN || temp->type == TOKEN_OP_REDIRECTION_OUT)
+			return (true);
+		temp = temp->next;
+	}
+	return (false);
+}
+
+bool is_command(t_tokenlist *tokenlist)
+{
+	t_token	*temp;
+
+	temp = tokenlist->head;
+	while (temp != NULL)
+	{
+		if (temp->type == TOKEN_WORD)
+			return (true);
+		temp = temp->next;
+	}
+	return (false);
+}
+
+
 
 // t_node *parse_arguments(t_tokenlist *tokenlist)
 // {
 
 // }
 
-
-
-// int is_pipeline(t_tokenlist *tokenlist)
-// {
-
-// }
-// int is_redirection(t_tokenlist *tokenlist)
-// {
-
-// }
-
-// int is_command(t_tokenlist *tokenlist)
-// {
-
-// }

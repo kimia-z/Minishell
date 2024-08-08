@@ -16,21 +16,6 @@ t_token	*token_create(token_type type, char *value)
 	return (token);
 }
 
-/*Im not sure about the name of this function change it if
-it is not clear :* */
-void	create_word_token(size_t start, size_t len, t_lexer *lexer, t_tokenlist *tokenlist)
-{
-	t_token	*token;
-	char	*word;
-
-	word = strndup(lexer->input + start, len);
-	if (!word)
-		return ; // also print sth
-	token = token_create(TOKEN_WORD, word);
-	lexer_skip_whitespace(lexer);
-	tokenlist_add(tokenlist, token);
-	free(word);
-}
 
 void	token_free(t_token *token)
 {

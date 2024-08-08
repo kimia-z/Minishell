@@ -10,6 +10,16 @@ bool is_metacharacter(char c)
 	return (true);
 }
 
+bool is_word_token(char c)
+{
+	return (c != '\0' && (ft_isalpha(c) || c == '_' || c == '-'));
+	
+}
+
+bool	is_operator_token(char c)
+{
+	return (c != '\0' && !ft_isalnum(c));
+}
 /* probably not gonna need it(for leading whitespace) */
 /* updates the struct */
 void	lexer_skip_whitespace(t_lexer *lexer)

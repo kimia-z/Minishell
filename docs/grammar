@@ -108,3 +108,22 @@ here_end ::= <word>
 <pipeline> ::= <simple_command>
             | <pipeline> '|' <simple_command>
 
+
+
+
+
+
+
+
+Sematic rules:
+commands be valid and executable
+command arguments be valid
+files exist and have correct permission
+
+draw examples of how a sequence of commands, pipeline, etc is going to be parsed into a tree
+        pipe
+      /     \
+   cmd       cmd
+   /   \      /  \
+echo  hello  grep  elo
+
