@@ -1,4 +1,21 @@
 
+notes:
+need to take subshell into account
+
+syntax checks:
+valid commands
+valid operators
+closed quotes
+pipeline syntax (do not start and end with | - commands on both sides)
+redirection syntax (valid filename after - not used consecutively)
+no consecutive operators 
+
+> two cons - end
+>> two cons - end
+< two cons - end
+| two cons - end - begining
+can pipe be at the end?
+
 word tokens can be:
                 command:
                         simple command: (builtin/shell command)
@@ -90,4 +107,23 @@ here_end ::= <word>
 
 <pipeline> ::= <simple_command>
             | <pipeline> '|' <simple_command>
+
+
+
+
+
+
+
+
+Sematic rules:
+commands be valid and executable
+command arguments be valid
+files exist and have correct permission
+
+draw examples of how a sequence of commands, pipeline, etc is going to be parsed into a tree
+        pipe
+      /     \
+   cmd       cmd
+   /   \      /  \
+echo  hello  grep  elo
 

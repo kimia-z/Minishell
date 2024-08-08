@@ -30,13 +30,17 @@ void	tokenlist_add(t_tokenlist *list, t_token *token)
 	list->token_count++;
 }
 
-void print_token_list(t_token *head)
+void tokenlist_print(t_token *head)
 {
+	int i = 0;
 	t_token *current = head;
 	while (current != NULL)
 	{
+		printf("%d  - ", i);
+
 		printf("Token Type: %d, Token Value: %s\n", current->type, current->value);
 		current = current->next;
+		i++;
 	}
 }
 
