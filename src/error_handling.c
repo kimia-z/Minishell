@@ -10,8 +10,3 @@ void	write_stderr(char *errmsg)
 	ft_putstr_fd("\n", STDERR_FILENO);
 }
 
-// void	cleanup(t_tokenlist *tokenlist)
-// {
-// 	tokenlist_free(tokenlist);
-
-// }

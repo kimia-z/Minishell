@@ -68,8 +68,8 @@ void		lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist, 
 
 
 /* Utils */
-//bool		is_quotes(char c);
 void		lexer_skip_whitespace(t_lexer *lexer);
+//bool		is_quotes(char c);
 //bool		is_operator_token(char c);
 //bool		is_word_token(char c);
 
@@ -81,7 +81,7 @@ void		token_free(t_token *token);
 t_tokenlist	*tokenlist_init(void);
 void		tokenlist_free(t_tokenlist *list);
 void		tokenlist_add(t_tokenlist *list, t_token *token);
-void		print_token_list(t_token *head);
+void		tokenlist_print(t_token *head);
 
 /* Error handling */
 void	write_stderr(char *errmsg);

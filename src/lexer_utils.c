@@ -26,7 +26,6 @@ void	lexer_free(t_lexer *lexer)
 	free(lexer);
 }
 
-/* probably not gonna need it(for leading whitespace) */
 /* updates the struct */
 void	lexer_skip_whitespace(t_lexer *lexer)
 {

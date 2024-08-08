@@ -47,7 +47,7 @@ void    parser(t_tokenlist *tokenlist)
 {
     t_node *tree;
   
-    print_token_list(tokenlist->head);
+    tokenlist_print(tokenlist->head);
 	if (syntax_checker(tokenlist) == 1)
     {
         tokenlist_free(tokenlist);
