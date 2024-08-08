@@ -1,21 +1,17 @@
 NAME := minishell
 CC := cc
-CFLAGS := -Wall -Werror -Wextra -g
-LIBFT_INCLUDES := -I./lib/libft/include
-MINISHELL_INCLUDES := -I./include
-INCLUDES = $(LIBFT_INCLUDES) $(MINISHELL_INCLUDES) 
-BUILD_DIR := bin
+CFLAGS := -Wall -Werror -Wextra
+INCLUDES := -I./include -I./lib/libft/include
+LIBFT := lib/libft/libft.a
+
 SRC_DIR := src
 INC_DIR := include
-LIBFT := lib/libft/libft.a
+BUILD_DIR := bin
+
 SRCS = $(wildcard $(SRC_DIR)/*.c)
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
 all: $(NAME)
-
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
-	mkdir -p $(BUILD_DIR)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(NAME): $(LIBFT) $(OBJS) 
 	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT) -o $(NAME)
@@ -23,17 +19,21 @@ $(NAME): $(LIBFT) $(OBJS)
 $(LIBFT):
 	$(MAKE) -C lib/libft
 
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
 clean:
 	$(MAKE) -C lib/libft clean
 	rm -rf $(BUILD_DIR)
 
 fclean: clean
 	$(MAKE) -C lib/libft fclean
-	rm -f $(NAME).a
+	rm -f $(NAME)
 
 re: fclean all
 
-test:
-	valgrind --leak-check=full --show-leak-kinds=all
+memcheck:
+	valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
 
 .PHONY: $(LIBFT) all clean fclean re

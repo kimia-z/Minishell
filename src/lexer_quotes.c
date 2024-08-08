@@ -1,18 +1,24 @@
-#include <lexer.h>
+#include "lexer.h"
 
-void	lexer_collect_squote(t_lexer *lexer, t_tokenlist *tokenlist, size_t len)
+static bool	is_quote_closed(t_lexer *lexer, char *value)
 {
-	create_word_token(lexer->position, len, lexer, tokenlist);
-	lexer->position += len + 1;
+	if (ft_strchr(lexer->input + lexer->position + 1, *value))
+		return (true);
+	return (false);
 }
 
-void	lexer_collect_dquote(t_lexer *lexer, t_tokenlist *tokenlist, size_t len)
+/* Calculates the length of the quoted section */
+static size_t	len_quotes(char *value)
 {
-	create_word_token(lexer->position, len, lexer, tokenlist);
-	lexer->position += len + 1;
+	size_t	i;
+
+	i = 1;
+	while (value[i] && value[i] != *value)
+		i++;
+	return (i - 1);
 }
 
-void	lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist)
+void	lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist, bool is_op)
 {
 	size_t len;
 
@@ -23,9 +29,9 @@ void	lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist)
 	}
 	len = len_quotes(value);
 	lexer->position++;
-	if (*value == '\'')
-		lexer_collect_squote(lexer, tokenlist, len);
-	else if (*value == '"')
-		lexer_collect_dquote(lexer, tokenlist, len);
+	if (*value == '\'' || *value == '"')
+	{
+		lexer_collect_token(lexer, tokenlist, is_op);
+		lexer->position += len + 1;
+	}
 }
-
