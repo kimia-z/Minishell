@@ -1,31 +1,27 @@
 #include "lexer.h"
 
 
-/* Initialize lexer with the given input */
-t_lexer	*lexer_init(char *input)
-{
-	t_lexer	*lexer;
 
-	lexer = malloc(sizeof(t_lexer));
-	if (!lexer)
-		return (NULL);
-	lexer->input = ft_strdup(input);
-	if (!lexer->input)
-		return (NULL);
-	lexer->tokens = NULL;
-	lexer->position = 0;
-	lexer->length = ft_strlen(input);
-	lexer->start = 0;
-	return (lexer);
+static bool is_word_token(char c)
+{
+	return (c != '\0' && (ft_isalpha(c) || c == '_' || c == '-'));
+	
 }
 
-void	lexer_free(t_lexer *lexer)
+static bool	is_operator_token(char c)
 {
-	if (!lexer)
-		return ;
-	free(lexer->input);
-	free(lexer);
+	return (c != '\0' && !ft_isalnum(c));
 }
+
+
+static bool	is_quotes(char c)
+{
+	if (c == '\'' || c == '"')
+		return (true);
+	return (false);
+}
+
+
 
 void	lexer_process_input(t_lexer *lexer, t_tokenlist *tokenlist)
 {

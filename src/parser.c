@@ -38,7 +38,6 @@ t_node	*parse_redirection(t_tokenlist *tokenlist)
 
 
 
-
 /* 
     do a syntax check
     create nodes for tree

@@ -68,13 +68,10 @@ void		lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist, 
 
 
 /* Utils */
-bool		is_quotes(char c);
-bool		is_quote_closed(t_lexer *lexer, char *value);
-size_t		len_quotes(char *value);
-bool		is_metacharacter(char c);
+//bool		is_quotes(char c);
 void		lexer_skip_whitespace(t_lexer *lexer);
-bool		is_operator_token(char c);
-bool		is_word_token(char c);
+//bool		is_operator_token(char c);
+//bool		is_word_token(char c);
 
 /* Token functions */
 t_token		*token_create(token_type type, char *value);
