@@ -82,9 +82,6 @@ void		print_token_list(t_token *head);
 /* Quotes */
 void		lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist);
 
-/* Error & Exit*/
-void	error_msg(char *msg);
-
 #endif
 
 

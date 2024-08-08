@@ -6,14 +6,11 @@ t_token	*token_create(token_type type, char *value)
 	t_token	*token;
 	token = malloc(sizeof(t_token));
 	if (!token)
-	{
-		//lexer_free(lexer);
-		//tokenlist_free(tokenlist);
-		error_msg("");
 		return (NULL);
-	}
 	token->type = type;
-	token->value = value;
+	token->value = ft_strdup(value);
+	if (!token->value)
+		return (NULL);
 	token->next = NULL;
 	//printf("token created. type: %d, value: %s.\n", token->type, token->value);
 	return (token);
@@ -41,8 +38,7 @@ void	token_free(t_token *token)
 {
 	if (!token)
 		return;
-	if (token->value)
-		free(token->value);
+	free(token->value);
 	free(token);
 }
 
