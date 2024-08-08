@@ -28,3 +28,15 @@ t_node	*add_node(rule rule)
 //     }
 // }
 
+ls 
+-l 
+file1 
+|
+wc
+
+
+        root
+        pipe
+      /     \
+   cmd       cmd
+

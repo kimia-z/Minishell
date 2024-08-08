@@ -1,17 +1,21 @@
 #include "parser.h"
 
-bool is_pipeline(t_tokenlist *tokenlist)
+/* if there's pipe symbol present, return position of it, else returns -1 */
+int is_pipeline(t_tokenlist *tokenlist)
 {
 	t_token	*temp;
+	size_t i;
 
+	i = 0;
 	temp = tokenlist->head;
-	while (temp != NULL)
+	while (temp != NULL && i < tokenlist->token_count)
 	{
 		if (temp->type == TOKEN_OP_PIPE)
-			return (true);
+			return (i);
 		temp = temp->next;
+		i++;
 	}
-	return (false);
+	return (-1);
 }
 bool is_redirection(t_tokenlist *tokenlist)
 {
@@ -48,5 +52,5 @@ bool is_command(t_tokenlist *tokenlist)
 
 // }
 
-parse_command()
-{}
+// parse_command()
+// {}

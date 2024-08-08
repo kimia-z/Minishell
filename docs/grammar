@@ -126,4 +126,34 @@ draw examples of how a sequence of commands, pipeline, etc is going to be parsed
    cmd       cmd
    /   \      /  \
 echo  hello  grep  elo
+/
+-n
+
+
+                REDIR_OUT
+               /         \
+            pipe       outfile
+             /     \
+            /      cmd 
+           /      /   \
+          /      grep  6 
+      pipe
+      /     \
+   cmd       cmd
+   /   \      /  \
+echo  hello  wc  -l
+
+
+
+       pipe
+      /     \
+    cmd       cmd
+    /   \      /  \
+echo  hello  wc    -l
+             /
+          pipe
+          /  \
+      grep   6
+echo hello | wc -l | grep 6 > outfile
+
 
