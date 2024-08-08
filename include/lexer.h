@@ -17,9 +17,9 @@ typedef enum e_token_type
 {
 	TOKEN_WORD,
 	TOKEN_WHITESPACE,
-	TOKEN_OP_REDIRECTION_OUT,
-	TOKEN_OP_REDIRECTION_IN,
-	TOKEN_OP_REDIRECTION_APPEND,
+	TOKEN_OP_REDIRECTION_OUT, // >
+	TOKEN_OP_REDIRECTION_IN, // <
+	TOKEN_OP_REDIRECTION_APPEND, // >> 
 	TOKEN_OP_PIPE,
 	TOKEN_UNKNOWN
 }				token_type;
@@ -85,6 +85,10 @@ t_tokenlist	*tokenlist_init(void);
 void		tokenlist_free(t_tokenlist *list);
 void		tokenlist_add(t_tokenlist *list, t_token *token);
 void		print_token_list(t_token *head);
+
+/* Syntax check */
+int syntax_checker(t_tokenlist *tokenlist);
+int operator_checker(token_type type, size_t position, size_t token_count, token_type left_op);
 
 
 #endif
