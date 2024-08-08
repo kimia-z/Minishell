@@ -1,7 +1,5 @@
 #include "parser.h"
 
-
-
 bool is_pipeline(t_tokenlist *tokenlist)
 {
 	t_token	*temp;
@@ -50,3 +48,5 @@ bool is_command(t_tokenlist *tokenlist)
 
 // }
 
+parse_command()
+{}

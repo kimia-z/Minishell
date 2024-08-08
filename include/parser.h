@@ -10,10 +10,10 @@
 typedef enum e_rule
 {
     command,
-    pipe,
+    pipeline,
     redirection,
     subshell,
-    //file,
+    file,
 } rule;
 
 /* nodes on the tree */
@@ -23,11 +23,10 @@ typedef struct s_node
 	char			**args ;// does command have args
 	char			*path;
 	int				fds[2];
-	struct s_node	*right_node;
-	struct s_node	*left_node;
+	struct s_node	*right;
+	struct s_node	*left;
 	//s_list *redirects; //something to handle redirects?? how?
 }			t_node;
-
 
 
 /************************************************************/
@@ -38,7 +37,7 @@ int			syntax_checker(t_tokenlist *tokenlist);
 /* Parser Functions */
 void		parser(t_tokenlist *tokenlist);
 // t_node *parse(t_tokenlist *tokenlist);
-// int parse_pipeline(t_tokenlist *tokenlist);
+t_node		*parse_pipeline(t_tokenlist *tokenlist, t_node *root);
 // int parse_redirection(t_tokenlist *tokenlist);
 // int parse_command(t_tokenlist *tokenlist);
 // t_node *parse_arguments(t_tokenlist *tokenlist);
@@ -53,10 +52,7 @@ bool	is_redirection(t_tokenlist *tokenlist);
 bool	is_command(t_tokenlist *tokenlist);
 
 /* Node Functions */
-t_node		*create_node();
-// // t_node	add_node();
-// // t_node	create_tree(t_tokenlist *tokens);
-
+t_node		*add_node(rule rule);
 
 
 #endif

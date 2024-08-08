@@ -1,22 +1,30 @@
 #include "parser.h"
 
 /* Creates a new node */
-t_node	*create_node()
+t_node	*add_node(rule rule)
 {
-	t_node	*new_node;
+	t_node	*node;
 
-	new_node = malloc(sizeof(t_node));
-	if (new_node == NULL)
+	node = malloc(sizeof(t_node));
+	if (node == NULL)
 		return (NULL);
-	ft_bzero(new_node, sizeof(t_node));
-	return (new_node);
+	// ft_bzero(new_node, sizeof(t_node));
+    node->rule = rule;
+    node->args = NULL;
+    node->path = NULL;
+    node->fds[0] = -1;
+    node->fds[1] = -1;
+    node->right = NULL;
+    node->left = NULL;
+
+	return (node);
 }
 
-void    free_node()
-{
-    if ()
-    {
-        free();
-    }
-}
+// void    free_node()
+// {
+//     if ()
+//     {
+//         free();
+//     }
+// }
 

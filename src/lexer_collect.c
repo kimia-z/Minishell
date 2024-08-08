@@ -1,5 +1,20 @@
 #include "lexer.h"
 
+token_type	get_operator_type(char *value)
+{
+	if (*value == '>' && *(value + 1) == '>')
+		return (TOKEN_OP_REDIRECTION_APPEND);
+	else if (*value == '<')
+		return (TOKEN_OP_REDIRECTION_IN);
+	else if (*value == '>')
+		return (TOKEN_OP_REDIRECTION_OUT);
+	else if (*value == '|')
+		return (TOKEN_OP_PIPE);
+	else
+		return (TOKEN_UNKNOWN);
+}
+
+
 void lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op)
 {
 	size_t	start;
@@ -25,16 +40,3 @@ void lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op)
 	free(word);
 }
 
-token_type	get_operator_type(char *value)
-{
-	if (*value == '>' && *(value + 1) == '>')
-		return (TOKEN_OP_REDIRECTION_APPEND);
-	else if (*value == '<')
-		return (TOKEN_OP_REDIRECTION_IN);
-	else if (*value == '>')
-		return (TOKEN_OP_REDIRECTION_OUT);
-	else if (*value == '|')
-		return (TOKEN_OP_PIPE);
-	else
-		return (TOKEN_UNKNOWN);
-}
