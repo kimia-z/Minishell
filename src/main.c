@@ -7,7 +7,7 @@ int main()
 	t_lexer 	*lexer;
 	t_tokenlist	*tokenlist;
 
-	char input[70] = "  ls -l _file1 |  wc  ";
+	char input[70] = "  ls -l _file1 |  w ";
 
 	lexer = lexer_init(input);
 	printf("input: %s\n", lexer->input);
