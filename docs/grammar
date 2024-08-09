@@ -17,14 +17,14 @@ no consecutive operators
 can pipe be at the end?
 
 word tokens can be:
-                command:
-                        simple command: (builtin/shell command)
-                                        command with args
-                                        command without args
-                
-                string literals: (things inside '') any character
-                variables (expandables): 
-                filenames: alpha - digit - . 
+								command:
+												simple command: (builtin/shell command)
+																				command with args
+																				command without args
+								
+								string literals: (things inside '') any character
+								variables (expandables): 
+								filenames: alpha - digit - . 
 
 
 /* grammar symbols */
@@ -50,9 +50,9 @@ word tokens can be:
 
 /*expandables*/
 <variable> ::=   <word>
-            |   '_' <word>
-            |   <variable> <digit>
-            |   
+						|   '_' <word>
+						|   <variable> <digit>
+						|   
 /*dont start with digit
 end with digit okay
 start with _ okay
@@ -60,8 +60,8 @@ cant be enclosed in paran
 no special characters ! &  ? @ 
 no dot in the middle - start - 
 weird case:
-    $ echo $value[h]
-    $ hi[h]
+		$ echo $value[h]
+		$ hi[h]
 */
 
 <filename> ::=  <word>
@@ -69,15 +69,15 @@ weird case:
 
 
 <io_redirect> ::=   <io_file>
-                |   <io_here>
+								|   <io_here>
 
 <io_file> ::= '<' <filename>
-            | '>' <filename>
-            | '>>' <filename>
+						| '>' <filename>
+						| '>>' <filename>
 
 
 <io_here> ::= '<<' <here_end>
-            | '<<-' <here_end>
+						| '<<-' <here_end>
 
 here_end ::= <word>
 
@@ -85,10 +85,10 @@ here_end ::= <word>
 
 
 <simple_command> ::=    <cmd_prefix> <cmd_word> <cmd_suffix>
-                |  cmd_prefix cmd_word
-                |  cmd_prefix
-                |  cmd_name cmd_suffix
-                |  cmd_name
+								|  cmd_prefix cmd_word
+								|  cmd_prefix
+								|  cmd_name cmd_suffix
+								|  cmd_name
 
 <cmd_name> ::= <word>
 
@@ -96,17 +96,17 @@ here_end ::= <word>
 
 
 <cmd_prefix> ::=  <io_redirect>
-            |   <cmd_prefix> <io_redirect>
+						|   <cmd_prefix> <io_redirect>
 
 
 <cmd_suffix> ::=    <io_redirect>
-            |   <cmd_suffix> <io_redirect>
-            |   <word>
-            |   <cmd_suffix> <word>
+						|   <cmd_suffix> <io_redirect>
+						|   <word>
+						|   <cmd_suffix> <word>
 
 
 <pipeline> ::= <simple_command>
-            | <pipeline> '|' <simple_command>
+						| <pipeline> '|' <simple_command>
 
 
 
@@ -121,9 +121,36 @@ command arguments be valid
 files exist and have correct permission
 
 draw examples of how a sequence of commands, pipeline, etc is going to be parsed into a tree
-        pipe
-      /     \
-   cmd       cmd
-   /   \      /  \
+				pipe
+			/     \
+	 cmd       cmd
+	 /   \      /  \
 echo  hello  grep  elo
+
+
+
+The design of an AST is often closely linked with the design of a compiler and its expected features.
+
+Core requirements include the following:
+
+Variable types must be preserved, as well as the location of each declaration in source code.
+The order of executable statements must be explicitly represented and well defined.
+Left and right components of binary operations must be stored and correctly identified.
+Identifiers and their assigned values must be stored for assignment statements.
+These requirements can be used to design the data structure for the AST.
+
+example: cat << EOF > file | wc -c | tr -d " " > file
+
+													__PIPELINE__
+											___/              \____
+										 /                       \
+								COMMAND                   __ PIPELINE _
+							 /        \                /             \
+			 ARGUMENTS   REDIRECTIONS      COMMAND         _ COMMAND __
+					|          |     |           |            /            \
+				 cat        <<     >       ARGUMENTS    ARGUMENTS   REDIRECTIONS
+										 |     |         |   |      |   |   |        |
+									 "..."  file      wc  -c      tr  -d " "       >
+																																 |
+																															 file2
 
