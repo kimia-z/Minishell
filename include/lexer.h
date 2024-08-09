@@ -9,6 +9,7 @@
 #include <string.h>
 #include <libft.h>
 #include <stddef.h>
+#include "grammar.h"
 
 /* **************************************************************************** */ 
 /* Structs */
