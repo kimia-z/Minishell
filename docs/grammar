@@ -150,7 +150,7 @@ example: cat << EOF > file | wc -c | tr -d " " > file
 					|          |     |           |            /            \
 				 cat        <<     >       ARGUMENTS    ARGUMENTS   REDIRECTIONS
 										 |     |         |   |      |   |   |        |
-									 "..."  file      wc  -c      tr  -d " "       >
+									 "..."  file      wc  -c     tr  -d  " "       >
 																																 |
 																															 file2
 

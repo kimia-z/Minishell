@@ -28,7 +28,71 @@ t_cmd_word *ft_cmd_word(t_token *token)
 	return (NULL);
 }
 
-t_simple_command *ft_simple_command(t_token *token)
+t_io_file	*ft_io_file(t_token *token)
+{
+	t_io_file	*io_file;
+	t_filename	*filename;
+
+	io_file = malloc(sizeof(t_io_file));
+	if (!io_file)
+	{
+		write_stderr("");
+	}
+	if (token->value == '>' || token->value == '<' || token->value == ">>")
+	{
+		token = token->next;
+		if (filename = ft_filename(token))
+		{
+			return (io_file);
+		}
+	}
+	return (NULL);
+}
+
+t_io_redirect	*ft_io_redirect(t_token *token)
+{
+	t_io_redirect	*io_redirect;
+	t_io_file		*io_file;
+	t_io_here		*io_here;
+
+	io_redirect = malloc(sizeof(t_io_redirect));
+	if (!io_redirect)
+	{
+		write_stderr("");
+	}
+	if (io_file = ft_io_file(token))
+	{
+		token = token->next;
+		return (io_redirect);
+	}
+	else if (io_here = ft_io_here(token))
+	{
+		token = token->next;
+		return (io_redirect);
+	}
+	return (NULL);
+}
+
+t_cmd_prefix	*ft_cmd_prefix(t_token *token)
+{
+	t_cmd_prefix	*prefix;
+	t_io_redirect	*io_redirect;
+
+	prefix = malloc(sizeof(t_cmd_prefix));
+	if (!prefix)
+	{
+		write_stderr("");
+	}
+	while (io_redirect = ft_io_redirect(token))
+	{
+		ft_ls_push(io_redirect, prefix->io_redirect);
+	}
+	if (prefix->io_redirect)
+		return (prefix);
+	return (NULL);
+}
+
+t_simple_command	*ft_simple_command(t_token *token)
 {
 	t_simple_command	*simple_cmd;
 	t_cmd_prefix		*cmd_prefix;
@@ -70,7 +134,7 @@ t_simple_command *ft_simple_command(t_token *token)
 }
 
 /* check the grammar for pipeline*/
-t_pipe_seq *ft_pipe_seq(t_tokenlist *tokenlist)
+t_pipe_seq	*ft_pipe_seq(t_tokenlist *tokenlist)
 {
 	t_pipe_seq			*pipe_seq;
 	t_simple_command	*simple_cmd;
