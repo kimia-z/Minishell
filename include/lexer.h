@@ -9,6 +9,8 @@
 #include <string.h>
 #include <libft.h>
 #include <stddef.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 
 /* **************************************************************************** */ 
 /* Structs */
