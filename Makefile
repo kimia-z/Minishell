@@ -1,6 +1,7 @@
 NAME := minishell
 CC := cc
 CFLAGS := -Wall -Werror -Wextra
+LDFLAG := -lreadline
 INCLUDES := -I./include -I./lib/libft/include
 LIBFT := lib/libft/libft.a
 
@@ -14,7 +15,7 @@ OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS) 
-	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT) -o $(NAME)
+	$(CC) $(LDFLAG) $(INCLUDES) $(OBJS) $(LIBFT) -o $(NAME)
 
 $(LIBFT):
 	$(MAKE) -C lib/libft

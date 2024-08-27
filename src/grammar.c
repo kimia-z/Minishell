@@ -1,4 +1,3 @@
-#include "grammar.h"
 #include "lexer.h"
 
 /***** it should be a loop through each token and call pipe_seq function ****/
@@ -7,6 +6,7 @@
 /* check the grammar for cmd_word 
 	for the filename, here_end, cmd_name
 	same function as this one*/
+/*
 bool	is_word(t_token *token)
 {
 	if (token->type == TOKEN_WORD)
@@ -88,7 +88,6 @@ bool	is_simple_command(t_token *token)
 		return (false);
 }
 
-/* check the grammar for pipeline*/
 bool	is_pipe_seq(t_tokenlist *tokenlist)
 {
 	bool	simple_cmd;
@@ -102,4 +101,4 @@ bool	is_pipe_seq(t_tokenlist *tokenlist)
 		return (true);
 	return (false);
 }
-
+*/

@@ -3,6 +3,7 @@
         "lexer.h": "c",
         "random": "c",
         "parser.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "stdbool.h": "c"
     }
 }

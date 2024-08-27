@@ -1,61 +1,52 @@
 #include "lexer.h"
 
-char	*expand_env_var(char *d_quote)
+int	get_env_len(char *arg)
 {
-	char	buffer[1024] = {0};
-	char	var_name[256];
-	char	*delimiter_chars;
 	char	*env_var;
-	char	*result;
 	int		i;
-	int		j;
-	int		k;
 
 	i = 0;
-	j = 0;
-	k = 0;
-	delimiter_chars = " \t\n\r";
-	while ((d_quote[i]))
+	env_var = ft_strchr(arg, '$') + 1;
+	while ((env_var[i] >= 'A' && env_var[i] <= 'Z') || (env_var[i] >= 'a' && env_var <= 'z')
+		|| (env_var[i] >= '0' && env_var[i] <= '9' && i != 0) || env_var[i] == '_')
 	{
-		if (d_quote[i] == '$')
-		{
-			//skip $
-			i++;
-			//take var name
-			k = 0;
-			while (!ft_strchr(delimiter_chars, d_quote[i]) && d_quote[i])
-			{
-				var_name[k++] = d_quote[i++];
-			}
-			//null terminated the var name
-			var_name[k] = '\0';
-			//take the value of env variable
-			env_var = getenv(var_name);
-			if (env_var)
-			{
-				//add the value to buffer
-				while(*env_var)
-				{
-					buffer[j++] = *env_var++;
-				}
-			}
-			else
-			{
-				//if did not find the value copy the var name to buffer
-				strcpy(&buffer[j], "$");
-				j++;
-				strcpy(&buffer[j], var_name);
-				j += ft_strlen(var_name);
-			}
-		}
-		//copy other characters
-		else
-		{
-			buffer[j++] = d_quote[i++];
-		}
+		i++;
 	}
-	buffer[j] = '\0';
-	result = malloc (ft_strlen(buffer) + 1);
-	strcpy(result, buffer);
-	return (result);
+	if (i == 0 && (env_var[i] == '?' || env_var[i] == '$'))
+	{
+		i = 1;
+	}
+	return (i);
+}
+
+char	*expand_env_var(char *arg)
+{
+	int		len;
+	char	*var_name;
+	char	*env_var;
+	char	*expand_str;
+
+	len = get_env_len(arg);
+	if (len == 0)
+	{
+		//could not find $
+	}
+	var_name = malloc(len + 1);
+	if (!var_name)
+	{
+		// error
+	}
+	ft_strlcpy(var_name, ft_strchr(arg, '$') + 1, len + 1);
+	env_var = getenv(var_name);
+	if (!env_var)
+	{
+		//could not find in env_var
+	}
+	expand_str = malloc(ft_strlen(env_var) + ft_strlen(arg) - ft_strlen(var_name) + 2);
+	if (!expand_str)
+	{
+		//failed
+	}
+	ft_strlcpy(expand_str, arg, ft_strchr(arg, '$') - arg + 1);
+	//to be continuted..
 }
