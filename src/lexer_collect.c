@@ -15,7 +15,7 @@ token_type	get_operator_type(char *value)
 }
 
 
-void lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op)
+void lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op, int pos)
 {
 	size_t	start;
 	size_t	len;
@@ -35,8 +35,10 @@ void lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op)
 		token = token_create(op_type, word);
 	}
 	else
-		token = token_create(TOKEN_WORD, word);	
+		token = token_create(TOKEN_WORD, word);
 	tokenlist_add(tokenlist, token);
+	token->position = pos;
+	//printf("tok pos: %d\n", token->position);
 	free(word);
 }
 

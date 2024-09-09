@@ -154,4 +154,4 @@ example: cat << EOF > file | wc -c | tr -d " " > file
 																																 |
 																															 file2
 
-** ls file1 | wc -l > file2
+** ls >> file1 | wc -l >> file2

@@ -48,5 +48,5 @@ bool is_command(t_tokenlist *tokenlist)
 
 // }
 
-parse_command()
-{}
+// parse_command()
+// {}

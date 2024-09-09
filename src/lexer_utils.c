@@ -8,6 +8,7 @@ t_lexer	*lexer_init(char *input)
 	lexer = malloc(sizeof(t_lexer));
 	if (!lexer)
 		return (NULL);
+	ft_bzero(lexer, sizeof(t_lexer));
 	lexer->input = ft_strdup(input);
 	if (!lexer->input)
 		return (NULL);

@@ -11,6 +11,7 @@
 #include <stddef.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <fcntl.h>
 
 /* **************************************************************************** */ 
 /* Structs */
@@ -33,6 +34,12 @@ typedef struct s_token
 	token_type		type;
 	char			*value;
 	size_t			size;
+	char			*path;
+	int				fd_out;
+	int				fd_in;
+	//char			**args;
+	int				position;
+
 	struct s_token	*next;
 }				t_token;
 
@@ -51,6 +58,8 @@ typedef struct s_lexer
 	char			*input; // contents of commandline
 	size_t			length;
 	char			start;
+	//char			**env;// ?
+	int				num_pipes;
 
 }			t_lexer;
 
@@ -62,11 +71,11 @@ void		lexer_process_input(t_lexer *lexer, t_tokenlist *tokenlist);
 t_lexer		*lexer_init(char *input);
 token_type	get_operator_type(char *value);
 void		lexer_free(t_lexer *lexer);
-void		lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op);
+void		lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op, int pos);
 
 
 /* Quotes */
-void		lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist, bool is_op);
+void		lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist, bool is_op, int pos);
 
 
 /* Utils */
@@ -82,7 +91,7 @@ void		token_free(t_token *token);
 /* Tokenlist functions */
 t_tokenlist	*tokenlist_init(void);
 void		tokenlist_free(t_tokenlist *list);
-void		tokenlist_add(t_tokenlist *list, t_token *token);
+void		 tokenlist_add(t_tokenlist *list, t_token *token);
 void		tokenlist_print(t_token *head);
 
 /* Error handling */
