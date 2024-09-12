@@ -16,7 +16,7 @@
 /* **************************************************************************** */ 
 /* Structs */
 
-typedef enum e_token_type
+enum e_token_type
 {
 	TOKEN_WORD,
 	//TOKEN_WHITESPACE,
@@ -25,13 +25,13 @@ typedef enum e_token_type
 	TOKEN_OP_REDIRECTION_APPEND, // >> 
 	TOKEN_OP_PIPE,
 	TOKEN_UNKNOWN
-}				token_type;
+};
 
 
 // a token node has type and value of char *
 typedef struct s_token
 {
-	token_type		type;
+	enum e_token_type		type;
 	char			*value;
 	size_t			size;
 	char			*path;
@@ -69,7 +69,7 @@ typedef struct s_lexer
 /* Lexer functions */
 void		lexer_process_input(t_lexer *lexer, t_tokenlist *tokenlist);
 t_lexer		*lexer_init(char *input);
-token_type	get_operator_type(char *value);
+enum e_token_type	get_operator_type(char *value);
 void		lexer_free(t_lexer *lexer);
 void		lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op, int pos);
 
@@ -85,7 +85,7 @@ void		lexer_skip_whitespace(t_lexer *lexer);
 //bool		is_word_token(char c);
 
 /* Token functions */
-t_token		*token_create(token_type type, char *value);
+t_token		*token_create(enum e_token_type type, char *value);
 void		token_free(t_token *token);
 
 /* Tokenlist functions */

@@ -1,52 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   parse_utils.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/09/12 16:42:09 by ykarimi       #+#    #+#                 */
+/*   Updated: 2024/09/12 16:42:11 by ykarimi       ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "parser.h"
 
-bool is_pipeline(t_tokenlist *tokenlist)
+bool is_pipe(enum e_token_type type)
 {
-	t_token	*temp;
-
-	temp = tokenlist->head;
-	while (temp != NULL)
-	{
-		if (temp->type == TOKEN_OP_PIPE)
-			return (true);
-		temp = temp->next;
-	}
+	if (type == TOKEN_OP_PIPE)
+		return (true);
 	return (false);
 }
-bool is_redirection(t_tokenlist *tokenlist)
+bool is_redirection(enum e_token_type type)
 {
-	t_token	*temp;
-
-	temp = tokenlist->head;
-	while (temp != NULL)
-	{
-		if (temp->type == TOKEN_OP_REDIRECTION_APPEND || temp->type == TOKEN_OP_REDIRECTION_IN || temp->type == TOKEN_OP_REDIRECTION_OUT)
-			return (true);
-		temp = temp->next;
-	}
+	if (type == TOKEN_OP_REDIRECTION_APPEND || type == TOKEN_OP_REDIRECTION_IN || type == TOKEN_OP_REDIRECTION_OUT)
+		return (true);
 	return (false);
 }
 
-bool is_command(t_tokenlist *tokenlist)
+bool is_command(enum e_token_type type)
 {
-	t_token	*temp;
-
-	temp = tokenlist->head;
-	while (temp != NULL)
-	{
-		if (temp->type == TOKEN_WORD)
-			return (true);
-		temp = temp->next;
-	}
+	if (type == TOKEN_WORD)
+		return (true);
 	return (false);
 }
-
-
-
-// t_node *parse_arguments(t_tokenlist *tokenlist)
-// {
-
-// }
-
-// parse_command()
-// {}
