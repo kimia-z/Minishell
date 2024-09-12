@@ -1,6 +1,6 @@
 #include "lexer.h"
 
-token_type	get_operator_type(char *value)
+enum e_token_type	get_operator_type(char *value)
 {
 	if (*value == '>' && *(value + 1) == '>')
 		return (TOKEN_OP_REDIRECTION_APPEND);

@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 16:47:59 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/09/12 17:02:20 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/09/12 18:02:16 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,19 +43,20 @@
 
 typedef struct s_command
 {
+	char				*command;
 	char				**args;
 	char				*redirect_in;
 	char				*redirect_out;
 	char 				*redirect_append;
 	struct s_command	*next;
-}           	t_command;
+}				t_command;
 
 
 typedef struct s_parser
 {
 	t_tokenlist			*tokenlist;
 	t_token				*current_token;
-}               t_parser;
+}				t_parser;
 
 
 /************************************************************/
@@ -88,7 +89,9 @@ bool			is_pipe(enum e_token_type type);
 // /* Node Functions */
 // t_node		*add_node(rule rule);
 
+/* Cleanup */
+void			free_command_list(t_command *cmdlist);
+void			free_command(t_command *command);
 
 #endif
-
 

@@ -1,86 +1,6 @@
 #include "parser.h"
 #include "lexer.h"
 
-// t_node *parse_pipeline(t_tokenlist *tokenlist, t_node *root)
-// {
-// 	t_node *redirect = NULL;
-
-// 	root = add_node(pipeline);
-// 	if (root == NULL)
-// 		printf("root null from pipe func\n");
-// 	root->left = add_node(command); // get the first command
-// 	root->right = add_node(command); // get the second command
-
-// 	// redirection withing the pipeline
-// 	if (is_redirection(tokenlist))
-// 	{
-// 		redirect = add_node(redirection);
-// 		redirect->left = root->left;
-// 		redirect->right = add_node(file);
-// 		root->left = redirect;
-// 	}
-// 	return (root);
-// }
-
-// t_node	*parse_redirection(t_tokenlist *tokenlist, t_node *root)
-// {
-// 	root = add_node(redirection);
-// 	root->left = add_node(command); //parse_command(tokenlist);
-// 	root->right = add_node(file);
-// }
-
-
-/* 
-	do a syntax check
-	create nodes for tree
-	semantic check - validity of tokens(commands and arguments)(define these rules)
-*/
-// void    parser(t_tokenlist *tokenlist)
-// {
-// 	t_node *root;
-// 	root = NULL;
-// 	//tokenlist_print(tokenlist->head);
-// 	if (syntax_checker(tokenlist) == 1)
-// 	{
-// 		printf("error\n");
-// 		tokenlist_free(tokenlist);
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	// at this point, things should be sorta ready for tree
-// 	// decide what gets to be the root ndoe
-// 	if (is_pipeline(tokenlist))
-// 	{
-// 		root = parse_pipeline(tokenlist, root);
-
-// 	}
-// 	if (root == NULL)
-// 		printf("root null\n");
-// 	int i = 0;
-// 	t_node *temp = root;
-// 	while (temp != NULL)
-// 	{
-// 		printf("%d  - ", i);
-
-// 		printf("Node rule: %d, Token Value: %s\n", temp->rule, temp->path);
-// 		//temp = temp->next;
-// 		i++;
-// 	}
-// 	// else if (is_redirection(tokenlist))
-// 	// {
-// 	//     tree = parse_redirection(tokenlist);
-
-// 	// }
-// 	// //else if subshell
-// 	// else if (is_command(tokenlist))
-// 	// {
-// 	//     tree = parse_command(tokenlist);
-// 	// }
-// }
-
-
-
-
-
 // yea? also open the thing?
 void parse_redirection(t_command *command, t_parser *parser)
 {
@@ -102,7 +22,6 @@ void parse_redirection(t_command *command, t_parser *parser)
 		if (parser->current_token && is_command(parser->current_token->type))
 			command->redirect_in = ft_strdup(parser->current_token->value);
 	}
-	return (0);
 }
 
 // check>??
@@ -151,9 +70,11 @@ int get_arg(t_command *command, char *value)
 t_command	*parse_command(t_parser *parser)
 {
 	t_command *command;
+	int is_first_arg = 1;
 	command = malloc(sizeof(t_command));
 	if (command == NULL)
 		return (NULL);
+	command->command = NULL;
 	command->args = NULL;
 	command->redirect_in = NULL;
 	command->redirect_out = NULL;
@@ -162,16 +83,25 @@ t_command	*parse_command(t_parser *parser)
 	while (parser->current_token != NULL && parser->current_token->type != TOKEN_OP_PIPE)
 	{
 		if (is_command(parser->current_token->type))
-			if (get_arg(command, parser->current_token->value) == 1)// what shall i pass to it?
-				return (NULL);
-		else if (is_redirection(parser->current_token->type))// is token any of the redirect types?
+		{
+			if (is_first_arg)
+			{
+			command->command = ft_strdup(parser->current_token->value);
+			is_first_arg = 0;
+			}
+			else
+			{
+				if (get_arg(command, parser->current_token->value) == 1)// what shall i pass to it?
+					return (NULL);
+			}
+		}
+		if (is_redirection(parser->current_token->type))// is token any of the redirect types?
 			parse_redirection(command, parser);
 		parser->current_token = parser->current_token->next;
 	}
 	return (command);
 
 }
-
 
 t_parser	*parser_init(t_tokenlist *tokenlist)
 {
@@ -184,10 +114,8 @@ t_parser	*parser_init(t_tokenlist *tokenlist)
 	return (parser);
 }
 
-
 t_command	*parse(t_parser *parser, t_tokenlist *tokenlist)
 {
-
 	t_command *commandlist;
 	t_command *last_command;
 	t_command *current_command;
