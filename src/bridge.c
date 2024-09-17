@@ -1,17 +1,6 @@
 #include "lexer.h"
 #include "parser.h"
 
-// char	*get_line()
-// {
-// 	char	*input;
-
-// 	input = readline("Minishell: ");
-// 	if (!input)
-// 	{
-// 		return (NULL);
-// 	}
-// 	return (input);
-// }
 
 static void print_command_list(t_command *cmdlist)
 {
