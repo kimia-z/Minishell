@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   lexer_collect.c                                    :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/09/14 16:00:24 by yasamankari   #+#    #+#                 */
+/*   Updated: 2024/09/14 16:02:24 by yasamankari   ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
 
-token_type	get_operator_type(char *value)
+enum e_token_type	get_operator_type(char *value)
 {
 	if (*value == '>' && *(value + 1) == '>')
 		return (TOKEN_OP_REDIRECTION_APPEND);

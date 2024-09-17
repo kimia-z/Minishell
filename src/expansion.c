@@ -1,4 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   expansion.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/09/12 17:17:33 by ykarimi       #+#    #+#                 */
+/*   Updated: 2024/09/12 17:19:48 by ykarimi       ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 #include "lexer.h"
+
 int get_env_len(char *arg)
 {
     char    *env_var;
@@ -6,7 +20,7 @@ int get_env_len(char *arg)
     i = 0;
     // ignore the $ sign
     env_var = ft_strchr(arg, '$') + 1;
-    while ((env_var[i] >= 'A' && env_var[i] <= 'Z') || (env_var[i] >= 'a' && env_var <= 'z')
+    while ((env_var[i] >= 'A' && env_var[i] <= 'Z') || (env_var[i] >= 'a' && env_var[i] <= 'z')
         || (env_var[i] >= '0' && env_var[i] <= '9' && i != 0) || env_var[i] == '_')
     {
         i++;

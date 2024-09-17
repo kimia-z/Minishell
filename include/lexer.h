@@ -27,42 +27,34 @@ enum e_token_type
 	TOKEN_UNKNOWN
 };
 
-
-// a token node has type and value of char *
+/* probably don't need the position member */
 typedef struct s_token
 {
-	enum e_token_type		type;
-	char			*value;
-	size_t			size;
-	char			*path;
-	int				fd_out;
-	int				fd_in;
-	//char			**args;
-	int				position;
-
-	struct s_token	*next;
+	enum e_token_type	type;
+	char				*value;
+	size_t				size;
+	int					position;
+	struct s_token		*next;
 }				t_token;
 
-// an array of tokens as nodes(linked lists)
+// an array of tokens
 typedef struct s_tokenlist
 {
-	size_t			token_count;
-	t_token			*head;
+	size_t				token_count;
+	t_token				*head;
 }				t_tokenlist;
 
 /* members of this struct need to be updated later on */
 typedef struct s_lexer
 {
-	t_token			**tokens; // an array of tokens
-	unsigned int	position;
-	char			*input; // contents of commandline
-	size_t			length;
-	char			start;
-	//char			**env;// ?
-	int				num_pipes;
-
+	t_token				**tokens; // an array of tokens
+	unsigned int		position;
+	char				*input; // contents of commandline
+	size_t				length;
+	char				start;
+	//char				**env;// ?
+	int					num_pipes;
 }			t_lexer;
-
 
 /* **************************************************************************** */ 
 
