@@ -1,24 +1,31 @@
 #include "parser.h"
 #include "lexer.h"
 
+static void advance_token(t_parser *parser)
+{
+    if (parser->current_token != NULL)
+        parser->current_token = parser->current_token->next;
+}
+
+
 // yea? also open the thing?
 void parse_redirection(t_command *command, t_parser *parser)
 {
 	if (parser->current_token->type == TOKEN_OP_REDIRECTION_APPEND)
 	{
-		parser->current_token = parser->current_token->next;
+		advance_token(parser);
 		if (parser->current_token && is_command(parser->current_token->type))
 			command->redirect_append = ft_strdup(parser->current_token->value);
 	}
 	else if (parser->current_token->type == TOKEN_OP_REDIRECTION_OUT)
 	{
-		parser->current_token = parser->current_token->next;
+		advance_token(parser);
 		if (parser->current_token && is_command(parser->current_token->type))
 			command->redirect_out = ft_strdup(parser->current_token->value);
 	}
 	else if (parser->current_token->type == TOKEN_OP_REDIRECTION_IN)
 	{
-		parser->current_token = parser->current_token->next;
+		advance_token(parser);
 		if (parser->current_token && is_command(parser->current_token->type))
 			command->redirect_in = ft_strdup(parser->current_token->value);
 	}
@@ -76,6 +83,7 @@ t_command	*parse_command(t_parser *parser)
 		return (NULL);
 	command->command = NULL;
 	command->args = NULL;
+	command->path = NULL;
 	command->redirect_in = NULL;
 	command->redirect_out = NULL;
 	command->redirect_append = NULL;
@@ -87,6 +95,10 @@ t_command	*parse_command(t_parser *parser)
 			if (is_first_arg)
 			{
 			command->command = ft_strdup(parser->current_token->value);
+			//find command path
+			command->path = find_command_path(command->command);
+			if (command->path == NULL)
+				return (NULL);
 			is_first_arg = 0;
 			}
 			else
@@ -97,7 +109,7 @@ t_command	*parse_command(t_parser *parser)
 		}
 		if (is_redirection(parser->current_token->type))// is token any of the redirect types?
 			parse_redirection(command, parser);
-		parser->current_token = parser->current_token->next;
+		advance_token(parser);
 	}
 	return (command);
 
@@ -138,7 +150,7 @@ t_command	*parse(t_parser *parser, t_tokenlist *tokenlist)
 			last_command->next = current_command;
 		last_command = current_command;
 		if (parser->current_token && is_pipe(parser->current_token->type))
-			parser->current_token = parser->current_token->next;//a funcion to go to the next token?
+			advance_token(parser);
 	}
 	return (commandlist);
 }
