@@ -94,7 +94,7 @@ t_env	*ft_copy_list(t_env *env_vars)
 
 
 //bubble sort the env variables
-t_env	*sort_env(t_env *env_vars)
+t_env	*ft_sort_env(t_env *env_vars)
 {
 	t_env	*temp_list;
 	t_env	*copy_list;
@@ -138,7 +138,7 @@ void	print_export(t_lexer *lexer, int outfile)
 	t_env	*sorted_env;
 	t_env	*temp;
 
-	//sorted_env = sort_env(lexer->env);
+	sorted_env = ft_sort_env(lexer->env);
 	temp = sorted_env;
 	while (temp)
 	{

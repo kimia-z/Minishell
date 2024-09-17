@@ -9,7 +9,7 @@ void	ft_pwd(t_lexer *lexer)
 	char	*pwd;
 
 	pwd = getcwd(NULL, 0);
-	//outfile = lexer.outfile;
+	outfile = lexer.outfile;
 	if (!outfile)
 	{
 		outfile = STDOUT_FILENO;

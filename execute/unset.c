@@ -1,5 +1,12 @@
 #include "lexer.h"
 
+/*
+	if pipe exist unset ignored
+	if without argument ignored
+	examples:
+	*- unset USER PWD
+*/
+
 void	ft_unset(t_lexer *lexer)
 {
 	int		i;
@@ -7,6 +14,10 @@ void	ft_unset(t_lexer *lexer)
 	t_env	*previous;
 
 	i = 1;
+	if (lexer->pipe > 0 || !lexer->tokens[1])
+	{
+		return ;
+	}
 	while (lexer->tokens[i])
 	{
 		current = lexer->env;
