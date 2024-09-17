@@ -1,5 +1,9 @@
 #include "lexer.h"
 
+
+/// ******subshell handle -> exit from subshell
+
+
 long long	ft_atoll(const char *str)
 {
 	long long	n;
