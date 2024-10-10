@@ -7,6 +7,7 @@ typedef struct s_env
 	t_env	*next;
 }	t_env;
 
+
 typedef struct s_command
 {
 	char				*command;
@@ -26,8 +27,9 @@ typedef struct s_parser
 	int					outfile_fd;
 	char				*infile;
 	char				*outfile;
-	struct s_command	commands;
-	struct s_env		envs;
+	char				*envp;
+	struct s_command	*commands;
+	struct s_env		*envs;
 	struct s_parser		*next;
 }				t_parser;
 
@@ -80,7 +82,7 @@ bool	check_builtin(t_command *command)
 	char	*cmd;
 
 	// echo  "kimia" --- cmd = echo;
-	cmd = command->tokens[0]->token->value;
+	//cmd = command->tokens[0]->token->value;
 	if (cmd == ECH)
 		return (ft_echo(command), true);
 	if (cmd == CD)
@@ -96,6 +98,117 @@ bool	check_builtin(t_command *command)
 	if (cmd == EXIT)
 		return (ft_exit(command), true);
 	return (false);
+}
+
+void	ft_child(t_parser *parser, int *fds, int read, int i)
+{
+	// find/have/check path
+	if (dup_manager(parser, fds, read, i) == EXIT_FAILURE)
+	{
+		close(fds[0]);
+		close(fds[1]);
+		if (read != STDIN_FILENO)
+			close (read);
+		//free
+		write_stderr("failed in dup");
+		exit(EXIT_FAILURE);
+	}
+	if (check_builtin(parser->commands) == false)
+	{
+		if (parser->commands->path != NULL)
+		{
+			execve(parser->commands->path, parser->commands, parser->envp);
+			write_stderr("Command not found");
+			//free
+			exit(127);
+		}
+	}
+	//free
+	exit(EXIT_SUCCESS);
+}
+
+
+void	ft_parent(t_parser *parser, int read, int *fds)
+{
+	if (parser->outfile_fd != -2 && parser->outfile_fd != -1)
+		close (parser->outfile_fd);
+	if (parser->infile_fd != -2 && parser->infile_fd != -1)
+		close (parser->infile_fd);
+	close(fds[1]);
+	if (read != STDIN_FILENO)
+		close (read);
+	read = fds[0];
+}
+
+int	pipeline(t_parser *parser)
+{
+	int			read;
+	int			fds[2];
+	int			pid;
+	t_command	*temp;
+	int			i;
+	int			status;
+
+	read = STDIN_FILENO;
+	temp = parser->commands;
+	i = 0;
+	while (temp != NULL)
+	{
+		if (pipe(fds) == -1)
+			return (write_stderr("failed in pipe"), EXIT_FAILURE);
+		pid = fork();
+		if (pid == -1)
+			return (write_stderr("failed in fork"), EXIT_FAILURE);
+		if (pid == 0)
+			ft_child(parser, fds, read, i);
+		ft_parent(parser, read, fds);
+		i++;
+		temp = temp->next;
+	}
+	close (read);
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		parser->exit_status = WEXITSTATUS(status);
+	while (waitpid(-1, &status, 0) > 0)
+	{
+	}
+	return (parser->exit_status);
+}
+
+int	execute_one_cmd(t_parser *parser)
+{
+	int	pid;
+	int	status;
+
+	pid = fork();
+	if (pid == -1)
+		write_stderr("failed in fork");
+	if (pid == 0)
+	{
+		if (parser->infile_fd == -1 || parser->outfile_fd == -1)
+			return (EXIT_FAILURE);
+		if (parser->infile_fd >= 0)
+		{
+			if (dup2(parser->infile_fd, STDIN_FILENO) == -1)
+				return (EXIT_FAILURE);
+		}
+		if (parser->outfile >= 0)
+		{
+			if (dup2(parser->outfile_fd, STDOUT_FILENO) == -1)
+				return (EXIT_FAILURE);
+		}
+		if (parser->commands->path != NULL)
+			execve(parser->commands->path, parser->commands->command, parser->envp);
+		write_stderr("Command not found");
+		//free everything
+		exit(127);
+	}
+	close (parser->infile_fd);
+	// if there is here doc -> unlink
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		parser->exit_status = WEXITSTATUS(status);
+	return (parser->exit_status);
 }
 
 /*
