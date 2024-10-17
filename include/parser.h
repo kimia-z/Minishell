@@ -1,60 +1,64 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   parser.h                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/09/12 16:47:59 by ykarimi       #+#    #+#                 */
+/*   Updated: 2024/09/14 16:55:17 by yasamankari   ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PARSER_H
 # define PARSER_H
 
 #include "lexer.h"
 
-
 /************************************************************/
 /*  Structs */
 
-typedef enum e_rule
+typedef struct s_command
 {
-    command,
-    pipeline,
-    redirection,
-    subshell,
-    file,
-} rule;
+	char				*command;
+	char				*path;
+	char				**args;
+	char				*redirect_in;
+	char				*redirect_out;
+	char 				*redirect_append;
+	struct s_command	*next;
+}				t_command;
 
-/* nodes on the tree */
-typedef struct s_node
+
+typedef struct s_parser
 {
-	rule			rule;//what rule to follow command/pipe
-	char			**args ;// does command have args
-	char			*path;
-	int				fds[2];
-	struct s_node	*right;
-	struct s_node	*left;
-	//s_list *redirects; //something to handle redirects?? how?
-}			t_node;
+	t_tokenlist			*tokenlist;
+	t_token				*current_token;
+}				t_parser;
 
 
 /************************************************************/
 /* Syntax Check */
-int			syntax_checker(t_tokenlist *tokenlist);
-
+int				syntax_checker(t_tokenlist *tokenlist);
 
 /* Parser Functions */
-void		parser(t_tokenlist *tokenlist);
-// t_node *parse(t_tokenlist *tokenlist);
-t_node		*parse_pipeline(t_tokenlist *tokenlist, t_node *root);
-// int parse_redirection(t_tokenlist *tokenlist);
-// int parse_command(t_tokenlist *tokenlist);
-// t_node *parse_arguments(t_tokenlist *tokenlist);
+t_command		*parse(t_parser *parser, t_tokenlist *tokenlist);
+t_parser		*parser_init(t_tokenlist *tokenlist);
+t_command		*parse_command(t_parser *parser);
+void			parse_redirection(t_command *command, t_parser *parser);
+int				get_arg(t_command *command, char *value);
 
-
-// char *get_filename(t_tokenlist *tokenlist);
-
+/* Command Path */
+char			*find_command_path(char *commandname);
 
 /* Parser Utils */
-bool	is_pipeline(t_tokenlist *tokenlist);
-bool	is_redirection(t_tokenlist *tokenlist);
-bool	is_command(t_tokenlist *tokenlist);
+bool			is_redirection(enum e_token_type type);
+bool			is_command(enum e_token_type type);
+bool			is_pipe(enum e_token_type type);
 
-/* Node Functions */
-t_node		*add_node(rule rule);
-
+/* Cleanup */
+void			free_command_list(t_command *cmdlist);
+void			free_command(t_command *command);
 
 #endif
-
 

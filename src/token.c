@@ -1,12 +1,13 @@
 #include "lexer.h"
 
 /* Create a new token of the given type and value */
-t_token	*token_create(token_type type, char *value)
+t_token	*token_create(enum e_token_type type, char *value)
 {
 	t_token	*token;
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
+	ft_bzero(token, sizeof(t_token));
 	token->type = type;
 	token->value = ft_strdup(value);
 	if (!token->value)

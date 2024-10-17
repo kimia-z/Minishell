@@ -1,36 +1,54 @@
 #include "lexer.h"
 #include "parser.h"
-#include <readline/readline.h>
+#include "minishell.h"
 
-char	*get_line()
+read_line()
 {
-	char	*input;
 
-	input = readline("Minishell: ");
-	if (!input)
+}
+
+
+
+void	interactive_shell()
+{
+	print prompt;
+	read_line();
+	parse line;
+	execute things;
+
+}
+
+
+
+
+
+/* do we need a while(true) loop in here? */
+int main(int argc, char **argv, char **envp)
+{
+	t_data	*data;
+
+	// set_signals();
+	//init_minishell(data);
+	//get_env_var(data);
+	//show_prompt();
+	if (isatty(STDIN_FILENO) == 1)
+		interative_shell(data);
+	else
+		non_interactive(data);
+	cleanup(data);
+	return (data->exit_code);
+
+
+}
+
+
+
+	//init and setting up
+	while (true)
 	{
-		return (NULL);
+		//set signals
+		//readline
+
 	}
-	return (input);
-}
-
-int main()
-{
-	// t_lexer 	*lexer;
-	// t_tokenlist	*tokenlist;
-	char		*input;
-
-	input = get_line();
-	printf("input is:%s\n", input);
-	free(input);
-	// lexer = lexer_init(input);
-	// printf("input: %s\n", lexer->input);
-	// tokenlist = tokenlist_init();
-	// lexer_process_input(lexer, tokenlist);
-	// lexer_free(lexer);
-	// tokenlist_print(tokenlist->head);
-	// parser(tokenlist);
-	// tokenlist_free(tokenlist);
-	
-	return (0);
-}
+	//cleanup()
+	return (status);

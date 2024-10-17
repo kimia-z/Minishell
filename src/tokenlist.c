@@ -7,6 +7,7 @@ t_tokenlist	*tokenlist_init(void)
 	list = malloc(sizeof(t_tokenlist));
 	if (!list)
 		return (NULL);
+	ft_bzero(list, sizeof(t_tokenlist));
 	list->token_count = 0;
 	list->head = NULL;
 	return (list);
@@ -38,7 +39,7 @@ void tokenlist_print(t_token *head)
 	{
 		printf("%d  - ", i);
 
-		printf("Token Type: %d, Token Value: %s\n", current->type, current->value);
+		printf("Token Type: %d, Token Value: %s, tok pos: %d\n", current->type, current->value, current->position);
 		current = current->next;
 		i++;
 	}

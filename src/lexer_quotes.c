@@ -18,7 +18,7 @@ static size_t	len_quotes(char *value)
 	return (i - 1);
 }
 
-void	lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist, bool is_op)
+void	lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist, bool is_op, int pos)
 {
 	size_t len;
 
@@ -31,7 +31,8 @@ void	lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist, b
 	lexer->position++;
 	if (*value == '\'' || *value == '"')
 	{
-		lexer_collect_token(lexer, tokenlist, is_op);
+		lexer_collect_token(lexer, tokenlist, is_op, pos);
 		lexer->position += len + 1;
+
 	}
 }
