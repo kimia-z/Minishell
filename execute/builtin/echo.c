@@ -52,7 +52,7 @@ void	ft_echo(t_lexer *lexer)
 	bool	is_newline;
 	int		position;
 
-	//outfile = lexer.outfile;
+	outfile = lexer.outfile;
 	position = 1;
 	if (!outfile)
 		outfile = STDOUT_FILENO;

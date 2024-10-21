@@ -13,7 +13,7 @@ void	ft_env(t_lexer *lexer)
 	{
 		return(ft_putstr_fd("Error: no env variables available\n", 2));
 	}
-	if (lexer->tokens[1])
+	if (lexer->tokens[1] && lexer->tokens[1] == TOKEN_WORD)
 	{
 		return (printf("env: '%s': No such file or directory\n", lexer->tokens[1]));
 	}

@@ -1,5 +1,7 @@
 #include "lexer.h"
 
+////change directory function
+
 /*
 	If no directory argument is provided, it changes to the `HOME` dir.
 	If more than one argument is provided, -> error).
