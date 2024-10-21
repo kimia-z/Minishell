@@ -100,6 +100,111 @@ bool	check_builtin(t_command *command)
 	return (false);
 }
 
+int	first_pipe(t_parser *parser, int *fds)
+{
+	if (parser->infile_fd == -1)
+		return (EXIT_FAILURE);
+	if (parser->infile_fd != -2)
+	{
+		if (dup2(parser->infile_fd, STDIN_FILENO) == -1)
+		{
+			return (EXIT_FAILURE);
+		}
+		close(parser->infile_fd);
+	}
+	if (parser->outfile_fd == -1)
+		return(EXIT_FAILURE);
+	if (parser->outfile_fd != -2)
+	{
+		if (dup2(parser->outfile_fd, STDOUT_FILENO) == -1)
+			return (EXIT_FAILURE);
+	}
+	else
+	{
+		if (dup2(fds[1], STDOUT_FILENO) == -1)
+			return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
+
+int	last_pipe(t_parser *parser, int *fds)
+{
+	if (parser->outfile_fd == -1)
+		return (EXIT_FAILURE);
+	if (parser->outfile_fd != -2)
+	{
+		if (dup2(parser->outfile_fd, STDOUT_FILENO) == -1)
+		{
+			return (EXIT_FAILURE);
+		}
+		close(parser->outfile_fd);
+	}
+	if (parser->infile_fd == -1)
+		return(EXIT_FAILURE);
+	if (parser->infile_fd != -2)
+	{
+		if (dup2(parser->infile_fd, STDIN_FILENO) == -1)
+			return (EXIT_FAILURE);
+	}
+	else
+	{
+		if (dup2(fds[0], STDIN_FILENO) == -1)
+			return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
+
+int	middle_pipe(t_parser *parser, int *fds)
+{
+	if (parser->infile_fd == -1)
+		return(EXIT_FAILURE);
+	if (parser->infile_fd != -2)
+	{
+		if (dup2(parser->infile_fd, STDIN_FILENO) == -1)
+			return (EXIT_FAILURE);
+	}
+	else
+	{
+		if (dup2(fds[0], STDIN_FILENO) == -1)
+			return (EXIT_FAILURE);
+	}
+	if (parser->outfile_fd == -1)
+		return(EXIT_FAILURE);
+	if (parser->outfile_fd != -2)
+	{
+		if (dup2(parser->outfile_fd, STDOUT_FILENO) == -1)
+			return (EXIT_FAILURE);
+	}
+	else
+	{
+		if (dup2(fds[1], STDOUT_FILENO) == -1)
+			return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
+
+int	ft_dup(t_parser *parser, int *fds, int read, int i)
+{
+	if (i == 0)
+	{
+		if (first_pipe(parser, fds) == EXIT_FAILURE)
+			return(EXIT_FAILURE);
+	}
+	else if (i == parser->nb_pipes)
+	{
+		if (last_pipe(parser, fds) == EXIT_FAILURE)
+			return(EXIT_FAILURE);
+	}
+	else
+	{
+		if (middle_pipe(parser, fds) == EXIT_FAILURE)
+			return(EXIT_FAILURE);
+	}
+	close(fds[0]);
+	close(fds[1]);
+	return (EXIT_SUCCESS);
+}
+
 void	ft_child(t_parser *parser, int *fds, int read, int i)
 {
 	// find/have/check path
@@ -137,6 +242,7 @@ void	ft_parent(t_parser *parser, int read, int *fds)
 	close(fds[1]);
 	if (read != STDIN_FILENO)
 		close (read);
+	//read stored in data structure?
 	read = fds[0];
 }
 
@@ -203,7 +309,10 @@ int	execute_one_cmd(t_parser *parser)
 		//free everything
 		exit(127);
 	}
+	//if parser->infile true
 	close (parser->infile_fd);
+	//if parser->outfile true
+	close (parser->outfile);
 	// if there is here doc -> unlink
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
@@ -228,6 +337,7 @@ int	ft_execute(t_parser *parser)
 		{
 			// find/have/check path
 			parser->exit_status = execute_one_cmd(parser);
+			//free path?
 		}
 	}
 	else if (number_pipe >= 1)
