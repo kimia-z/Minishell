@@ -6,12 +6,16 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/26 12:25:48 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/03/25 14:47:39 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/10/24 13:13:11 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
 
 # include <stdlib.h>
 # include <string.h>
@@ -95,5 +99,14 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstclear(t_list **lst, void (*del)(void *));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+
+/* get_next_line */
+char	*get_next_line(int fd);
+char	*read_from_fd(int fd, char *read_chunk);
+char	*get_line_from_buffer(char *remaining_buffer);
+char	*remove_returned_line(char *remaining_buffer, int *flag);
+char	*ftt_strjoin(char *s1, char *s2);
+char	*allocate_memory(int i);
+void	copy_characters(char *remaining_buffer, char *extracted_line);
 
 #endif

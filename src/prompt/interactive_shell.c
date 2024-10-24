@@ -75,7 +75,7 @@ char *get_prompt()
     execute things
 */
 
-
+// note: ctl c doesnt work for termination
 void interactive_shell(t_data *data)
 {
     char *input;

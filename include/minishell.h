@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:58:32 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/18 18:01:03 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/10/24 13:14:32 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void print_command_list(t_command *cmdlist);
 
 /* non interactive mode */
 int		read_line(char **buffer, size_t size);
-void	non_interactive();
+int	non_interactive();
 
 /* interactive shell */
 void	interactive_shell(t_data *data);

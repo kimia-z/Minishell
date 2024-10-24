@@ -2,10 +2,10 @@
 #include "parser.h"
 #include "minishell.h"
 
-void non_interactive()
-{
-    printf("bip bppp\n");
-}
+// void non_interactive()
+// {
+//     printf("bip bppp\n");
+// }
 
 /*
     *buffer or **buffer ? - experiment
@@ -23,34 +23,44 @@ int read_line(char **buffer, size_t size)
     return (0);
 }
 
+/*
+read commands from stdin until EOF
+*/
 
-
-// int non_interactive(t_data *data)
+// buffer_size()
 // {
-//     struct stat st;
-//     size_t  size;
-//     char    *line;
 
-//     line = NULL;
-//     if (fstat(STDIN_FILENO, &st) == -1)
-//     {
-//         printf("error\n");
-//         return (-1);
-//     }
-//     size = st.st_size + 1;
-//     line = malloc(size);
-//     if (!line)
-//     {
-//         printf("error\n");
-//         return (-1);
-//     }
-//     while (1)
-//     {
-//         if (read_line(&line, size) == -1)
-//             break ;
-//         process_commandline(data, line);
-//     }
-//     return (0);
 // }
+
+
+
+int non_interactive()
+{
+    struct stat st;
+    size_t  size;
+    char    *line;
+
+    line = NULL;
+    if (fstat(STDIN_FILENO, &st) == -1)
+    {
+        printf("error\n");
+        return (-1);
+    }
+    size = st.st_size + 1;
+    line = malloc(size);
+    if (!line)
+    {
+        perror("error\n");
+        return (-1);
+    }
+    while (1)
+    {
+        if (read_line(&line, size) == -1)
+            break ;
+        //process_commandline(data, line);
+    }
+    free(line);
+    return (0);
+}
 
 
