@@ -6,12 +6,14 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 17:17:33 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/09/12 17:19:48 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/10/18 17:49:49 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "lexer.h"
+#include "parser.h"
+#include "minishell.h"
 
 int get_env_len(char *arg)
 {

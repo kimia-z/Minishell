@@ -4,6 +4,10 @@
         "random": "c",
         "parser.h": "c",
         "stdio.h": "c",
-        "stdbool.h": "c"
+        "stdbool.h": "c",
+        "minishell.h": "c",
+        "stdlib.h": "c",
+        "ranges": "c",
+        "signal.h": "c"
     }
 }

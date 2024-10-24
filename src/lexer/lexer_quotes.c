@@ -1,4 +1,6 @@
 #include "lexer.h"
+#include "parser.h"
+#include "minishell.h"
 
 static bool	is_quote_closed(t_lexer *lexer, char *value)
 {
