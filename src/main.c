@@ -2,53 +2,25 @@
 #include "parser.h"
 #include "minishell.h"
 
-read_line()
+
+/*
+	do we need a while(true) loop in here? 
+	interative -> input from a terminal 
+	non-interative input from a file or pipe
+*/
+int main()
 {
+	t_data	data;
 
-}
-
-
-
-void	interactive_shell()
-{
-	print prompt;
-	read_line();
-	parse line;
-	execute things;
-
-}
-
-
-
-
-
-/* do we need a while(true) loop in here? */
-int main(int argc, char **argv, char **envp)
-{
-	t_data	*data;
-
-	// set_signals();
-	//init_minishell(data);
+	memset(&data, 0, sizeof(t_data));
+    global_data = &data;
+	// set_signals(); sigint - sigquit - sigwinch
 	//get_env_var(data);
-	//show_prompt();
-	if (isatty(STDIN_FILENO) == 1)
-		interative_shell(data);
+
+	if (isatty(STDIN_FILENO) == 1) //if input is from a terminal
+		interactive_shell(&data); //termcap lib - prompt
 	else
-		non_interactive(data);
-	cleanup(data);
-	return (data->exit_code);
-
-
+		non_interactive();
+	//cleanup(data);
+	return (data.exit_status);
 }
-
-
-
-	//init and setting up
-	while (true)
-	{
-		//set signals
-		//readline
-
-	}
-	//cleanup()
-	return (status);

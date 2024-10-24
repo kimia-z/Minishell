@@ -90,7 +90,7 @@ void		tokenlist_print(t_token *head);
 /* Error handling */
 void	write_stderr(char *errmsg);
 //void	cleanup(t_tokenlist *tokenlist);
-
+//void lexer(t_data *data, char *line);
 
 #endif
 

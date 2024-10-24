@@ -69,3 +69,19 @@ void	lexer_process_input(t_lexer *lexer, t_tokenlist *tokenlist)
 	}
 	lexer->num_pipes = get_num_pipes(tokenlist);
 }
+
+
+// void lexer(data, line)
+// {
+// 	t_lexer 	*lexer;
+// 	t_tokenlist	*tokenlist;
+// 	char		*input;
+
+// 	input = "echo hello | ls > out | wc -l";
+
+// 	lexer = lexer_init(input);
+// 	tokenlist = tokenlist_init();
+// 	lexer_process_input(lexer, tokenlist);
+// 	lexer_free(lexer);
+
+// }

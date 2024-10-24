@@ -154,3 +154,14 @@ t_command	*parse(t_parser *parser, t_tokenlist *tokenlist)
 	}
 	return (commandlist);
 }
+
+
+// parserrrr()
+// {
+// 	t_parser *parser;
+// 	t_command *cmdlist;
+
+// 		parser = parser_init(tokenlist);
+// 	cmdlist = parse(parser, tokenlist);
+
+// }
