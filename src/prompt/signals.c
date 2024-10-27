@@ -24,7 +24,7 @@ void sigint_handler()
     {
         reset_terminal_attributes(global_data);
         write(STDOUT_FILENO, "\n", 1);
-        rl_replace_line("", 0);
+        //rl_replace_line("", 0);
         rl_on_new_line();
         rl_redisplay();
     }

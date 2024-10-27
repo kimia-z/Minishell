@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:58:32 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/24 13:14:32 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/10/27 09:26:20 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,10 @@ typedef struct s_process
 /* more things need to be added as we go */
 typedef struct s_data
 {
-	t_lexer		lexer;
-	t_parser	parser;
+	t_lexer		*lexer;
+	t_token		*tokenlist;
+	t_parser	*parser;
+	t_command	*cmdlist;
 	char		**envp;
 	t_error		error;
 	int			signal;
@@ -120,7 +122,7 @@ void add_history_node(t_historylist *history, const char *command);
 void load_history(t_historylist *history, const char *filename);
 void save_history(t_historylist *history, const char *filename);
 void free_history(t_historylist *history);
-void process_commandline(char *input);
+void process_commandline(t_data *data, char *input);
 
 #endif
 

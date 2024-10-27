@@ -1,5 +1,6 @@
 {
     "files.associations": {
+        "*.ejs": "html",
         "lexer.h": "c",
         "random": "c",
         "parser.h": "c",
@@ -8,6 +9,8 @@
         "minishell.h": "c",
         "stdlib.h": "c",
         "ranges": "c",
-        "signal.h": "c"
+        "signal.h": "c",
+        "termcap.h": "c",
+        "termios.h": "c"
     }
 }

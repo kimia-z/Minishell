@@ -80,7 +80,10 @@ t_command	*parse_command(t_parser *parser)
 	int is_first_arg = 1;
 	command = malloc(sizeof(t_command));
 	if (command == NULL)
-		return (NULL);
+	{
+        perror("malloc");
+        return NULL;
+    }
 	command->command = NULL;
 	command->args = NULL;
 	command->path = NULL;
@@ -144,6 +147,11 @@ t_command	*parse(t_parser *parser, t_tokenlist *tokenlist)
 	while (parser->current_token != NULL)
 	{
 		current_command = parse_command(parser);
+		if (current_command == NULL)
+        {
+            printf("Error parsing command\n");
+            break;
+        }
 		if (commandlist == NULL)
 			commandlist = current_command;
 		else
@@ -154,14 +162,3 @@ t_command	*parse(t_parser *parser, t_tokenlist *tokenlist)
 	}
 	return (commandlist);
 }
-
-
-// parserrrr()
-// {
-// 	t_parser *parser;
-// 	t_command *cmdlist;
-
-// 		parser = parser_init(tokenlist);
-// 	cmdlist = parse(parser, tokenlist);
-
-// }

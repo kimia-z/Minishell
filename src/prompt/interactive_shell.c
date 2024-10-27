@@ -1,6 +1,8 @@
 #include "lexer.h"
 #include "parser.h"
 #include "minishell.h"
+#include <readline/readline.h>
+
 
 // get the current working directory
 static char *get_current_working_directory()
@@ -83,7 +85,7 @@ void interactive_shell(t_data *data)
 
     initialize_termcap();
     set_terminal_attributes(data);
-    handle_terminal_signals(data);
+    handle_terminal_signals();
 
     // Load history from file into linked list and Readline
     load_history(&data->history, HISTORY_FILE);
@@ -103,7 +105,8 @@ void interactive_shell(t_data *data)
             add_history(input);
             // add input to history linked list
             add_history_node(&data->history, input);
-            process_commandline(input);
+            printf("inside int_shell, input is:%s\n", input);
+            process_commandline(data, input);
             free(input);
         }
 		else
@@ -116,7 +119,7 @@ void interactive_shell(t_data *data)
     save_history(&data->history, HISTORY_FILE);
     free_history(&data->history);
     reset_terminal_attributes(data);
-    rl_clear_history();
+    clear_history(); // ? rl_ ?
     rl_free_line_state();
     rl_cleanup_after_signal();
 }
