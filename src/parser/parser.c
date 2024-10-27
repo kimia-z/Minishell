@@ -84,30 +84,47 @@ t_command	*parse_command(t_parser *parser)
         perror("malloc");
         return NULL;
     }
-	command->command = NULL;
-	command->args = NULL;
-	command->path = NULL;
-	command->redirect_in = NULL;
-	command->redirect_out = NULL;
-	command->redirect_append = NULL;
-	command->next = NULL;
+	// command->command = NULL;
+	// command->args = NULL;
+	// command->path = NULL;
+	// command->redirect_in = NULL;
+	// command->redirect_out = NULL;
+	// command->redirect_append = NULL;
+	// command->next = NULL;
 	while (parser->current_token != NULL && parser->current_token->type != TOKEN_OP_PIPE)
 	{
+		printf("Parsing token: %s\n", parser->current_token->value); // Debug statement
+
 		if (is_command(parser->current_token->type))
 		{
 			if (is_first_arg)
 			{
 			command->command = ft_strdup(parser->current_token->value);
+			printf("Command: %s\n", command->command); // Debug statement
+
 			//find command path
 			command->path = find_command_path(command->command);
 			if (command->path == NULL)
-				return (NULL);
+            {
+                printf("Error: Command path not found for %s\n", command->command); // Debug statement
+                free(command->command);
+                free(command);
+                return NULL;
+            }
+			printf("Command path: %s\n", command->path); // Debug statement
+
 			is_first_arg = 0;
 			}
 			else
 			{
 				if (get_arg(command, parser->current_token->value) == 1)// what shall i pass to it?
-					return (NULL);
+                {
+                    printf("Error: Failed to get argument %s\n", parser->current_token->value); // Debug statement
+                    free(command->command);
+                    free(command->path);
+                    free(command);
+                    return NULL;
+                }
 			}
 		}
 		if (is_redirection(parser->current_token->type))// is token any of the redirect types?
@@ -140,12 +157,14 @@ t_command	*parse(t_parser *parser, t_tokenlist *tokenlist)
 
 	if (syntax_checker(tokenlist) == 1)
 	{
-		printf("error\n");
+		printf("syntax error\n");
 		tokenlist_free(tokenlist);
 		exit(EXIT_FAILURE);
 	}
 	while (parser->current_token != NULL)
 	{
+		printf("Current token: %s\n", parser->current_token->value); // Debug statement
+
 		current_command = parse_command(parser);
 		if (current_command == NULL)
         {
