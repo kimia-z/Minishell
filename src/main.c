@@ -27,9 +27,9 @@ int main(int argc, char **argv, char **envp)
 	init_minishell(&data);
 	init_env(&data, envp);
 
-    global_data = &data;
+    //global_data = &data;
 	// set_signals(); sigint - sigquit - sigwinch
-	//get_env_var(data);
+	signal_handlers();
 
 	if (isatty(STDIN_FILENO) == 1) //if input is from a terminal
 		interactive_shell(&data); //termcap lib - prompt

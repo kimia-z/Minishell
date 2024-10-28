@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:58:32 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/28 23:11:45 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/28 23:32:18 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 #include <termios.h>
 #include <signal.h>
 
-
+extern volatile sig_atomic_t g_signal_received = 0;
 
 // Macros for color codes
 #define GREEN "\033[1;32m"
