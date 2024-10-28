@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:58:32 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/27 09:26:20 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/28 23:11:45 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,14 @@ typedef struct s_process
 	int				status;
 }			t_process;
 
+typedef struct s_env
+{
+	char			*name;
+	char			*value;
+	struct s_env	*next;
+}			t_env;
+
+
 /* more things need to be added as we go */
 typedef struct s_data
 {
@@ -82,7 +90,7 @@ typedef struct s_data
 	t_token		*tokenlist;
 	t_parser	*parser;
 	t_command	*cmdlist;
-	char		**envp;
+	t_env		*env;
 	t_error		error;
 	int			signal;
 	int			exit_status;
@@ -96,6 +104,8 @@ static t_data *global_data; // global var for signal
 /* Utils */
 void print_command_list(t_command *cmdlist);
 
+/* init functions */
+void	init_minishell(t_data *data);
 
 /* non interactive mode */
 int		read_line(char **buffer, size_t size);
@@ -123,6 +133,14 @@ void load_history(t_historylist *history, const char *filename);
 void save_history(t_historylist *history, const char *filename);
 void free_history(t_historylist *history);
 void process_commandline(t_data *data, char *input);
+
+
+/* Env functions */
+int init_env(t_data *data, char **envp);
+int add_env_node(t_env **env_list, t_env **last_node, const char *env_var);
+void free_env_list(t_env *env_list);
+t_env *create_env_node(const char *env_var);
+
 
 #endif
 
