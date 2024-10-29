@@ -2,8 +2,10 @@
 // #include "parser.h"
 // #include "minishell.h"
 
-// #include <signal.h>
-
+// extern volatile sig_atomic_t g_signal_received = 0;
+// // or int *g_signal_received ?
+// // do i need to init?
+// // to save the exit status for ctl c instead of exiting child
 
 // // handle terminal signals
 // void handle_terminal_signals()

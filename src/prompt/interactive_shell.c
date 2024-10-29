@@ -1,125 +1,90 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   interactive_shell.c                                :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/10/29 11:33:05 by yasamankari   #+#    #+#                 */
+/*   Updated: 2024/10/29 14:14:57 by yasamankari   ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
 #include "parser.h"
 #include "minishell.h"
 #include <readline/readline.h>
 
+//TODO
+// for interative_shell, define what happens when error
+// change the namne of do_things()
+// ctl c doesnt work for termination in do_things
+// implement ft_strcmp in libft
+//check functions for errors
+// check return values
 
-// get the current working directory
-static char *get_current_working_directory()
+//NOTES
+// do i display prompt with readline, or on STDOUT?
+// could also add support for arrows and cursor
+
+
+
+char	*get_prompt()
 {
-    char cwd[1024];
-    if (getcwd(cwd, sizeof(cwd)) == NULL)
-	{
-        perror("getcwd");
-        return strdup("minishell> ");
-    }
-    return strdup(cwd);
-}
-
-// get the hostname
-static char *get_hostname()
-{
-    char hostname[1024];
-    if (gethostname(hostname, sizeof(hostname)) != 0)
-	{
-        perror("gethostname");
-        return strdup("minishell> ");
-    }
-    return strdup(hostname);
-}
-
-
-static char *build_prompt(const char *hostname, const char *cwd)
-{
-    char *prompt;
-	
-	prompt = malloc(strlen(GREEN) + strlen(hostname) + strlen(RESET) +
-                          strlen(":") + strlen(BLUE) + strlen(cwd) + strlen(RESET) +
-                          strlen("$ ") + 1);
-    if (prompt == NULL)
-	{
-        perror("malloc");
-        return strdup("minishell> ");
-    }
-    strcpy(prompt, GREEN);
-    strcat(prompt, hostname);
-    strcat(prompt, RESET);
-    strcat(prompt, ":");
-    strcat(prompt, BLUE);
-    strcat(prompt, cwd);
-    strcat(prompt, RESET);
-    strcat(prompt, "$ ");
-    return prompt;
-}
-
-
-// Function to get the current working directory and format the prompt
-char *get_prompt()
-{
-    char *cwd;
-    char *hostname;
-    char *prompt;
+	char	*cwd;
+	char	*hostname;
+	char	*prompt;
 
 	cwd = get_current_working_directory();
 	hostname = get_hostname();
 	prompt = build_prompt(hostname, cwd);
-    free(cwd);
-    free(hostname);
-    return prompt;
+	free(cwd);
+	free(hostname);
+	return (prompt);
 }
 
 
-
-/*
-    print prompt - getcwd - getlogin - gethostname
-    read line
-    parse line
-    execute things
-*/
-
-// note: ctl c doesnt work for termination
-void interactive_shell(t_data *data)
+void	do_things(t_data *data)
 {
-    char *input;
-    char *prompt;
+	char	*input;
+	char	*prompt;
 
-    initialize_termcap();
-    set_terminal_attributes(data);
-    handle_terminal_signals();
-
-    // Load history from file into linked list and Readline
-    load_history(&data->history, HISTORY_FILE);
-
-    while (1)
+	while (1)
 	{
-        prompt = get_prompt();
-        input = readline(prompt);
-        free(prompt);
-        if (input)
+		prompt = get_prompt();
+		input = readline(prompt);
+		free(prompt);
+		if (input)
 		{
-            if (strcmp(input, "exit") == 0)
+			if (strcmp(input, "exit") == 0)
 			{
-                free(input);
-                break;
-            }
-            add_history(input);
-            // add input to history linked list
-            add_history_node(&data->history, input);
-            printf("inside int_shell, input is:%s\n", input);
-            process_commandline(data, input);
-            free(input);
-        }
+				free(input);
+				break;
+			}
+			add_history(input);
+			add_history_node(&data->terminal.history, input);
+			process_commandline(data, input); //main logic
+			free(input);
+		}
 		else
-		{
-            write(STDOUT_FILENO, "No input provided.\n", 19);
-        }
-    }
+			write(STDOUT_FILENO, "No input provided.\n", 19);
+	}
+	save_history(&data->terminal.history, HISTORY_FILE);
+	free_history(&data->terminal.history);
+	clear_history(); // ? rl_ ?
+	rl_free_line_state();
+	rl_cleanup_after_signal();
+}
 
-    // Save history to file
-    save_history(&data->history, HISTORY_FILE);
-    free_history(&data->history);
-    reset_terminal_attributes(data);
-    clear_history(); // ? rl_ ?
-    rl_free_line_state();
-    rl_cleanup_after_signal();
+/* 
+show prompt outside of while loop or inside ?
+*/
+void	interactive_shell(t_data *data)
+{
+	initialize_termcap();
+	set_terminal_attributes(data);
+	ft_bzero(&data->terminal.history, sizeof(t_history));
+	if (load_history(&data->terminal.history, HISTORY_FILE) == -1)
+		printf("too bad\n");
+	do_things(data);
 }

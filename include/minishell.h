@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:58:32 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/28 23:32:18 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/29 13:56:33 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,31 +28,42 @@
 #include <termios.h>
 #include <signal.h>
 
-extern volatile sig_atomic_t g_signal_received = 0;
 
 // Macros for color codes
 #define GREEN "\033[1;32m"
 #define BLUE "\033[1;34m"
 #define RESET "\033[0m"
 
+// file to save history 
 #define HISTORY_FILE ".minishell_history"
 
+# define SUCCESS 0 
+# define ERROR_GENERIC 1
+# define ERROR_BUILTIN_IMPROPER 2
+# define ERROR_CANT_EXEC 126
+# define ERROR_CMD_NOT_FOUND 127
+# define FATAL_ERROR_SIG 128
+# define ERROR_CTRL_C_ 130
+
+// max commands kept in history
+# ifndef HISTORY_MAX
+#  define HISTORY_MAX 1000
+# endif
 
 
 typedef struct s_historynode
 {
-    char                *command;
-    struct s_historynode    *next;
+	char					*command;
+	struct s_historynode	*next;
+}				t_historynode;
 
-}           t_historynode;
-
-typedef struct s_historylist
+typedef struct s_history
 {
-    t_historynode *head;
-    t_historynode *tail;
-}			t_historylist;
+	t_historynode	*head;
+	t_historynode	*tail;
+}			t_history;
 
-
+// define what kind of errors you wanna specify(keywords)
 typedef struct s_error
 {
 	int		error_num;
@@ -82,34 +93,40 @@ typedef struct s_env
 	struct s_env	*next;
 }			t_env;
 
+typedef struct s_terminal
+{
+	struct termios	original;
+	struct termios	modified;
+	t_history		history;
+	bool			is_modified;
+}					t_terminal;
 
 /* more things need to be added as we go */
 typedef struct s_data
 {
-	t_lexer		*lexer;
-	t_token		*tokenlist;
-	t_parser	*parser;
-	t_command	*cmdlist;
-	t_env		*env;
-	t_error		error;
-	int			signal;
-	int			exit_status;
-	t_historylist	history;
-	struct termios orig_termios;
-}               t_data;
+	t_lexer			*lexer;
+	t_token			*tokenlist;
+	t_parser		*parser;
+	t_command		*cmdlist;
+	t_env			*env;
+	t_error			error;
+	t_terminal		terminal;
+	int				signal;
+	int				exit_status;
+}					t_data;
 
-static t_data *global_data; // global var for signal
 
 
 /* Utils */
 void print_command_list(t_command *cmdlist);
+// add more printing and testing functions
 
 /* init functions */
 void	init_minishell(t_data *data);
 
 /* non interactive mode */
 int		read_line(char **buffer, size_t size);
-int	non_interactive();
+int		non_interactive();
 
 /* interactive shell */
 void	interactive_shell(t_data *data);
@@ -122,25 +139,29 @@ void move_cursor(int row, int col);
 
 
 /* signals */
-void sigint_handler();
-void handle_terminal_signals();
+// void sigint_handler();
+// void handle_terminal_signals();
 
 
 
 /* history functions */
-void add_history_node(t_historylist *history, const char *command);
-void load_history(t_historylist *history, const char *filename);
-void save_history(t_historylist *history, const char *filename);
-void free_history(t_historylist *history);
-void process_commandline(t_data *data, char *input);
+int		load_history(t_history *history, const char *filename);
+int		add_history_node(t_history *history, const char *command);
+void	free_history(t_history *history);
+int		save_history(t_history *history, const char *filename);
 
 
 /* Env functions */
-int init_env(t_data *data, char **envp);
-int add_env_node(t_env **env_list, t_env **last_node, const char *env_var);
-void free_env_list(t_env *env_list);
-t_env *create_env_node(const char *env_var);
+int	get_env(t_data *data, char **envp);
 
+
+
+/* Error Handling */
+// void    ft_perror(char *msg);
+// void	exit_error(int exit_status, char *msg);
+void	reset_terminal(t_data *data);
+void	exit_shell(t_data *data, char *err_msg);
+void	end_shell(t_data *data);
 
 #endif
 
