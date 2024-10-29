@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:58:32 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/29 13:56:33 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/29 21:08:51 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,10 +123,11 @@ void print_command_list(t_command *cmdlist);
 
 /* init functions */
 void	init_minishell(t_data *data);
+void	shell_mode(t_data *data);
 
 /* non interactive mode */
-int		read_line(char **buffer, size_t size);
-int		non_interactive();
+// int		read_line(char **buffer, size_t size);
+// int		non_interactive();
 
 /* interactive shell */
 void	interactive_shell(t_data *data);
@@ -135,9 +136,9 @@ void	set_terminal_attributes(t_data *data);
 void	reset_terminal_attributes(t_data *data);
 char	*get_prompt();
 void clear_screen();
-void move_cursor(int row, int col);
+//void move_cursor(int row, int col);
 
-
+void	do_things(t_data *data);
 /* signals */
 // void sigint_handler();
 // void handle_terminal_signals();
@@ -154,7 +155,7 @@ int		save_history(t_history *history, const char *filename);
 /* Env functions */
 int	get_env(t_data *data, char **envp);
 
-
+//void process_commandline(t_data *data, char *input);
 
 /* Error Handling */
 // void    ft_perror(char *msg);
@@ -162,6 +163,16 @@ int	get_env(t_data *data, char **envp);
 void	reset_terminal(t_data *data);
 void	exit_shell(t_data *data, char *err_msg);
 void	end_shell(t_data *data);
+void	exit_error(int exit_status, char *msg);
+void	ft_perror(char *msg);
+
+
+
+
+int	parser(t_data *data, char *input);
+t_tokenlist *tokenizer(t_data *data, char *line);
+
+
 
 #endif
 

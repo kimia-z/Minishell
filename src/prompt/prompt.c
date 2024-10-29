@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 14:08:07 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/29 14:09:10 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/29 20:48:04 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 // implement ft_strcmp in libft
 //check functions for errors
 // check return values
+// cursor movement is wacky
 
 // NOTES
 // in bash, what happens if getcwd or gethostname fail? what does minishell need to do in those cases?

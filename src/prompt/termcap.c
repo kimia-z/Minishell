@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:13:29 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/29 13:23:02 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/29 20:21:05 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@
 
 // TODO
 // for initialize_termcap, choose no buffer or yes buffer, and why
-
+// think about cursor
 
 // reset terminal attributes - error and return ?
 void reset_terminal_attributes(t_data *data)
 {
-	if (tcsetattr(STDIN_FILENO, TCSANOW, &data->orig_termios) == -1)
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &data->terminal.original) == -1)
 	{
 		perror("tcsetattr");
 		exit(1);
@@ -29,15 +29,15 @@ void reset_terminal_attributes(t_data *data)
 }
 
 
-// Function to move the cursor to a specific position
-void move_cursor(int row, int col)
-{
-	char *move_cmd = tgetstr("cm", NULL);
-	if (move_cmd)
-	{
-		tputs(tgoto(move_cmd, col, row), 1, putchar);
-	}
-}
+// // Function to move the cursor to a specific position
+// void move_cursor(int row, int col)
+// {
+// 	char *move_cmd = tgetstr("cm", NULL);
+// 	if (move_cmd)
+// 	{
+// 		tputs(tgoto(move_cmd, col, row), 1, putchar);
+// 	}
+// }
 
 
 void clear_screen()

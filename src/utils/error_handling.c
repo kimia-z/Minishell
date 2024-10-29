@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 12:41:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/29 14:13:50 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/29 20:50:41 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 //TODO
 // for exit_shell, include a scenario when it's not error and you wanna exit
-
+// make functions that display error in different situations
 
 /* Writing errors to STDERR */
 void	write_stderr(char *errmsg)

@@ -19,7 +19,7 @@ SRCS = src/expansion/expansion.c src/history/history.c \
 		src/prompt/interactive_shell.c \
 		src/prompt/non_interactive_shell.c src/prompt/signals.c \
 		src/prompt/termcap.c src/utils/error_handling.c \
-		src/utils/test_functions.c src/main.c
+		src/utils/test_functions.c src/main.c src/prompt/prompt.c
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
 all: $(NAME)

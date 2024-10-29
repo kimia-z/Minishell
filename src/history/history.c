@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 13:19:36 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/29 13:55:03 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/29 20:38:02 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 // TODO
 // check load_history for leaks
 // check return values
+// check if history only holds 100 commands, and how it's updating them
 
 // NOTES
 // history is loaded from a file - read and loaded from a file
@@ -79,6 +80,7 @@ int	add_history_node(t_history *history, const char *command)
 	else
 		history->head = new_node;
 	history->tail = new_node;
+	return (0);
 }
 
 

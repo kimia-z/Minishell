@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:09:38 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/29 12:45:17 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/29 20:42:14 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,14 @@ void	init_minishell(t_data *data)
 	//reset/flush terminal if necessary ?
 }
 
+
+void	shell_mode(t_data *data)
+{
+	if (isatty(STDIN_FILENO))
+		interactive_shell(data);
+	else
+		return ;
+}
 
 /*
 	do we need a while(true) loop in here? 
@@ -38,10 +46,31 @@ int	main(int argc, char **argv, char **envp)
 	init_minishell(&data);
 	if (get_env(&data, envp) == -1)
 		exit_shell(&data, "copying env failed."); //what resources do we need to free/cleanup at this point?
-	if (isatty(STDIN_FILENO) == 1) //if input is from a terminal
+	shell_mode(&data);
+	do_things(&data);
+	
+	end_shell(&data);
+	return (data.exit_status);
+}
+
+
+/* 
+old main
+int	main(int argc, char **argv, char **envp)
+{
+	t_data	data;
+
+	(void)argc;
+	(void)argv;
+	//signal_handlers();sigint - sigquit - sigwinch
+	init_minishell(&data);
+	if (get_env(&data, envp) == -1)
+		exit_shell(&data, "copying env failed."); //what resources do we need to free/cleanup at this point?
+	if (isatty(STDIN_FILENO)) //if input is from a terminal
 		interactive_shell(&data); //termcap lib - prompt
 	else
 		non_interactive(); // implement ways to invoke this - now all goes to interactive
 	end_shell(&data);
 	return (data.exit_status);
 }
+*/
