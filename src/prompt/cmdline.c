@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 21:00:50 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/29 21:10:01 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/29 21:13:44 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,13 @@ static t_command *cmd_init()
 
 
 
-t_tokenlist *tokenizer(t_data *data, char *line)
+t_tokenlist *tokenizer(t_data *data, char *input)
 {
 	t_lexer 	*lexer;
 	t_tokenlist	*tokenlist;
-	char		*input;
+	//char		*input;
 
-    input = NULL;
+
 	//input = "echo hello | ls > out | wc -l";
 	lexer = lexer_init(input);
 	data->lexer = lexer;
@@ -103,7 +103,7 @@ int	parser(t_data *data, char *input)
     cmdlist = parse(parser, tokenlist);
     tokenlist_free(tokenlist);
 	free(parser);
-    //execute(data, cmdlist);
+    //ft_execute(data, cmdlist);
     free_command_list(cmdlist);
     return (0);
 }

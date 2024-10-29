@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:58:32 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/29 21:08:51 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/29 21:13:55 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ void	ft_perror(char *msg);
 
 
 int	parser(t_data *data, char *input);
-t_tokenlist *tokenizer(t_data *data, char *line);
+t_tokenlist *tokenizer(t_data *data, char *input);
 
 
 

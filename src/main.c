@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:09:38 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/29 20:42:14 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/29 21:11:53 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,15 @@
 #include "parser.h"
 #include "minishell.h"
 
+//TODO
+// implement sigmal handler
+
 void	init_minishell(t_data *data)
 {
 	memset(data, 0, sizeof(t_data)); // set everything to 0 or null
 	//init fds if you wish to keep them in t_data struct
 	//reset/flush terminal if necessary ?
 }
-
 
 void	shell_mode(t_data *data)
 {
