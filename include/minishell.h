@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:58:32 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/29 21:13:55 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/30 16:52:20 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,9 +139,13 @@ void clear_screen();
 //void move_cursor(int row, int col);
 
 void	do_things(t_data *data);
+
 /* signals */
-// void sigint_handler();
-// void handle_terminal_signals();
+void	set_signals(t_data *data);
+void	unset_signals(void);
+void	signals_for_kids(void);
+void	signal_int_handler(int sig);
+
 
 
 

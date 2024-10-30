@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:33:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/29 21:08:41 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/30 17:58:14 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@
 //check functions for errors
 // check return values
 // implement handle_buffer()
+// prompt doesnt print after ctrl c 
+// arrow keys and backspace is fucked
+
 
 
 //NOTES
@@ -43,38 +46,45 @@
 // 	}
 // }
 
-void	do_things(t_data *data)
+int	do_things(t_data *data)
 {
 	char	*input;
 	char	*prompt;
 
 	while (1)
 	{
+		set_signals(data);
 		prompt = get_prompt();
 		input = readline(prompt); //include error checking
-		free(prompt);
-		if (input)
+		//free(prompt);
+		if (input == NULL) // Handle Ctrl+D
+        {
+            write(STDOUT_FILENO, "exit\n", 5); //also being handled in end shell
+            break;
+        }
+		if (strcmp(input, "exit") == 0) //also add ctrl d or empty 
 		{
-			if (strcmp(input, "exit") == 0) //also add ctrl d or empty 
-			{
-				free(input);
-				break;
-			}
-			add_history(input);
-			add_history_node(&data->terminal.history, input);
-			//process_commandline(data, input); //main logic
-			parser(data, input);
 			free(input);
-			//handle_buffer();
+			break;
 		}
+		add_history(input);
+		add_history_node(&data->terminal.history, input);
+		//process_commandline(data, input); //main logic
+		if (parser(data, input) == -1)
+			return (1); // 
+		free(input);
+		//handle_buffer();
+		
 		//else
 			//write(STDOUT_FILENO, "No input provided.\n", 19);
 	}
+	free(prompt);
 	save_history(&data->terminal.history, HISTORY_FILE);
 	free_history(&data->terminal.history);
 	clear_history(); // ? rl_ ?
 	rl_free_line_state();
 	rl_cleanup_after_signal();
+	return 0;
 }
 
 /* 

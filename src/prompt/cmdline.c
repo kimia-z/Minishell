@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 21:00:50 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/29 21:13:44 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/30 17:55:27 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static t_command *cmd_init()
     cmd->redirect_out = NULL;
     cmd->redirect_append = NULL;
     cmd->next = NULL;
-    return cmd;
+    return (cmd);
 }
 
 
@@ -82,6 +82,8 @@ t_tokenlist *tokenizer(t_data *data, char *input)
 
 	//input = "echo hello | ls > out | wc -l";
 	lexer = lexer_init(input);
+	if (!lexer)
+		return (NULL);
 	data->lexer = lexer;
 	tokenlist = tokenlist_init();
 	lexer_process_input(lexer, tokenlist);
@@ -96,11 +98,19 @@ int	parser(t_data *data, char *input)
 	t_command *cmdlist;
 
 	tokenlist = tokenizer(data, input);
+	if (!tokenlist)
+		return (-1); // malloc error - lethal
 	parser = parser_init(tokenlist);
+	if (!parser)
+		return (-1); // mallloc error - lethal
     data->parser = parser;
 	cmdlist = cmd_init();
+	if (!cmdlist)
+		return (-1); // malloc error - lethal
     data->cmdlist = cmdlist;
     cmdlist = parse(parser, tokenlist);
+	if (!cmdlist)
+		return (-1); // syntax error - parsing error - path not found - lethal
     tokenlist_free(tokenlist);
 	free(parser);
     //ft_execute(data, cmdlist);

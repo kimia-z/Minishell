@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:09:38 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/29 21:11:53 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/30 17:35:56 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	init_minishell(t_data *data)
 void	shell_mode(t_data *data)
 {
 	if (isatty(STDIN_FILENO))
-		interactive_shell(data);
+		return (interactive_shell(data));
 	else
 		return ;
 }
@@ -44,11 +44,12 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	//signal_handlers();sigint - sigquit - sigwinch
+
 	init_minishell(&data);
 	if (get_env(&data, envp) == -1)
 		exit_shell(&data, "copying env failed."); //what resources do we need to free/cleanup at this point?
 	shell_mode(&data);
+	
 	do_things(&data);
 	
 	end_shell(&data);

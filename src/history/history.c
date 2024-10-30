@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 13:19:36 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/29 20:38:02 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/30 17:37:23 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 // check load_history for leaks
 // check return values
 // check if history only holds 100 commands, and how it's updating them
+// new line is also being stored in histor, fix it
 
 // NOTES
 // history is loaded from a file - read and loaded from a file

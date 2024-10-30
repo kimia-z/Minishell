@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   parser.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/10/30 17:49:42 by yasamankari   #+#    #+#                 */
+/*   Updated: 2024/10/30 17:56:22 by yasamankari   ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "parser.h"
 #include "lexer.h"
-
+// line 183
 static void advance_token(t_parser *parser)
 {
     if (parser->current_token != NULL)
@@ -123,7 +135,7 @@ t_command	*parse_command(t_parser *parser)
                     free(command->command);
                     free(command->path);
                     free(command);
-                    return NULL;
+                    return NULL; // malloc error - lethal
                 }
 			}
 		}
@@ -155,11 +167,11 @@ t_command	*parse(t_parser *parser, t_tokenlist *tokenlist)
 	commandlist = NULL;
 	last_command = NULL;
 
-	if (syntax_checker(tokenlist) == 1)
+	if (syntax_checker(tokenlist) == -1)
 	{
 		printf("syntax error\n");
 		tokenlist_free(tokenlist);
-		exit(EXIT_FAILURE);
+		return (NULL);
 	}
 	while (parser->current_token != NULL)
 	{
@@ -168,8 +180,8 @@ t_command	*parse(t_parser *parser, t_tokenlist *tokenlist)
 		current_command = parse_command(parser);
 		if (current_command == NULL)
         {
-            printf("Error parsing command\n");
-            break;
+            printf("Error parsing command\n"); // lethal?
+            return (NULL); // lethal
         }
 		if (commandlist == NULL)
 			commandlist = current_command;
