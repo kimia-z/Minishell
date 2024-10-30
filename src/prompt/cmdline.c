@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 21:00:50 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/30 17:55:27 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/30 18:25:17 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,7 @@ static t_command *cmd_init()
 {
     t_command *cmd = (t_command *)malloc(sizeof(t_command));
     if (!cmd)
-    {
-        perror("malloc");
-        return NULL;
-    }
+        return (NULL);
     cmd->command = NULL;
     cmd->path = NULL;
     cmd->args = NULL;
@@ -99,18 +96,18 @@ int	parser(t_data *data, char *input)
 
 	tokenlist = tokenizer(data, input);
 	if (!tokenlist)
-		return (-1); // malloc error - lethal
+		return (ft_perror(malloc_error), -1); // malloc error - lethal
 	parser = parser_init(tokenlist);
 	if (!parser)
-		return (-1); // mallloc error - lethal
+		return (ft_perror(malloc_error), -1); // mallloc error - lethal
     data->parser = parser;
 	cmdlist = cmd_init();
 	if (!cmdlist)
-		return (-1); // malloc error - lethal
+		return (ft_perror(malloc_error), -1); // malloc error - lethal
     data->cmdlist = cmdlist;
     cmdlist = parse(parser, tokenlist);
 	if (!cmdlist)
-		return (-1); // syntax error - parsing error - path not found - lethal
+		return (-1); // syntax error - parsing error - path not found - lethal -dont print error, already handled
     tokenlist_free(tokenlist);
 	free(parser);
     //ft_execute(data, cmdlist);

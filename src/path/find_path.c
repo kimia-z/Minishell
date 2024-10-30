@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 15:54:56 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/09/14 16:54:32 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/30 18:20:15 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,13 @@ static char **path_variable()
     path = getenv("PATH");
     if (path == NULL)
     {
-        perror("Error extracting the PATH variable");
+        //perror("Error extracting the PATH variable");
         return (NULL);
     }
     directories = ft_split(path, ':');
     if (directories == NULL)
     {
-        perror("Error getting the PATH directories from ft_split");
+        //perror("Error getting the PATH directories from ft_split");
         return (NULL);
     }
     return (directories);

@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:58:32 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/30 16:52:20 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/30 18:23:40 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,24 @@ typedef struct s_history
 	t_historynode	*tail;
 }			t_history;
 
+typedef enum e_errtype
+{
+	success = 0,
+	malloc_error,
+	syscall_error,
+	cmd_error,
+	permission_error,
+	syntax_error,
+	path_error,
+	error
+	
+}			t_errtype;
+
+
 // define what kind of errors you wanna specify(keywords)
 typedef struct s_error
 {
-	int		error_num;
+	t_errtype		errortype;
 	char 	*error_msg;
 }			t_error;
 
@@ -138,7 +152,7 @@ char	*get_prompt();
 void clear_screen();
 //void move_cursor(int row, int col);
 
-void	do_things(t_data *data);
+int		do_things(t_data *data);
 
 /* signals */
 void	set_signals(t_data *data);
@@ -168,7 +182,7 @@ void	reset_terminal(t_data *data);
 void	exit_shell(t_data *data, char *err_msg);
 void	end_shell(t_data *data);
 void	exit_error(int exit_status, char *msg);
-void	ft_perror(char *msg);
+void	ft_perror(t_errtype);
 
 
 

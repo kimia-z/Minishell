@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 12:41:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/29 20:50:41 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/30 18:10:33 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@
 void	write_stderr(char *errmsg)
 {
 	ft_putstr_fd("Error: ", STDERR_FILENO);
-	if (errmsg)
-		ft_putstr_fd(errmsg, STDERR_FILENO);
-	ft_putstr_fd("\n", STDERR_FILENO);
+	// if (errmsg)
+	// 	ft_putstr_fd(errmsg, STDERR_FILENO);
+	// ft_putstr_fd("\n", STDERR_FILENO);
+	perror(errmsg);
 }
 
 void free_command(t_command *command)
@@ -69,10 +70,10 @@ void free_command_list(t_command *cmdlist)
 }
 
 /* prints error to stderr */
-void	ft_perror(char *msg)
+void	ft_perror(t_errtype error)
 {
-	ft_putstr_fd("-bash: ", STDERR_FILENO);
-	perror(msg);
+	ft_putstr_fd("Error: ", STDERR_FILENO);
+	perror(error);
 }
 
 /* exit and print error to stderr*/

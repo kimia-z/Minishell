@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 17:21:55 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/10/30 17:50:40 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/30 18:18:22 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,10 @@ int syntax_checker(t_tokenlist *tokenlist)
 		if (is_operator(temp->type))
 		{
 			if (operator_checker(temp->type, i, tokenlist->token_count, left_op) == 1)
-			{
-				write_stderr("Syntax not correct.");
 				return (-1);
-			}
 		}
 		else if (temp->type == TOKEN_UNKNOWN)
 		{
-			write_stderr("Syntax not correct, unknown operator.");
 			return (-1);
 		}
 		i++;

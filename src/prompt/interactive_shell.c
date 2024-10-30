@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:33:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/30 17:58:14 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/30 18:25:59 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	do_things(t_data *data)
 		add_history(input);
 		add_history_node(&data->terminal.history, input);
 		//process_commandline(data, input); //main logic
-		if (parser(data, input) == -1)
+		if (parser(data, input) == -1) // dont print , just handle exit, cleanup
 			return (1); // 
 		free(input);
 		//handle_buffer();

@@ -6,12 +6,13 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/30 17:49:42 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/30 17:56:22 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/10/30 18:24:28 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "lexer.h"
+#include "minishell.h"
 // line 183
 static void advance_token(t_parser *parser)
 {
@@ -44,6 +45,7 @@ void parse_redirection(t_command *command, t_parser *parser)
 }
 
 // check>??
+// malloc error
 int get_arg(t_command *command, char *value)
 {
 	char	**new_args;
@@ -60,10 +62,7 @@ int get_arg(t_command *command, char *value)
     // Allocate memory for the new argument array
     new_args = malloc((i + 2) * sizeof(char *));
     if (new_args == NULL)
-    {
-        perror("malloc");
-        return (1);
-    }
+        return (ft_perror(malloc_error), 1); 
 
     // Copy existing arguments to the new array
 	while (j < i)
@@ -85,17 +84,14 @@ int get_arg(t_command *command, char *value)
 	return (0);
 }
 
-
+// malloc error - 
 t_command	*parse_command(t_parser *parser)
 {
 	t_command *command;
 	int is_first_arg = 1;
 	command = malloc(sizeof(t_command));
 	if (command == NULL)
-	{
-        perror("malloc");
         return NULL;
-    }
 	// command->command = NULL;
 	// command->args = NULL;
 	// command->path = NULL;
@@ -118,9 +114,10 @@ t_command	*parse_command(t_parser *parser)
 			command->path = find_command_path(command->command);
 			if (command->path == NULL)
             {
-                printf("Error: Command path not found for %s\n", command->command); // Debug statement
+                //printf("Error: Command path not found for %s\n", command->command); // Debug statement
                 free(command->command);
                 free(command);
+				ft_perror(path_error);
                 return NULL;
             }
 			printf("Command path: %s\n", command->path); // Debug statement
@@ -131,11 +128,11 @@ t_command	*parse_command(t_parser *parser)
 			{
 				if (get_arg(command, parser->current_token->value) == 1)// what shall i pass to it?
                 {
-                    printf("Error: Failed to get argument %s\n", parser->current_token->value); // Debug statement
+                    //printf("Error: Failed to get argument %s\n", parser->current_token->value); // Debug statement
                     free(command->command);
                     free(command->path);
                     free(command);
-                    return NULL; // malloc error - lethal
+                    return (NULL); // malloc error - lethal
                 }
 			}
 		}
@@ -169,18 +166,16 @@ t_command	*parse(t_parser *parser, t_tokenlist *tokenlist)
 
 	if (syntax_checker(tokenlist) == -1)
 	{
-		printf("syntax error\n");
 		tokenlist_free(tokenlist);
-		return (NULL);
+		return (ft_perror(syntax_error), NULL);
 	}
 	while (parser->current_token != NULL)
 	{
-		printf("Current token: %s\n", parser->current_token->value); // Debug statement
-
+		//printf("Current token: %s\n", parser->current_token->value); // Debug statement
 		current_command = parse_command(parser);
 		if (current_command == NULL)
         {
-            printf("Error parsing command\n"); // lethal?
+            //printf("Error parsing command\n"); // lethal?
             return (NULL); // lethal
         }
 		if (commandlist == NULL)
