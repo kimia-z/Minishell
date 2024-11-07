@@ -1,7 +1,7 @@
 #include "lexer.h"
 
 /* Initialize lexer with the given input */
-t_lexer	*lexer_init(char *input)
+t_lexer	*lexer_init(char *input, char **envp)
 {
 	t_lexer	*lexer;
 
@@ -11,6 +11,9 @@ t_lexer	*lexer_init(char *input)
 	ft_bzero(lexer, sizeof(t_lexer));
 	lexer->input = ft_strdup(input);
 	if (!lexer->input)
+		return (NULL);
+	lexer->env = ft_strdup(envp);
+	if (!lexer->env)
 		return (NULL);
 	lexer->tokens = NULL;
 	lexer->position = 0;

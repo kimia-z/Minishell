@@ -50,7 +50,7 @@ int	main(int argc, char **argv, char **envp)
 		exit_shell(&data, "copying env failed."); //what resources do we need to free/cleanup at this point?
 	shell_mode(&data);
 	
-	do_things(&data);
+	do_things(&data, envp);
 	
 	end_shell(&data);
 	return (data.exit_status);

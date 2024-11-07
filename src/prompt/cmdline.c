@@ -58,6 +58,7 @@ static t_command *cmd_init()
     t_command *cmd = (t_command *)malloc(sizeof(t_command));
     if (!cmd)
         return (NULL);
+	//cmd->command = NULL;
     cmd->command = NULL;
     cmd->path = NULL;
     cmd->args = NULL;
@@ -70,7 +71,7 @@ static t_command *cmd_init()
 
 
 
-t_tokenlist *tokenizer(t_data *data, char *input)
+t_tokenlist *tokenizer(t_data *data, char *input, char **envp)
 {
 	t_lexer 	*lexer;
 	t_tokenlist	*tokenlist;
@@ -78,7 +79,7 @@ t_tokenlist *tokenizer(t_data *data, char *input)
 
 
 	//input = "echo hello | ls > out | wc -l";
-	lexer = lexer_init(input);
+	lexer = lexer_init(input, envp);
 	if (!lexer)
 		return (NULL);
 	data->lexer = lexer;
@@ -88,13 +89,13 @@ t_tokenlist *tokenizer(t_data *data, char *input)
 	return (tokenlist);
 }
 
-int	parser(t_data *data, char *input)
+int	parser(t_data *data, char *input, char **envp)
 {
 	t_tokenlist	*tokenlist;
 	t_parser *parser;
 	t_command *cmdlist;
 
-	tokenlist = tokenizer(data, input);
+	tokenlist = tokenizer(data, input, envp);
 	if (!tokenlist)
 		return (ft_perror(malloc_error), -1); // malloc error - lethal
 	parser = parser_init(tokenlist);

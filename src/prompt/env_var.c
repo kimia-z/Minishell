@@ -22,9 +22,12 @@
 // NOTES
 // can i use environ instead of all this? (as an extern var)
 
+//ask from Yasaman: is list like this?
+//key : USER
+//value : kziari
 static void	free_env_node(t_env *node)
 {
-	free(node->name);
+	free(node->key);
 	free(node->value);
 	free(node);
 }
@@ -54,10 +57,10 @@ static t_env	*create_env_node(const char *env_var)
 	if (!delimiter)
 		return (free(node), NULL);
 	len = delimiter - env_var;
-	node->name = strndup(env_var, len); // implement in libft
+	node->key = strndup(env_var, len); // implement in libft
 	node->value = ft_strdup(delimiter + 1);
 	node->next = NULL;
-	if (!node->name || !node->value)
+	if (!node->key || !node->value)
 		return (NULL);
 	return (node);
 }

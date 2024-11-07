@@ -93,16 +93,16 @@ typedef enum s_processtype
 }				t_processtype;
 
 
-typedef struct s_process
-{
-	t_processtype	process_type;
-	int				pid;
-	int				status;
-}			t_process;
+// typedef struct s_process
+// {
+// 	t_processtype	process_type;
+// 	int				pid;
+// 	int				status;
+// }			t_process;
 
 typedef struct s_env
 {
-	char			*name;
+	char			*key;
 	char			*value;
 	struct s_env	*next;
 }			t_env;
@@ -152,7 +152,7 @@ char	*get_prompt();
 void clear_screen();
 //void move_cursor(int row, int col);
 
-int		do_things(t_data *data);
+int		do_things(t_data *data, char **envp);
 
 /* signals */
 void	set_signals(t_data *data);
@@ -187,8 +187,8 @@ void	ft_perror(t_errtype);
 
 
 
-int	parser(t_data *data, char *input);
-t_tokenlist *tokenizer(t_data *data, char *input);
+int	parser(t_data *data, char *input, char **envp);
+t_tokenlist *tokenizer(t_data *data, char *input, char **envp);
 
 
 

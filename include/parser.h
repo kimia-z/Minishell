@@ -20,12 +20,15 @@
 
 typedef struct s_command
 {
-	char				*command;
+	//char	**command;
+	char				*command;//remove
 	char				*path;
-	char				**args;
+	char				**args; //remove
 	char				*redirect_in;
 	char				*redirect_out;
 	char 				*redirect_append;
+	//int in_fd
+	//int out_fd
 	struct s_command	*next;
 }				t_command;
 

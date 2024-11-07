@@ -53,7 +53,7 @@ typedef struct s_lexer
 	char				*input; // contents of commandline
 	size_t				length;
 	char				start;
-	//char				**env;// ?
+	char				**env;
 	int					num_pipes;
 }			t_lexer;
 
@@ -61,7 +61,7 @@ typedef struct s_lexer
 
 /* Lexer functions */
 void		lexer_process_input(t_lexer *lexer, t_tokenlist *tokenlist);
-t_lexer		*lexer_init(char *input);
+t_lexer		*lexer_init(char *input, char **envp);
 enum e_token_type	get_operator_type(char *value);
 void		lexer_free(t_lexer *lexer);
 void		lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op, int pos);

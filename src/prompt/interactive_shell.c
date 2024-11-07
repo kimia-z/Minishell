@@ -46,7 +46,7 @@
 // 	}
 // }
 
-int	do_things(t_data *data)
+int	do_things(t_data *data, char **envp)
 {
 	char	*input;
 	char	*prompt;
@@ -70,7 +70,7 @@ int	do_things(t_data *data)
 		add_history(input);
 		add_history_node(&data->terminal.history, input);
 		//process_commandline(data, input); //main logic
-		if (parser(data, input) == -1) // dont print , just handle exit, cleanup
+		if (parser(data, input, envp) == -1) // dont print , just handle exit, cleanup
 			return (1); // 
 		free(input);
 		//handle_buffer();
