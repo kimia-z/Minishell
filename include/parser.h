@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 16:47:59 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/10/30 18:17:39 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/12 17:07:48 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ t_command		*parse(t_parser *parser, t_tokenlist *tokenlist);
 t_parser		*parser_init(t_tokenlist *tokenlist);
 t_command		*parse_command(t_parser *parser);
 void			parse_redirection(t_command *command, t_parser *parser);
-int				get_arg(t_command *command, char *value);
+//int				get_arg(t_command *command, char *value);
 
 /* Command Path */
 char			*find_command_path(char *commandname);

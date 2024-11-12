@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/30 17:49:42 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/30 18:24:28 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/12 17:12:02 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,15 +111,90 @@ int	count_words(t_parser *token)
 	return (count);
 }
 
-// malloc error - 
-//test this function
+
 t_command	*parse_command(t_parser *parser)
 {
-	t_command *command;
-	//int is_first_arg = 1;
-	command = malloc(sizeof(t_command));
-	if (command == NULL)
-		return NULL;
+    t_command *command;
+    int is_first_arg = 1;
+    int command_count = 0;
+
+    command = malloc(sizeof(t_command));
+    if (command == NULL)
+        return NULL;
+
+    command->command = NULL;
+    command->path = NULL;
+    command->redirect_in = NULL;
+    command->redirect_out = NULL;
+    command->redirect_append = NULL;
+    command->infile_fd = -1;
+    command->outfile_fd = -1;
+    command->next = NULL;
+
+    while (parser->current_token != NULL && parser->current_token->type != TOKEN_OP_PIPE)
+    {
+        printf("Parsing token: %s\n", parser->current_token->value); // Debug statement
+        if (is_command(parser->current_token->type))
+        {
+            if (is_first_arg)
+            {
+                command->command = malloc(2 * sizeof(char *));
+                if (command->command == NULL)
+                {
+                    free(command);
+                    return NULL;
+                }
+                command->command[0] = ft_strdup(parser->current_token->value);
+                command->command[1] = NULL;
+                printf("Command: %s\n", command->command[0]); // Debug statement
+
+                // Find command path
+                command->path = find_command_path(command->command[0]);
+                if (command->path == NULL)
+                {
+                    free(command->command[0]);
+                    free(command->command);
+                    free(command);
+                    //ft_perror("path_error");
+                    return NULL;
+                }
+                printf("Command path: %s\n", command->path); // Debug statement
+
+                is_first_arg = 0;
+                command_count = 1;
+            }
+            else
+            {
+                command->command = realloc(command->command, (command_count + 2) * sizeof(char *));
+                if (command->command == NULL)
+                {
+                    free(command->command[0]);
+                    free(command->path);
+                    free(command);
+                    return NULL;
+                }
+                command->command[command_count] = ft_strdup(parser->current_token->value);
+                command->command[command_count + 1] = NULL;
+                command_count++;
+            }
+        }
+        if (is_redirection(parser->current_token->type))
+            parse_redirection(command, parser);
+        advance_token(parser);
+    }
+    return command;
+}
+
+
+// malloc error - 
+//test this function
+// t_command	*parse_command(t_parser *parser)
+// {
+// 	t_command *command;
+// 	int is_first_arg = 1;
+// 	command = malloc(sizeof(t_command));
+// 	if (command == NULL)
+// 		return NULL;
 	// command->command = NULL;
 	// command->args = NULL;
 	// command->path = NULL;
@@ -128,100 +203,100 @@ t_command	*parse_command(t_parser *parser)
 	// command->redirect_append = NULL;
 	// command->next = NULL;
 
-	int i = 0;
-	//t_parser *temp = parser;
-	printf("\n\n\n curr token befor ec word: %s\n", parser->current_token->value);
-	int word_token = count_words(parser);
-	printf("word:%d\n", word_token);
-	command->command = malloc (sizeof(char *) * word_token + 1);
-	command->command[word_token] = NULL;
-	if (command->command == NULL)
-		return NULL;
-	printf("\n\nhello out of while\n\n");
-	printf("\n\n\n curr token: %s\n", parser->current_token->value);
-	printf("\n\n\n curr tokentype : %d\n", parser->current_token->type);
-	while (parser->current_token != NULL && parser->current_token->type != TOKEN_OP_PIPE)
-	{
-		printf("\n\nhello from while\n");
-		if (parser->current_token->type != TOKEN_WORD)
-		{
-			if (parser->current_token->type == TOKEN_OP_REDIRECTION_IN)
-			{
-				command->redirect_in = ft_strdup(parser->current_token->next->value);
-				//not sure about open flags
-				command->infile_fd = open(command->redirect_in, O_RDONLY);
-				parser->current_token = parser->current_token->next;
-			}
-			else if (parser->current_token->type == TOKEN_OP_REDIRECTION_OUT)
-			{
-				command->redirect_out = ft_strdup(parser->current_token->next->value);
-				//not sure about open flags
-				command->outfile_fd = open(command->redirect_out, O_CREAT | O_WRONLY);
-				parser->current_token = parser->current_token->next;
-			}
-			else if (parser->current_token->type == TOKEN_OP_REDIRECTION_APPEND)
-			{
-				command->redirect_out = ft_strdup(parser->current_token->next->value);
-				//not sure about open flags
-				command->outfile_fd = open(command->redirect_out, O_CREAT | O_APPEND);
-				parser->current_token = parser->current_token->next;
-			}
-		}
-		else
-		{
-			printf("\n\n error from loop 1 : %s\n", command->command[i]);
-			command->command[i] = ft_strdup(parser->current_token->value);
-			printf("\n\n error from loop 2 : %s\n", command->command[i]);
-			i++;
-		}
-		parser->current_token = parser->current_token->next;
-	}
-	printf("error: %s\n", command->command[0]);
-	command->path = find_command_path(command->command[0]);
-	//is it nessary to free stuff if path=NULL ? in execution there is checking for path
-	return (command);
+	// int i = 0;
+	// //t_parser *temp = parser;
+	// printf("\n\n\n curr token befor ec word: %s\n", parser->current_token->value);
+	// int word_token = count_words(parser);
+	// printf("word:%d\n", word_token);
+	// command->command = malloc (sizeof(char *) * word_token + 1);
+	// command->command[word_token] = NULL;
+	// if (command->command == NULL)
+	// 	return NULL;
+	// printf("\n\nhello out of while\n\n");
+	// printf("\n\n\n curr token: %s\n", parser->current_token->value);
+	// printf("\n\n\n curr tokentype : %d\n", parser->current_token->type);
 	// while (parser->current_token != NULL && parser->current_token->type != TOKEN_OP_PIPE)
 	// {
-	// 	printf("Parsing token: %s\n", parser->current_token->value); // Debug statement
-		// if (is_command(parser->current_token->type))
-		// {
-		// 	if (is_first_arg)
-		// 	{
-		// 	command->command = ft_strdup(parser->current_token->value);
-		// 	printf("Command: %s\n", command->command); // Debug statement
-
-		// 	//find command path
-		// 	command->path = find_command_path(command->command);
-		// 	if (command->path == NULL)
-		//     {
-		//         //printf("Error: Command path not found for %s\n", command->command); // Debug statement
-		//         free(command->command);
-		//         free(command);
-		// 		ft_perror(path_error);
-		//         return NULL;
-		//     }
-		// 	printf("Command path: %s\n", command->path); // Debug statement
-
-		// 	is_first_arg = 0;
-		// 	}
-		// 	else
-		// 	{
-		// 		if (get_arg(command, parser->current_token->value) == 1)// what shall i pass to it?
-		//         {
-		//             //printf("Error: Failed to get argument %s\n", parser->current_token->value); // Debug statement
-		//             free(command->command);
-		//             free(command->path);
-		//             free(command);
-		//             return (NULL); // malloc error - lethal
-		//         }
-		// 	}
-		// }
-		// if (is_redirection(parser->current_token->type))// is token any of the redirect types?
-		// 	parse_redirection(command, parser);
-		// advance_token(parser);
+	// 	printf("\n\nhello from while\n");
+	// 	if (parser->current_token->type != TOKEN_WORD)
+	// 	{
+	// 		if (parser->current_token->type == TOKEN_OP_REDIRECTION_IN)
+	// 		{
+	// 			command->redirect_in = ft_strdup(parser->current_token->next->value);
+	// 			//not sure about open flags
+	// 			command->infile_fd = open(command->redirect_in, O_RDONLY);
+	// 			parser->current_token = parser->current_token->next;
+	// 		}
+	// 		else if (parser->current_token->type == TOKEN_OP_REDIRECTION_OUT)
+	// 		{
+	// 			command->redirect_out = ft_strdup(parser->current_token->next->value);
+	// 			//not sure about open flags
+	// 			command->outfile_fd = open(command->redirect_out, O_CREAT | O_WRONLY);
+	// 			parser->current_token = parser->current_token->next;
+	// 		}
+	// 		else if (parser->current_token->type == TOKEN_OP_REDIRECTION_APPEND)
+	// 		{
+	// 			command->redirect_out = ft_strdup(parser->current_token->next->value);
+	// 			//not sure about open flags
+	// 			command->outfile_fd = open(command->redirect_out, O_CREAT | O_APPEND);
+	// 			parser->current_token = parser->current_token->next;
+	// 		}
+	// 	}
+	// 	else
+	// 	{
+	// 		printf("\n\n error from loop 1 : %s\n", command->command[i]);
+	// 		command->command[i] = ft_strdup(parser->current_token->value);
+	// 		printf("\n\n error from loop 2 : %s\n", command->command[i]);
+	// 		i++;
+	// 	}
+	// 	parser->current_token = parser->current_token->next;
 	// }
+	// printf("error: %s\n", command->command[0]);
+	// command->path = find_command_path(command->command[0]);
+	// //is it nessary to free stuff if path=NULL ? in execution there is checking for path
 	// return (command);
-}
+// 	while (parser->current_token != NULL && parser->current_token->type != TOKEN_OP_PIPE)
+// 	{
+// 		printf("Parsing token: %s\n", parser->current_token->value); // Debug statement
+// 		if (is_command(parser->current_token->type))
+// 		{
+// 			if (is_first_arg)
+// 			{
+// 			command->command = ft_strdup(parser->current_token->value);
+// 			printf("Command: %s\n", command->command); // Debug statement
+
+// 			//find command path
+// 			command->path = find_command_path(command->command);
+// 			if (command->path == NULL)
+// 		    {
+// 		        //printf("Error: Command path not found for %s\n", command->command); // Debug statement
+// 		        free(command->command);
+// 		        free(command);
+// 				ft_perror(path_error);
+// 		        return NULL;
+// 		    }
+// 			printf("Command path: %s\n", command->path); // Debug statement
+
+// 			is_first_arg = 0;
+// 			}
+// 			else
+// 			{
+// 				if (get_arg(command, parser->current_token->value) == 1)// what shall i pass to it?
+// 		        {
+// 		            //printf("Error: Failed to get argument %s\n", parser->current_token->value); // Debug statement
+// 		            free(command->command);
+// 		            free(command->path);
+// 		            free(command);
+// 		            return (NULL); // malloc error - lethal
+// 		        }
+// 			}
+// 		}
+// 		if (is_redirection(parser->current_token->type))// is token any of the redirect types?
+// 			parse_redirection(command, parser);
+// 		advance_token(parser);
+// 	}
+// 	return (command);
+// }
 
 t_parser	*parser_init(t_tokenlist *tokenlist)
 {
@@ -253,7 +328,6 @@ t_command	*parse(t_parser *parser, t_tokenlist *tokenlist)
 	{
 		//printf("Current token: %s\n", parser->current_token->value); // Debug statement
 
-		printf("\n\n\n error from parse: %s\n", parser->current_token->value);
 		current_command = parse_command(parser);
 		if (current_command == NULL)
 		{
