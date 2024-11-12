@@ -60,12 +60,14 @@ TCSANOW vs. TCSAFLUSH - which one and why
 void	set_terminal_attributes(t_data *data)
 {
 	if (tcgetattr(STDIN_FILENO, &data->terminal.original) == -1)
-		exit_error(ERROR_GENERIC, "tcgetattr");
+		printf("oops\n");
+		//exit_error(ERROR_GENERIC, "tcgetattr");
 	data->terminal.modified = data->terminal.original;
 	data->terminal.modified.c_lflag &= ~ICANON;
 	data->terminal.modified.c_lflag |= ECHO;
 	if (tcsetattr(STDIN_FILENO, TCSANOW, &data->terminal.modified) == -1)
-		exit_error(ERROR_GENERIC, "tcgetattr");
+	//exit_error(ERROR_GENERIC, "tcgetattr");
+		printf("oops\n");
 	data->terminal.is_modified = true; 
 }
 
@@ -79,5 +81,6 @@ void	initialize_termcap()
 	char	term_buffer[2048];
 
 	if (tgetent(term_buffer, getenv("TERM")) < 0)
-		exit_error(ERROR_GENERIC, "termcap");
+	//exit_error(ERROR_GENERIC, "termcap");
+		printf("oopss\n");
 }

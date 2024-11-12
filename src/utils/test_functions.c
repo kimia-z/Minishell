@@ -5,19 +5,22 @@
 void print_command_list(t_command *cmdlist)
 {
     t_command *current = cmdlist;
-    int i;
+    //int i;
 
     while (current != NULL)
     {
-        printf("Command: %s\n", current->command);
-        printf("Arguments: ");
-        if (current->args != NULL)
+        for (int j = 0; current->command[j]; j++)
         {
-            for (i = 0; current->args[i] != NULL; i++)
-            {
-                printf("%s ", current->args[i]);
-            }
+            printf("Command: %s\n", current->command[j]);
         }
+        printf("Arguments: ");
+        // if (current->args != NULL)
+        // {
+        //     for (i = 0; current->args[i] != NULL; i++)
+        //     {
+        //         printf("%s ", current->args[i]);
+        //     }
+        // }
         printf("\n");
 
         if (current->redirect_in != NULL)

@@ -30,7 +30,7 @@ void	write_stderr(char *errmsg)
 
 void free_command(t_command *command)
 {
-	int i;
+	//int i;
 
 	if (command == NULL)
 		return;
@@ -38,14 +38,14 @@ void free_command(t_command *command)
 	if (command->command != NULL)
 		free(command->command);
 
-	if (command->args != NULL)
-	{
-		for (i = 0; command->args[i] != NULL; i++)
-		{
-			free(command->args[i]);
-		}
-		free(command->args);
-	}
+	// if (command->args != NULL)
+	// {
+	// 	for (i = 0; command->args[i] != NULL; i++)
+	// 	{
+	// 		free(command->args[i]);
+	// 	}
+	// 	free(command->args);
+	// }
 	if (command->redirect_in != NULL)
 		free(command->redirect_in);
 	if (command->redirect_out != NULL)
@@ -69,20 +69,20 @@ void free_command_list(t_command *cmdlist)
 	}
 }
 
-/* prints error to stderr */
-void	ft_perror(t_errtype error)
-{
-	ft_putstr_fd("Error: ", STDERR_FILENO);
-	perror(error);
-}
+// /* prints error to stderr */
+// void	ft_perror(t_errtype error)
+// {
+// 	ft_putstr_fd("Error: ", STDERR_FILENO);
+// 	perror((const char *)error);
+// }
 
-/* exit and print error to stderr*/
-void	exit_error(int exit_status, char *msg)
-{
-	ft_perror(msg);
-	//reset_terminal();
-	exit(exit_status);
-}
+// /* exit and print error to stderr*/
+// void	exit_error(int exit_status, char *msg)
+// {
+// 	ft_perror(msg);
+// 	//reset_terminal();
+// 	exit(exit_status);
+// }
 
 /* when things went well and you wanna exit */
 void	end_shell(t_data *data)
@@ -100,7 +100,8 @@ terminal settings might change when entering interactive mode(canonical mdoe and
 void	exit_shell(t_data *data, char *err_msg)
 {
 	if (err_msg)
-		ft_perror(err_msg);
+		printf("oops\n");
+	//ft_perror(err_msg);
 	reset_terminal(data);
 	exit(EXIT_FAILURE);
 }
@@ -114,5 +115,6 @@ void	reset_terminal(t_data *data)
 	if (!data->terminal.is_modified)
 		return ;
 	if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &data->terminal.original) == -1)
-		ft_perror("tcsetattr");
+		printf("oops\n");
+	//ft_perror("tcsetattr");
 }

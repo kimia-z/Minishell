@@ -72,7 +72,7 @@ typedef enum e_errtype
 	permission_error,
 	syntax_error,
 	path_error,
-	error
+	generic_error
 	
 }			t_errtype;
 
@@ -152,7 +152,7 @@ char	*get_prompt();
 void clear_screen();
 //void move_cursor(int row, int col);
 
-int		do_things(t_data *data, char **envp);
+int		do_things(t_data *data);
 
 /* signals */
 void	set_signals(t_data *data);
@@ -181,14 +181,14 @@ int	get_env(t_data *data, char **envp);
 void	reset_terminal(t_data *data);
 void	exit_shell(t_data *data, char *err_msg);
 void	end_shell(t_data *data);
-void	exit_error(int exit_status, char *msg);
-void	ft_perror(t_errtype);
+// void	exit_error(int exit_status, char *msg);
+// void	ft_perror(t_errtype);
 
 
 
 
-int	parser(t_data *data, char *input, char **envp);
-t_tokenlist *tokenizer(t_data *data, char *input, char **envp);
+int	parser(t_data *data, char *input);
+t_tokenlist *tokenizer(t_data *data, char *input);
 
 
 
