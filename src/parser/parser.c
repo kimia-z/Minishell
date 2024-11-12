@@ -28,19 +28,28 @@ void parse_redirection(t_command *command, t_parser *parser)
 	{
 		advance_token(parser);
 		if (parser->current_token && is_command(parser->current_token->type))
+		{
 			command->redirect_append = ft_strdup(parser->current_token->value);
+			printf("redirect append: %s\n", command->redirect_append);
+		}
 	}
 	else if (parser->current_token->type == TOKEN_OP_REDIRECTION_OUT)
 	{
 		advance_token(parser);
 		if (parser->current_token && is_command(parser->current_token->type))
+		{
 			command->redirect_out = ft_strdup(parser->current_token->value);
+			printf("redirect out: %s\n", command->redirect_out);
+		}
 	}
 	else if (parser->current_token->type == TOKEN_OP_REDIRECTION_IN)
 	{
 		advance_token(parser);
 		if (parser->current_token && is_command(parser->current_token->type))
+		{
 			command->redirect_in = ft_strdup(parser->current_token->value);
+			printf("redirect in: %s\n", command->redirect_out);
+		}
 	}
 }
 
@@ -173,7 +182,8 @@ t_command	*parse_command(t_parser *parser)
                     free(command);
                     return NULL;
                 }
-                command->command[command_count] = ft_strdup(parser->current_token->value);
+				command->command[command_count] = ft_strdup(parser->current_token->value);
+				printf("Command in the loop: %s\n", command->command[command_count]); // Debug statement
                 command->command[command_count + 1] = NULL;
                 command_count++;
             }

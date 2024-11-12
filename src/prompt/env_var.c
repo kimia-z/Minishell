@@ -18,6 +18,8 @@
 // need a function to make a copy of it for builtins probably
 // implement ft_strndup in libft
 // make sure in get_env(), if things failed halfway, the previous resources are properly freed
+// malloc for data->envp = envp;
+
 
 // NOTES
 // can i use environ instead of all this? (as an extern var)
@@ -90,6 +92,7 @@ int get_env(t_data *data, char **envp)
 	env_list = NULL;
 	last_node = NULL;
 	i = 0;
+	//data->envp = envp;
 	while (envp[i])
 	{
 		if (add_env_node(&env_list, &last_node, envp[i]) != 0)

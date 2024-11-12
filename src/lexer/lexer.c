@@ -1,3 +1,8 @@
+
+//TODO
+// add when char c = $... so it should call expander the create token
+// add here_doc
+
 #include "lexer.h"
 
 static bool is_word_token(char c)
@@ -35,11 +40,8 @@ static int	get_num_pipes(t_tokenlist *tokens)
 	}
 	return (count);
 }
-/* main lexing logic - probably temporary function */
-/*
-	add when char c = $... so it should call expander the create token
-	add here_doc
-*/
+
+
 void	lexer_process_input(t_lexer *lexer, t_tokenlist *tokenlist)
 {
 	char current_char;
