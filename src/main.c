@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:09:38 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/12 20:38:58 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/12 20:40:27 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	init_minishell(t_data *data, char **envp)
 	//reset/flush terminal if necessary ?
 	//read_history_file(); // open history file and read contents
 	// search for path here?
-	if (get_env(&data, envp) == -1)// error check
+	if (get_env(data, envp) == -1)// error check
 		return (-1);
 	if (load_history(&data->history, HISTORY_FILE) == -1)
 		printf("too bad\n"); // error check - what happens if loading history fails?

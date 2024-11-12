@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:58:32 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/12 20:01:02 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/11/12 20:41:08 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@
 
 // max commands kept in history
 # ifndef HISTORY_MAX
-#  define HISTORY_MAX 10
+#  define HISTORY_MAX 100
 # endif
 
 
@@ -155,7 +155,7 @@ char	*get_prompt();
 //void clear_screen();
 //void move_cursor(int row, int col);
 
-//int		do_things(t_data *data);
+int		do_things(t_data *data);
 char *get_commandline(t_data *data);
 /* signals */
 void	set_signals(t_data *data);
