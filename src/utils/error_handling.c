@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 12:41:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/30 18:10:33 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/12 18:49:32 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	exit_shell(t_data *data, char *err_msg)
 	if (err_msg)
 		printf("oops\n");
 	//ft_perror(err_msg);
-	reset_terminal(data);
+	//reset_terminal(data);
 	exit(EXIT_FAILURE);
 }
 
@@ -110,11 +110,11 @@ void	exit_shell(t_data *data, char *err_msg)
 reset terminal settings to original before exiting
 TCSANOW or  TCSAFLUSH ? why ?
 */
-void	reset_terminal(t_data *data)
-{
-	if (!data->terminal.is_modified)
-		return ;
-	if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &data->terminal.original) == -1)
-		printf("oops\n");
-	//ft_perror("tcsetattr");
-}
+// void	reset_terminal(t_data *data)
+// {
+// 	if (!data->terminal.is_modified)
+// 		return ;
+// 	if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &data->terminal.original) == -1)
+// 		printf("oops\n");
+// 	//ft_perror("tcsetattr");
+// }

@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:12:43 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/29 12:14:38 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/12 19:38:14 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 // need a function to make a copy of it for builtins probably
 // implement ft_strndup in libft
 // make sure in get_env(), if things failed halfway, the previous resources are properly freed
-// malloc for data->envp = envp;
+// malloc for data->envp = envp; DONE
 
 
 // NOTES
@@ -27,6 +27,9 @@
 //ask from Yasaman: is list like this?
 //key : USER
 //value : kziari
+// answer from yasaman: 
+// 		yes
+
 static void	free_env_node(t_env *node)
 {
 	free(node->key);
@@ -82,6 +85,36 @@ static int	add_env_node(t_env **env_list, t_env **last_node, const char *env_var
 	return (0);
 }
 
+int	add_env_to_data(t_data *data, char **envp)
+{
+	int	env_count;
+	int	i;
+
+	i = 0;
+	env_count = 0;
+	while (envp[env_count])
+		env_count++;
+	data->envp = malloc((env_count + 1) * sizeof(char *));
+	if (!data->envp)
+	{
+		return (-1);
+	}
+	while (i < env_count)
+	{
+		data->envp[i] = ft_strdup(envp[i]);
+		if (!data->envp[i])
+		{
+			while (i > 0)
+				free(data->envp[--i]);
+			free(data->envp);
+			return (-1);
+		}
+		i++;
+	}
+	data->envp[env_count] = NULL; // ft_strdup does it?
+	return (0);
+}
+
 /* 0 for success, -1 for env null*/
 int get_env(t_data *data, char **envp)
 {
@@ -92,7 +125,12 @@ int get_env(t_data *data, char **envp)
 	env_list = NULL;
 	last_node = NULL;
 	i = 0;
-	//data->envp = envp;
+
+	if (add_env_to_data(data, envp) == -1)
+	{
+		printf("mno env available\n");
+		return (-1);
+	}
 	while (envp[i])
 	{
 		if (add_env_node(&env_list, &last_node, envp[i]) != 0)

@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:58:32 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/30 18:23:40 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/12 20:01:02 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@
 
 // max commands kept in history
 # ifndef HISTORY_MAX
-#  define HISTORY_MAX 1000
+#  define HISTORY_MAX 10
 # endif
 
 
@@ -61,6 +61,7 @@ typedef struct s_history
 {
 	t_historynode	*head;
 	t_historynode	*tail;
+	int				size;
 }			t_history;
 
 typedef enum e_errtype
@@ -107,13 +108,13 @@ typedef struct s_env
 	struct s_env	*next;
 }			t_env;
 
-typedef struct s_terminal
-{
-	struct termios	original;
-	struct termios	modified;
-	t_history		history;
-	bool			is_modified;
-}					t_terminal;
+// typedef struct s_terminal
+// {
+// 	struct termios	original;
+// 	struct termios	modified;
+// 	t_history		history;
+// 	bool			is_modified;
+// }					t_terminal;
 
 /* more things need to be added as we go */
 typedef struct s_data
@@ -124,7 +125,8 @@ typedef struct s_data
 	t_command		*cmdlist;
 	t_env			*env;
 	t_error			error;
-	t_terminal		terminal;
+	t_history		history;
+	//t_terminal		terminal;
 	char			**envp;
 	int				signal;
 	int				exit_status;
@@ -137,24 +139,24 @@ void print_command_list(t_command *cmdlist);
 // add more printing and testing functions
 
 /* init functions */
-void	init_minishell(t_data *data);
-void	shell_mode(t_data *data);
+int	init_minishell(t_data *data,  char **envp);
+//void	shell_mode(t_data *data);
 
 /* non interactive mode */
 // int		read_line(char **buffer, size_t size);
 // int		non_interactive();
 
 /* interactive shell */
-void	interactive_shell(t_data *data);
-void	initialize_termcap();
-void	set_terminal_attributes(t_data *data);
-void	reset_terminal_attributes(t_data *data);
+//void	interactive_shell(t_data *data);
+//void	initialize_termcap();
+//void	set_terminal_attributes(t_data *data);
+//void	reset_terminal_attributes(t_data *data);
 char	*get_prompt();
-void clear_screen();
+//void clear_screen();
 //void move_cursor(int row, int col);
 
-int		do_things(t_data *data);
-
+//int		do_things(t_data *data);
+char *get_commandline(t_data *data);
 /* signals */
 void	set_signals(t_data *data);
 void	unset_signals(void);
@@ -169,17 +171,18 @@ int		load_history(t_history *history, const char *filename);
 int		add_history_node(t_history *history, const char *command);
 void	free_history(t_history *history);
 int		save_history(t_history *history, const char *filename);
-
+void	trim_newline(char *str);
 
 /* Env functions */
-int	get_env(t_data *data, char **envp);
+int		get_env(t_data *data, char **envp);
+int		add_env_to_data(t_data *data, char **envp);
 
 //void process_commandline(t_data *data, char *input);
 
 /* Error Handling */
 // void    ft_perror(char *msg);
 // void	exit_error(int exit_status, char *msg);
-void	reset_terminal(t_data *data);
+//void	reset_terminal(t_data *data);
 void	exit_shell(t_data *data, char *err_msg);
 void	end_shell(t_data *data);
 // void	exit_error(int exit_status, char *msg);

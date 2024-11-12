@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 13:19:36 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/30 17:37:23 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/12 19:49:32 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,22 @@
 // TODO
 // check load_history for leaks
 // check return values
-// check if history only holds 100 commands, and how it's updating them
-// new line is also being stored in histor, fix it
+// check if history only holds 100 commands, and how it's updating them - DONE
+// new line is also being stored in histor, fix it - DONE
 
 // NOTES
 // history is loaded from a file - read and loaded from a file
 // have history as a linked list for immediate access and then write off to a file later
-// if we decided to save history to a file we could use these fuctions
+// the ammount of commands saved to history we have access to on the commandline is different than what's being stored on the file
 
+
+void	trim_newline(char *str)
+{
+	char	*newline;
+	newline = ft_strchr(str, '\n');
+	if (newline)
+		*newline = '\0';
+}
 
 // save history from the linked list to a file
 int	save_history(t_history *history, const char *filename)
@@ -62,6 +70,7 @@ void	free_history(t_history *history)
 	}
 	history->head = NULL;
 	history->tail = NULL;
+	history->size = 0;
 }
 
 
@@ -74,35 +83,81 @@ int	add_history_node(t_history *history, const char *command)
 		return (-1);
 	new_node->command = ft_strdup(command);
 	if (!new_node->command)
+	{
+		free(new_node);
 		return (-1);
+	}
 	new_node->next = NULL;
 	if (history->tail)
 		history->tail->next = new_node;
 	else
 		history->head = new_node;
 	history->tail = new_node;
-	return (0);
-}
-
-
-int	load_history(t_history *history, const char *filename)
-{
-	char	*line;
-	int		fd;
-
-	fd = open(filename, O_RDONLY);
-	if (fd == -1)
-		return (-1);
-	while (1)
+	history->size++;
+	if (history->size > HISTORY_MAX)
 	{
-		line = get_next_line(fd);
-		if (!line)
-			break ;
-		add_history_node(history, line);
-		add_history(line);
-		free(line);
+		t_historynode *old_node = history->head;
+        history->head = history->head->next;
+        free(old_node->command);
+        free(old_node);
+        history->size--;
 	}
-	free(line);
-	close(fd);
 	return (0);
 }
+
+
+int load_history(t_history *history, const char *filename)
+{
+    char	*line;
+    int		fd;
+
+    fd = open(filename, O_RDONLY);
+	if (fd == -1)
+    {
+        fd = open(filename, O_CREAT | O_WRONLY, 0644);
+        if (fd == -1)
+            return (-1);
+        close(fd);
+        return (0);
+    }
+    while (1)
+    {
+        line = get_next_line(fd);
+        if (!line)
+            break ;
+        trim_newline(line);
+        add_history_node(history, line);
+        free(line);
+    }
+    close(fd);
+    return (0);
+}
+
+// int	read_history_file(t_history *history, const char *filename)
+// {
+// 	int		fd;
+// 	char	*line;
+
+//     fd = open(filename, O_RDONLY);
+// 	if (fd == -1)
+//     {
+//         fd = open(filename, O_CREAT | O_WRONLY, 0644);
+//         if (fd == -1)
+//             return (-1);
+//         close(fd);
+//         return (0);
+//     }
+	
+// 	while (1)
+// 	{
+// 		line = get_next_line(fd);
+// 		if (!line)
+//             break ;
+// 		trim_newline(line);
+// 		add_history(line);
+// 		free(line);
+
+// 	}
+// 	close(fd);
+// 	return (true);
+// }
