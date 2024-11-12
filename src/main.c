@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:09:38 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/12 20:01:12 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/11/12 20:38:58 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,9 @@ int	main(int argc, char **argv, char **envp)
 	//shell_mode(&data);
 
 
-	save_history(&data->history, HISTORY_FILE);
+	save_history(&data.history, HISTORY_FILE);
 	
-	free_history(&data->history);
+	free_history(&data.history);
 	clear_history(); // ? rl_ ?
 	rl_free_line_state();
 	rl_cleanup_after_signal();
