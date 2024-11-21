@@ -20,21 +20,22 @@ static size_t	len_quotes(char *value)
 	return (i - 1);
 }
 
-void	lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist, bool is_op, int pos)
+void	*lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist, bool is_op, int pos)
 {
 	size_t len;
 
 	if (!is_quote_closed(lexer, value))
 	{
 		//error unclosed
-		return ;
+		return NULL;
 	}
 	len = len_quotes(value);
 	lexer->position++;
 	if (*value == '\'' || *value == '"')
 	{
-		lexer_collect_token(lexer, tokenlist, is_op, pos);
+		if (!lexer_collect_token(lexer, tokenlist, is_op, pos))
+			return (NULL);
 		lexer->position += len + 1;
-
 	}
+	//return(); // indication of success
 }

@@ -1,9 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   token.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/11/19 21:25:13 by yasamankari   #+#    #+#                 */
+/*   Updated: 2024/11/19 21:33:43 by yasamankari   ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
 
 /* Create a new token of the given type and value */
 t_token	*token_create(enum e_token_type type, char *value)
 {
 	t_token	*token;
+
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
@@ -11,12 +24,10 @@ t_token	*token_create(enum e_token_type type, char *value)
 	token->type = type;
 	token->value = ft_strdup(value);
 	if (!token->value)
-		return (NULL);
+		return (free(token), NULL);
 	token->next = NULL;
-	//printf("token created. type: %d, value: %s.\n", token->type, token->value);
 	return (token);
 }
-
 
 void	token_free(t_token *token)
 {

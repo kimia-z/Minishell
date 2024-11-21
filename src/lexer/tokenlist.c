@@ -1,15 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   tokenlist.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/11/19 21:10:39 by yasamankari   #+#    #+#                 */
+/*   Updated: 2024/11/19 21:34:23 by yasamankari   ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
 
 /* Initialize a new token list */
 t_tokenlist	*tokenlist_init(void)
 {
 	t_tokenlist	*list;
+
 	list = malloc(sizeof(t_tokenlist));
 	if (!list)
 		return (NULL);
 	ft_bzero(list, sizeof(t_tokenlist));
-	list->token_count = 0;
-	list->head = NULL;
 	return (list);
 }
 
@@ -17,10 +28,9 @@ t_tokenlist	*tokenlist_init(void)
 void	tokenlist_add(t_tokenlist *list, t_token *token)
 {
 	t_token	*current;
+
 	if (!list->head)
-	{
 		list->head = token;
-	}
 	else
 	{
 		current = list->head;
@@ -31,19 +41,6 @@ void	tokenlist_add(t_tokenlist *list, t_token *token)
 	list->token_count++;
 }
 
-void tokenlist_print(t_token *head)
-{
-	int i = 0;
-	t_token *current = head;
-	while (current != NULL)
-	{
-		printf("%d  - ", i);
-
-		printf("Token Type: %d, Token Value: %s, tok pos: %d\n", current->type, current->value, current->position);
-		current = current->next;
-		i++;
-	}
-}
 
 /* Free the memory allocated for the token list and its tokens */
 void	tokenlist_free(t_tokenlist *list)

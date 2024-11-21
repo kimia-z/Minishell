@@ -1,6 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   lexer_utils.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/11/19 21:06:47 by yasamankari   #+#    #+#                 */
+/*   Updated: 2024/11/19 21:09:51 by yasamankari   ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
 
-/* Initialize lexer with the given input */
+/*
+Initialize lexer with the given input
+returns NULL for malloc failure
+*/
 t_lexer	*lexer_init(char *input)
 {
 	t_lexer	*lexer;

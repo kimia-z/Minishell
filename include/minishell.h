@@ -6,13 +6,12 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:58:32 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/12 20:41:08 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/19 22:18:59 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
 
 #include "lexer.h"
 #include "parser.h"
@@ -28,11 +27,11 @@
 #include <termios.h>
 #include <signal.h>
 
-
 // Macros for color codes
 #define GREEN "\033[1;32m"
 #define BLUE "\033[1;34m"
 #define RESET "\033[0m"
+#define PROMPT_DEFAULT "minishell> "
 
 // file to save history 
 #define HISTORY_FILE ".minishell_history"
@@ -50,6 +49,17 @@
 #  define HISTORY_MAX 100
 # endif
 
+extern int	g_exit_code;
+
+
+typedef enum e_sig
+{
+	PARENT,
+	CHILD,
+	HERE_DOC,
+	IGNORE,
+	MINISHELL
+}		t_sig;
 
 typedef struct s_historynode
 {
@@ -73,6 +83,7 @@ typedef enum e_errtype
 	permission_error,
 	syntax_error,
 	path_error,
+	envp_error,
 	generic_error
 	
 }			t_errtype;
@@ -81,8 +92,8 @@ typedef enum e_errtype
 // define what kind of errors you wanna specify(keywords)
 typedef struct s_error
 {
-	t_errtype		errortype;
-	char 	*error_msg;
+	t_errtype	errortype;
+	char 		*error_msg;
 }			t_error;
 
 
@@ -92,7 +103,6 @@ typedef enum s_processtype
 	command,
 	error
 }				t_processtype;
-
 
 // typedef struct s_process
 // {
@@ -108,91 +118,75 @@ typedef struct s_env
 	struct s_env	*next;
 }			t_env;
 
-// typedef struct s_terminal
-// {
-// 	struct termios	original;
-// 	struct termios	modified;
-// 	t_history		history;
-// 	bool			is_modified;
-// }					t_terminal;
-
 /* more things need to be added as we go */
 typedef struct s_data
 {
-	t_lexer			*lexer;
-	t_token			*tokenlist;
-	t_parser		*parser;
-	t_command		*cmdlist;
+	//t_lexer			*lexer;
+	//t_token			*tokenlist;
+	//t_parser		*parser;
+	//t_command		*cmdlist;
 	t_env			*env;
 	t_error			error;
 	t_history		history;
-	//t_terminal		terminal;
 	char			**envp;
 	int				signal;
 	int				exit_status;
 }					t_data;
 
 
+/* Setup functions */
+int			init_minishell(t_data *data,  char **envp);
+char		*get_prompt();
+char		*get_commandline(t_data *data);
+int			process_cmdline(t_data *data, char *input);
+void		exit_code(int code);
+
+/* Envp functions */
+int			get_env(t_data *data, char **envp);
+int			add_env_to_data(t_data *data, char **envp);
+void		free_env_list(t_env *env_list);
+
+/* Signal functions */
+void		parent_sig_handler(int sig);
+void		heredoc_sig_handler(int sig);
+int			signal_mode(int mode);
+
+/* history functions */
+int			load_history(t_history *history, const char *filename);
+int			add_history_node(t_history *history, const char *command);
+void		free_history(t_history *history);
+int			save_history(t_history *history, const char *filename);
+void		trim_newline(char *str);
+
+/* Parsing */
+int			parser_entry(t_data *data, char *input);
+t_tokenlist	*tokenizer(t_data *data, char *input);
+
+
+
+
+/* Error Handling */
+void	free_2d(void ***thing);
+void	free_nullify(void **thing);
+void	cleanup_memory_alloc(t_data *data);
+void	write_stderr(char *errmsg);
+
+// void    ft_perror(char *msg);
+// void	exit_error(int exit_status, char *msg);
+//void	reset_terminal(t_data *data);
+//void	exit_shell(t_data *data, char *err_msg);
+//void	end_shell(t_data *data);
+// void	exit_error(int exit_status, char *msg);
+// void	ft_perror(t_errtype);
+//void clear_screen();
+
 
 /* Utils */
 void print_command_list(t_command *cmdlist);
 // add more printing and testing functions
 
-/* init functions */
-int	init_minishell(t_data *data,  char **envp);
-//void	shell_mode(t_data *data);
-
-/* non interactive mode */
-// int		read_line(char **buffer, size_t size);
-// int		non_interactive();
-
-/* interactive shell */
-//void	interactive_shell(t_data *data);
-//void	initialize_termcap();
-//void	set_terminal_attributes(t_data *data);
-//void	reset_terminal_attributes(t_data *data);
-char	*get_prompt();
-//void clear_screen();
-//void move_cursor(int row, int col);
-
-int		do_things(t_data *data);
-char *get_commandline(t_data *data);
-/* signals */
-void	set_signals(t_data *data);
-void	unset_signals(void);
-void	signals_for_kids(void);
-void	signal_int_handler(int sig);
 
 
-
-
-/* history functions */
-int		load_history(t_history *history, const char *filename);
-int		add_history_node(t_history *history, const char *command);
-void	free_history(t_history *history);
-int		save_history(t_history *history, const char *filename);
-void	trim_newline(char *str);
-
-/* Env functions */
-int		get_env(t_data *data, char **envp);
-int		add_env_to_data(t_data *data, char **envp);
-
-//void process_commandline(t_data *data, char *input);
-
-/* Error Handling */
-// void    ft_perror(char *msg);
-// void	exit_error(int exit_status, char *msg);
-//void	reset_terminal(t_data *data);
-void	exit_shell(t_data *data, char *err_msg);
-void	end_shell(t_data *data);
-// void	exit_error(int exit_status, char *msg);
-// void	ft_perror(t_errtype);
-
-
-
-
-int	parser(t_data *data, char *input);
-t_tokenlist *tokenizer(t_data *data, char *input);
 
 
 

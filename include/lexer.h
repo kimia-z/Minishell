@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   lexer.h                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/11/19 21:07:57 by yasamankari   #+#    #+#                 */
+/*   Updated: 2024/11/19 22:35:41 by yasamankari   ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef LEXER_H
 # define LEXER_H
 
@@ -20,7 +32,6 @@
 enum e_token_type
 {
 	TOKEN_WORD,
-	//TOKEN_WHITESPACE,
 	TOKEN_OP_REDIRECTION_OUT, // >
 	TOKEN_OP_REDIRECTION_IN, // <
 	TOKEN_OP_REDIRECTION_APPEND, // >> 
@@ -28,13 +39,12 @@ enum e_token_type
 	TOKEN_UNKNOWN
 };
 
-/* probably don't need the position member */
+
 typedef struct s_token
 {
 	enum e_token_type	type;
 	char				*value;
 	size_t				size;
-	int					position;
 	struct s_token		*next;
 }				t_token;
 
@@ -48,34 +58,24 @@ typedef struct s_tokenlist
 /* members of this struct need to be updated later on */
 typedef struct s_lexer
 {
-	t_token				**tokens; // an array of tokens
+	t_token				**tokens;
 	unsigned int		position;
-	char				*input; // contents of commandline
+	char				*input;
 	size_t				length;
 	char				start;
-	char				**env;
-	int					num_pipes;
-}			t_lexer;
+}						t_lexer;
 
 /* **************************************************************************** */ 
 
 /* Lexer functions */
-void		lexer_process_input(t_lexer *lexer, t_tokenlist *tokenlist);
-t_lexer		*lexer_init(char *input);
+t_lexer				*lexer_init(char *input);
 enum e_token_type	get_operator_type(char *value);
-void		lexer_free(t_lexer *lexer);
-void		lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op, int pos);
+void				lexer_free(t_lexer *lexer);
+void				*lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op, int pos);
+int					lexer_main(t_lexer *lexer, t_tokenlist *tokenlist);
+void				*lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist, bool is_op, int pos);
+void				lexer_skip_whitespace(t_lexer *lexer);
 
-
-/* Quotes */
-void		lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist, bool is_op, int pos);
-
-
-/* Utils */
-void		lexer_skip_whitespace(t_lexer *lexer);
-//bool		is_quotes(char c);
-//bool		is_operator_token(char c);
-//bool		is_word_token(char c);
 
 /* Token functions */
 t_token		*token_create(enum e_token_type type, char *value);
@@ -84,13 +84,9 @@ void		token_free(t_token *token);
 /* Tokenlist functions */
 t_tokenlist	*tokenlist_init(void);
 void		tokenlist_free(t_tokenlist *list);
-void		 tokenlist_add(t_tokenlist *list, t_token *token);
+void		tokenlist_add(t_tokenlist *list, t_token *token);
 void		tokenlist_print(t_token *head);
 
-/* Error handling */
-void	write_stderr(char *errmsg);
-//void	cleanup(t_tokenlist *tokenlist);
-//void lexer(t_data *data, char *line);
 
 #endif
 

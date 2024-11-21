@@ -6,38 +6,13 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 15:54:56 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/30 18:20:15 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/19 16:54:32 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "parser.h"
-
-
-static void	free_nullify(void **thing)
-{
-	free(*thing);
-	*thing = NULL;
-}
-
-static void	free_2d(void ***thing)
-{
-	int		i;
-	void	**arr;
-
-	i = 0;
-	if (*thing == NULL)
-		return ;
-	arr = *thing;
-	while (arr[i] != NULL)
-	{
-		free_nullify(&arr[i]);
-		i++;
-	}
-	free(arr);
-	*thing = NULL;
-}
-
+#include "minishell.h"
 
 // Function to get the PATH directories
 static char **path_variable()

@@ -36,3 +36,17 @@ void print_command_list(t_command *cmdlist)
         printf("\n");
     }
 }
+
+void tokenlist_print(t_token *head)
+{
+	int i = 0;
+	t_token *current = head;
+	while (current != NULL)
+	{
+		printf("%d  - ", i);
+
+		printf("Token Type: %d, Token Value: %s, tok pos: %d\n", current->type, current->value, current->position);
+		current = current->next;
+		i++;
+	}
+}

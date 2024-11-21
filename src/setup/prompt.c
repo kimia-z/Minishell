@@ -6,86 +6,101 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 14:08:07 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/29 20:48:04 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/19 18:14:41 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "parser.h"
 #include "minishell.h"
-#include <readline/readline.h>
 
 //TODO
-// implement ft_strcmp in libft
+// implement ft_strcmp ft_strcat ft_strcpy in libft
 //check functions for errors
 // check return values
-// cursor movement is wacky
+// cursor movement is wacky - not necessary
 
 // NOTES
 // in bash, what happens if getcwd or gethostname fail? what does minishell need to do in those cases?
 
 
 
-// get the current working directory
+/* get the current working directory */
 static char	*get_current_working_directory()
 {
 	char	cwd[1024];
+
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
 	{
-		perror("getcwd");
-		return (ft_strdup("minishell> "));
+		write_stderr("getcwd failed");
+		return (ft_strdup(PROMPT_DEFAULT));
 	}
 	return (ft_strdup(cwd));
 }
 
-// get the hostname
+/* get the hostname */
 static char	*get_hostname()
 {
 	char	hostname[1024];
+
 	if (gethostname(hostname, sizeof(hostname)) != 0)
 	{
-		perror("gethostname");
-		return (ft_strdup("minishell> "));
+		write_stderr("gethostname failed");
+		return (ft_strdup(PROMPT_DEFAULT));
 	}
 	return (ft_strdup(hostname));
 }
 
+static void	append_to_prompt(char *prompt, size_t prompt_len, const char *str)
+{
+	ft_strlcat(prompt, str, prompt_len);
+}
 
 static char	*build_prompt(const char *hostname, const char *cwd)
 {
 	char	*prompt;
-	
-	prompt = malloc(ft_strlen(GREEN) + ft_strlen(hostname) + ft_strlen(RESET) +
-						ft_strlen(":") + ft_strlen(BLUE) + ft_strlen(cwd) + ft_strlen(RESET) +
-						ft_strlen("$ ") + 1);
+	size_t	prompt_len;
+
+	prompt_len = ft_strlen(GREEN) + ft_strlen(hostname) + ft_strlen(RESET) +
+				ft_strlen(":") + ft_strlen(BLUE) + ft_strlen(cwd) + ft_strlen(RESET) +
+				ft_strlen("$ ") + 1;
+	prompt = malloc(prompt_len);
 	if (!prompt)
 	{
-		perror("malloc");
-		return (ft_strdup("minishell> "));
+		write_stderr("malloc failed");
+		return ft_strdup(PROMPT_DEFAULT);
 	}
-	//construct_prompt();
-	strcpy(prompt, GREEN);
-	strcat(prompt, hostname);
-	strcat(prompt, RESET);
-	strcat(prompt, ":");
-	strcat(prompt, BLUE);
-	strcat(prompt, cwd);
-	strcat(prompt, RESET);
-	strcat(prompt, "$ ");
-	return (prompt); // return (construct_prompt(prompt));
+	prompt[0] = '\0';
+	append_to_prompt(prompt, prompt_len, GREEN);
+	append_to_prompt(prompt, prompt_len, hostname);
+	append_to_prompt(prompt, prompt_len, RESET);
+	append_to_prompt(prompt, prompt_len, ":");
+	append_to_prompt(prompt, prompt_len, BLUE);
+	append_to_prompt(prompt, prompt_len, cwd);
+	append_to_prompt(prompt, prompt_len, RESET);
+	append_to_prompt(prompt, prompt_len, "$ ");
+	return (prompt);
 }
-
 
 char	*get_prompt()
 {
-	char	*cwd;
-	char	*hostname;
-	char	*prompt;
+	char *cwd;
+	char *hostname;
+	char *prompt;
 
 	cwd = get_current_working_directory();
+	if (!cwd)
+		return (ft_strdup(PROMPT_DEFAULT));
 	hostname = get_hostname();
+	if (!hostname)
+	{
+		free(cwd);
+		return (ft_strdup(PROMPT_DEFAULT));
+	}
 	prompt = build_prompt(hostname, cwd);
 	free(cwd);
 	free(hostname);
+	if (!prompt)
+		return (ft_strdup(PROMPT_DEFAULT));
 	return (prompt);
 }
