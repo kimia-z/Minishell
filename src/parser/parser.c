@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/30 17:49:42 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/24 19:58:11 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/24 21:34:53 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,7 +289,6 @@ t_command	*parse_command(t_token **current_token)
     command = malloc(sizeof(t_command));
     if (command == NULL)
         return NULL;
-
     command->command = NULL;
     command->path = NULL;
     command->redirect_in = NULL;
@@ -309,7 +308,7 @@ t_command	*parse_command(t_token **current_token)
                 command->command = malloc(2 * sizeof(char *));
                 if (!command->command)
                 {
-                    free(command);
+                    //free(command);
                     return NULL;
                 }
                 command->command[0] = ft_strdup((*current_token)->value);
@@ -320,6 +319,7 @@ t_command	*parse_command(t_token **current_token)
                 command->path = find_command_path(command->command[0]);
                 if (command->path == NULL)
                 {
+
                     free(command->command[0]);
                     free(command->command);
                     free(command);

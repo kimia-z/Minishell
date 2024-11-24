@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/30 16:36:12 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/19 17:59:22 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/24 21:26:43 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,25 +48,39 @@ void	heredoc_sig_handler(int sig)
 
 int	signal_mode(int mode)
 {
+	//printf("Setting signal mode: %d\n", mode); // Debugging statement
+
 	if (mode == MINISHELL)
 	{
 		if (signal(SIGINT, parent_sig_handler) == SIG_ERR || signal(SIGQUIT, SIG_IGN) == SIG_ERR)
-			return (0);
+		{
+			//perror("signal");
+			return (-1);
+		}
 	}
 	else if (mode == CHILD)
 	{
 		if (signal(SIGINT, parent_sig_handler) == SIG_ERR || signal(SIGQUIT, SIG_DFL) == SIG_ERR)
-			return (0);
+		{
+			//perror("signal");
+			return (-1);
+		}
 	}
 	else if (mode == HERE_DOC)
 	{
 		if (signal(SIGINT, heredoc_sig_handler) == SIG_ERR || signal(SIGQUIT, SIG_IGN) == SIG_ERR)
-			return (0);
+		{
+			// perror("signal");
+			return (-1);
+		}
 	}
 	else if (mode == IGNORE)
 	{
 		if (signal(SIGINT, SIG_IGN) == SIG_ERR || signal(SIGQUIT, SIG_IGN) == SIG_ERR)
-			return (0);
+		{
+			//perror("signal");
+			return (-1);
+		}
 	}
-	return (-1);
+	return (0);
 }

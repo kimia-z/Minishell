@@ -13,14 +13,6 @@ void print_command_list(t_command *cmdlist)
         {
             printf("Command: %s\n", current->command[j]);
         }
-        printf("Arguments: ");
-        // if (current->args != NULL)
-        // {
-        //     for (i = 0; current->args[i] != NULL; i++)
-        //     {
-        //         printf("%s ", current->args[i]);
-        //     }
-        // }
         printf("\n");
 
         if (current->redirect_in != NULL)

@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:12:43 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/19 22:32:37 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/24 20:17:35 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,20 @@ static t_env	*create_env_node(const char *env_var)
 	node = malloc(sizeof(t_env));
 	if (!node)
 		return (NULL);
+
 	delimiter = ft_strchr(env_var, '=');
 	if (!delimiter)
 		return (free(node), NULL);
 	len = delimiter - env_var;
-	node->key = ft_strndup(env_var, len); // implement in libft
+	node->key = strndup(env_var, len); // implement in libft
 	if (!node->key)
 		return (free(node), NULL);
 	node->value = ft_strdup(delimiter + 1);
 	if (!node->value)
+	{
+		free(node->key); // ?
 		return (free(node), NULL);
+	}
 	node->next = NULL;
 	// if (!node->key || !node->value)
 	// 	return (NULL);
@@ -118,6 +122,7 @@ int	add_env_to_data(t_data *data, char **envp)
 */
 int	get_env(t_data *data, char **envp)
 {
+
 	t_env	*env_list;
 	t_env	*last_node;
 	int		i;
@@ -125,7 +130,6 @@ int	get_env(t_data *data, char **envp)
 	env_list = NULL;
 	last_node = NULL;
 	i = 0;
-	ft_bzero(data->env, sizeof(t_env));
 	if (!envp || add_env_to_data(data, envp) == -1)
 		return (write_stderr("No envp was provided"), -1);
 	while (envp[i])
