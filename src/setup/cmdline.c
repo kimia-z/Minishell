@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:33:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/24 20:01:11 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/24 21:44:04 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,38 @@
 // check return values
 // prompt doesnt print after ctrl c 
 // ISSUE: CTR C doesnt give you back the prompt - fix it
+
+
+/*
+NULL for failure: lexer failure - tokenlist failure
+(doesnt need data)
+envp for heredoc ?
+*/
+t_tokenlist	*tokenizer(char **envp, char *input)
+{
+	t_lexer		*lexer;
+	t_tokenlist	*tokenlist;
+
+	lexer = lexer_init(input);
+	if (!lexer)
+		return (write_stderr("Lexer initialization failed"), NULL);
+	//data->lexer = lexer;
+	tokenlist = tokenlist_init();
+	if (!tokenlist)
+	{
+		lexer_free(lexer);
+		return (write_stderr("Tokenlist initialization failed"), NULL);
+	}
+	if (lexer_main(lexer, tokenlist) == -1)
+	{
+		write_stderr("Lexer failed");
+		tokenlist_free(tokenlist);
+		return (lexer_free(lexer), NULL);
+	}
+	lexer_free(lexer);
+	return (tokenlist);
+}
+
 
 int	process_cmdline(t_data *data, char *input)
 {
@@ -40,12 +72,12 @@ int	process_cmdline(t_data *data, char *input)
 	commandlist = parser(tokenlist);
 	if (!commandlist)
 	{
-		printf("oops\n");
+		printf("parser failed\n");
 		//handle error
 	}	
 	//status = ft_execute(data, commandlist);
 	// error check
-	//cleanup regarding parser if any
+	//cleanup for parser if any
 	return (0); // status
 	
 }

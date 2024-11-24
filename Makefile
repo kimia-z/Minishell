@@ -15,10 +15,10 @@ SRCS = src/expansion/expansion.c src/setup/history.c \
 		src/lexer/token.c src/lexer/tokenlist.c \
 		src/parser/parse_utils.c src/parser/parser.c \
 		src/parser/syntax_checker.c src/execution/find_path.c \
-		src/setup/cmdline.c src/setup/env_var.c \
-		src/setup/parser_entry.c src/setup/signals.c \
+		src/setup/cmdline.c src/setup/env_var.c src/setup/signals.c \
 		src/utils/error_handling.c src/utils/test_functions.c \
 		 src/main.c src/setup/prompt.c
+
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
 all: $(NAME)
