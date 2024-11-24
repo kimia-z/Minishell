@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:58:32 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/19 22:18:59 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/24 20:04:41 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,8 +159,8 @@ int			save_history(t_history *history, const char *filename);
 void		trim_newline(char *str);
 
 /* Parsing */
-int			parser_entry(t_data *data, char *input);
-t_tokenlist	*tokenizer(t_data *data, char *input);
+//int			parser_entry(t_data *data, char *input);
+t_tokenlist	*tokenizer(char **envp, char *input);
 
 
 
@@ -175,7 +175,7 @@ void	write_stderr(char *errmsg);
 // void	exit_error(int exit_status, char *msg);
 //void	reset_terminal(t_data *data);
 //void	exit_shell(t_data *data, char *err_msg);
-//void	end_shell(t_data *data);
+void	end_shell(t_data *data);
 // void	exit_error(int exit_status, char *msg);
 // void	ft_perror(t_errtype);
 //void clear_screen();

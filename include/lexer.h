@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/19 21:07:57 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/19 22:35:41 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/24 18:26:41 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ typedef struct s_lexer
 t_lexer				*lexer_init(char *input);
 enum e_token_type	get_operator_type(char *value);
 void				lexer_free(t_lexer *lexer);
-void				*lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op, int pos);
+void				*lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op);
 int					lexer_main(t_lexer *lexer, t_tokenlist *tokenlist);
-void				*lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist, bool is_op, int pos);
+void				*lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist, bool is_op);
 void				lexer_skip_whitespace(t_lexer *lexer);
 
 

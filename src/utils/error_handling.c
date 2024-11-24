@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 12:41:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/19 22:38:18 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/24 20:03:07 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	free_command_list(t_command *cmdlist)
 
 void	cleanup_memory_alloc(t_data *data)
 {
-	free_2d(data->envp);
+	free_2d((void ***)data->envp);
 	free_env_list(data->env);
 	free_history(&data->history); // is it doing its job?
 	

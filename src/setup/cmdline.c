@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:33:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/19 23:04:03 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/24 20:01:11 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,10 @@ int	process_cmdline(t_data *data, char *input)
 	}
 	commandlist = parser(tokenlist);
 	if (!commandlist)
+	{
+		printf("oops\n");
 		//handle error
+	}	
 	//status = ft_execute(data, commandlist);
 	// error check
 	//cleanup regarding parser if any

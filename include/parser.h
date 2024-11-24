@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 16:47:59 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/11/19 23:02:17 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/24 19:58:03 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,16 @@ typedef struct s_cmdlist
 {
 	//int			pid;
 	//int			pipe[2];
-	t_command *head;
+	size_t			num_commands;
+	t_command		*head;
 	//t_command *prev;
 }				t_cmdlist;
 
-typedef struct s_parser
-{
-	t_tokenlist			*tokenlist;
-	t_token				*current_token;
-}						t_parser;
+// typedef struct s_parser
+// {
+// 	t_tokenlist			*tokenlist;
+// 	t_token				*current_token;
+// }						t_parser;
 
 
 /************************************************************/
@@ -50,11 +51,11 @@ typedef struct s_parser
 int				syntax_checker(t_tokenlist *tokenlist);
 
 /* Parser Functions */
-t_command		*parse(t_parser *parser, t_tokenlist *tokenlist);
-t_parser		*parser_init(t_tokenlist *tokenlist);
-t_command		*parse_command(t_parser *parser);
-void			parse_redirection(t_command *command, t_parser *parser);
-
+t_cmdlist		*parser(t_tokenlist *tokenlist);
+//t_parser		*parser_init(t_tokenlist *tokenlist);
+t_command		*parse_command(t_token **current_token);
+void			parse_redirection(t_command *command, t_token **current_token);
+t_cmdlist	*cmdlist_init();
 /* Command Path */
 char			*find_command_path(char *commandname);
 

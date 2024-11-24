@@ -45,7 +45,7 @@ void tokenlist_print(t_token *head)
 	{
 		printf("%d  - ", i);
 
-		printf("Token Type: %d, Token Value: %s, tok pos: %d\n", current->type, current->value, current->position);
+		printf("Token Type: %d, Token Value: %s", current->type, current->value);
 		current = current->next;
 		i++;
 	}

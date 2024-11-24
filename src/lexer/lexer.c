@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/19 21:15:24 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/19 22:36:07 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/24 18:28:53 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ int	lexer_main(t_lexer *lexer, t_tokenlist *tokenlist)
 {
 	char	current_char;
 	bool	is_op;
-	int		pos;
+	// int		pos;
 
-	pos = 1;
+	//pos = 1;
 	while (lexer->position < lexer->length)
 	{
 		lexer_skip_whitespace(lexer);
@@ -47,23 +47,23 @@ int	lexer_main(t_lexer *lexer, t_tokenlist *tokenlist)
 		is_op = false;
 		if (is_word_token(current_char) == true)
 		{
-			if (!lexer_collect_token(lexer, tokenlist, is_op, pos))
+			if (!lexer_collect_token(lexer, tokenlist, is_op))
 				return (-1);
-			pos++;
+			//pos++;
 		}
 		else if (is_operator_token(current_char))
 		{
 			is_op = true;
-			if (!lexer_collect_token(lexer, tokenlist, is_op, pos))
+			if (!lexer_collect_token(lexer, tokenlist, is_op))
 				return (-1);
-			pos++;
+			//pos++;
 		}
 		else if (is_quotes(current_char))
 		{
 			is_op = false;
-			if (!lexer_collect_quotes(lexer, &current_char, tokenlist, is_op, pos))
+			if (!lexer_collect_quotes(lexer, &current_char, tokenlist, is_op))
 				return (-1);
-			pos++;
+			//pos++;
 		}
 		lexer->position++;
 	}

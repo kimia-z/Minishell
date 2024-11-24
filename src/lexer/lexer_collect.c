@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:00:24 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/19 22:26:41 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/24 18:25:50 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ enum e_token_type	get_operator_type(char *value)
 }
 
 
-void	*lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op, int pos)
+void	*lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op)
 {
 	size_t	start;
 	size_t	len;
