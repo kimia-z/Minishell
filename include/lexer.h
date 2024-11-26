@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/19 21:07:57 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 19:24:05 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/11/26 19:32:34 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ enum e_token_type
 	TOKEN_OP_HEREDOC, // <<
 	TOKEN_UNKNOWN
 };
-
 
 typedef struct s_token
 {

@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/26 19:17:01 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/11/26 19:17:05 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/11/26 19:33:53 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void print_command(t_command *command)
         //printf("Arguments:\n");
         while (command->command[i])
         {
-            printf("  command[%d]: %s\n", i, command->command[i]);
+            printf(" command[%d]: %s\n", i, command->command[i]);
             i++;
         }
     }
