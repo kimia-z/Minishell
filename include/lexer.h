@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/19 21:07:57 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/24 18:26:41 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/26 19:24:05 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ enum e_token_type
 	TOKEN_OP_REDIRECTION_IN, // <
 	TOKEN_OP_REDIRECTION_APPEND, // >> 
 	TOKEN_OP_PIPE,
+	TOKEN_OP_HEREDOC, // <<
 	TOKEN_UNKNOWN
 };
 

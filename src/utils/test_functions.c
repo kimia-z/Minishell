@@ -1,33 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   test_functions.c                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/11/26 19:17:01 by ykarimi       #+#    #+#                 */
+/*   Updated: 2024/11/26 19:17:05 by ykarimi       ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
 #include "parser.h"
 #include "minishell.h"
-
-// void print_command_list(t_command *cmdlist)
-// {
-//     t_command *current = cmdlist;
-//     //int i;
-
-//     while (current != NULL)
-//     {
-//         for (int j = 0; current->command[j]; j++)
-//         {
-//             printf("Command: %s\n", current->command[j]);
-//         }
-//         printf("\n");
-//         if (current->redirect_in != NULL)
-//             printf("Redirect In: %s\n", current->redirect_in);
-//         if (current->redirect_out != NULL)
-//             printf("Redirect Out: %s\n", current->redirect_out);
-//         if (current->redirect_append != NULL)
-//             printf("Redirect Append: %s\n", current->redirect_append);
-// 		    if (current->path != NULL)
-//             printf("Path: %s\n", current->path);
-
-//         current = current->next;
-//         printf("\n");
-//     }
-// }
-
 
 
 void print_command(t_command *command)
@@ -53,6 +38,8 @@ void print_command(t_command *command)
         printf("Redirect out: %s\n", command->redirect_out);
     if (command->redirect_append)
         printf("Redirect append: %s\n", command->redirect_append);
+    if (command->heredoc_content)
+        printf("Heredoc content: %s\n", command->heredoc_content);
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/30 17:49:42 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 17:59:35 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/11/26 18:50:32 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,15 @@ void parse_redirection(t_command *command, t_token **current_token)
 				//perror("open");
 		}
 	}
+	else if ((*current_token)->type == TOKEN_OP_HEREDOC)
+    {
+        *current_token = (*current_token)->next;
+        if (*current_token && is_command((*current_token)->type))
+        {
+            command->redirect_in = handle_heredoc((*current_token)->value);
+            printf("here_doc: %s\n", command->redirect_in);
+        }
+    }
 }
 
 
@@ -85,8 +94,7 @@ static int	handle_subsequent_args(t_command *command, t_token *current_token, in
 {
 	//printf("Handling subsequent argument: %s\n", current_token->value);
 	char	**new_command;
-
-	new_command = realloc(command->command, (command_count + 2) * sizeof(char *));
+    new_command = ft_realloc(command->command, (command_count + 1) * sizeof(char *), (command_count + 2) * sizeof(char *));
 	if (!new_command)
 		return (-1);
 	command->command = new_command;

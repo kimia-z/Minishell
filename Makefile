@@ -17,7 +17,7 @@ SRCS = src/expansion/expansion.c src/setup/history.c \
 		src/parser/syntax_checker.c src/execution/find_path.c \
 		src/setup/cmdline.c src/setup/env_var.c src/setup/signals.c \
 		src/utils/error_handling.c src/utils/test_functions.c \
-		 src/main.c src/setup/prompt.c
+		 src/main.c src/setup/prompt.c src/parser/heredoc.c
 
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 

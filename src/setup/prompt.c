@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 14:08:07 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/19 18:14:41 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/26 18:38:01 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "minishell.h"
 
 //TODO
-// implement ft_strcmp ft_strcat ft_strcpy in libft
 //check functions for errors
 // check return values
 // cursor movement is wacky - not necessary
@@ -68,7 +67,7 @@ static char	*build_prompt(const char *hostname, const char *cwd)
 	if (!prompt)
 	{
 		write_stderr("malloc failed");
-		return ft_strdup(PROMPT_DEFAULT);
+		return (ft_strdup(PROMPT_DEFAULT));
 	}
 	prompt[0] = '\0';
 	append_to_prompt(prompt, prompt_len, GREEN);

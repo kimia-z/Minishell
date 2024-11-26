@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/19 21:15:24 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/24 18:28:53 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/26 19:25:50 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static bool is_word_token(char c)
 
 static bool	is_operator_token(char c)
 {
-	return (c != '\0' && !ft_isalnum(c));
+	return (c != '\0' && !ft_isalnum(c) && c!= ' ' && c != '\t' && c!= '\n');
 }
 
 static bool	is_quotes(char c)
@@ -37,9 +37,7 @@ int	lexer_main(t_lexer *lexer, t_tokenlist *tokenlist)
 {
 	char	current_char;
 	bool	is_op;
-	// int		pos;
 
-	//pos = 1;
 	while (lexer->position < lexer->length)
 	{
 		lexer_skip_whitespace(lexer);
@@ -49,21 +47,33 @@ int	lexer_main(t_lexer *lexer, t_tokenlist *tokenlist)
 		{
 			if (!lexer_collect_token(lexer, tokenlist, is_op))
 				return (-1);
-			//pos++;
 		}
+		// else if (is_operator_token(current_char))
+        // {
+        //     is_op = true;
+        //     if (current_char == '<' && lexer->input[lexer->position + 1] == '<')
+        //     {
+        //         lexer->position++;
+        //         if (!lexer_collect_token(lexer, tokenlist, is_op))
+        //             return (-1);
+        //     }
+        //     else
+        //     {
+        //         if (!lexer_collect_token(lexer, tokenlist, is_op))
+        //             return (-1);
+        //     }
+        // }
 		else if (is_operator_token(current_char))
 		{
 			is_op = true;
 			if (!lexer_collect_token(lexer, tokenlist, is_op))
 				return (-1);
-			//pos++;
 		}
 		else if (is_quotes(current_char))
 		{
 			is_op = false;
 			if (!lexer_collect_quotes(lexer, &current_char, tokenlist, is_op))
 				return (-1);
-			//pos++;
 		}
 		lexer->position++;
 	}

@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:09:38 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 17:58:41 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/11/26 18:22:30 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,10 @@ int	main(int argc, char **argv, char **envp)
 		}
 		if (process_cmdline(&data, input) == -1)
 		{
-			end_shell(&data);
-			return (EXIT_FAILURE);
+			free(input);
+			continue;
 		}
+		free(input);
 	}
 	end_shell(&data);
 	return (0);

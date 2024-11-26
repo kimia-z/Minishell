@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 16:47:59 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/11/26 15:38:11 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/11/26 18:54:45 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct s_command
 	char				*redirect_in;
 	char				*redirect_out;
 	char 				*redirect_append;//do not need it?
+	char				*heredoc_content;
 	int					infile_fd;
 	int					outfile_fd;
 	struct s_command	*next;
@@ -60,6 +61,11 @@ bool			is_pipe(enum e_token_type type);
 void			free_command_list(t_cmdlist *cmdlist);
 void			free_command(t_command *command);
 void			free_command_resources(t_command *command, int command_count);
+
+
+/* Heredoc */
+char	*handle_heredoc(const char *delimiter);
+
 
 #endif
 

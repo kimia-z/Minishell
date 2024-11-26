@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 12:41:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 17:57:31 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/11/26 18:54:04 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ void	free_command(t_command *command)
 		free(command->redirect_out);
 	if (command->redirect_append != NULL)
 		free(command->redirect_append);
+	if (command->heredoc_content != NULL)
+        free(command->heredoc_content);
 	if (command->path != NULL)
 		free(command->path);
 	free(command);
@@ -101,7 +103,7 @@ void	end_shell(t_data *data)
 	//close_fds();
 	save_history(&data->history, HISTORY_FILE);
 	free_history(&data->history);
-	clear_history(); // ? rl_ ?
+	rl_clear_history(); // ? rl_ ?
 	rl_free_line_state();
 	rl_cleanup_after_signal();
 }
