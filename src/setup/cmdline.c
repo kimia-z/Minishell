@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:33:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/24 21:44:04 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/26 13:36:57 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,9 @@ t_tokenlist	*tokenizer(char **envp, char *input)
 	return (tokenlist);
 }
 
-
+/*
+-l on failure - tokenizer fails 
+*/
 int	process_cmdline(t_data *data, char *input)
 {
 	//int	status; //to track exit code
@@ -67,13 +69,14 @@ int	process_cmdline(t_data *data, char *input)
 	if (syntax_checker(tokenlist) == -1)
 	{
 		tokenlist_free(tokenlist);
-		return -1;
+		return (-1);
 	}
 	commandlist = parser(tokenlist);
+	tokenlist_free(tokenlist);
 	if (!commandlist)
 	{
 		printf("parser failed\n");
-		//handle error
+		return (-1);
 	}	
 	//status = ft_execute(data, commandlist);
 	// error check
@@ -99,7 +102,7 @@ static int	no_input(char *str)
 }
 
 /*
-NULL on failure: unable to read from commandline - saving/adding to history fails
+NULL on failure: unable to read from commandline - saving/adding to history fails - prompt failed
 */
 char	*get_commandline(t_data *data)
 {
@@ -109,6 +112,8 @@ char	*get_commandline(t_data *data)
 	while (1)
 	{
 		prompt = get_prompt();
+		if (!prompt)
+			return (write_stderr("failed to get prompt"), NULL);
 		input = readline(prompt);
 		free(prompt);
 		if (!input)

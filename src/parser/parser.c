@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/30 17:49:42 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/24 21:41:32 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/26 13:34:24 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void parse_redirection(t_command *command, t_token **current_token)
 }
 
 
+
 t_command	*parse_command(t_token **current_token)
 {
     t_command *command;
@@ -71,14 +72,15 @@ t_command	*parse_command(t_token **current_token)
     command = malloc(sizeof(t_command));
     if (command == NULL)
         return NULL;
-    command->command = NULL;
-    command->path = NULL;
-    command->redirect_in = NULL;
-    command->redirect_out = NULL;
-    command->redirect_append = NULL;
-    command->infile_fd = -1;
-    command->outfile_fd = -1;
-    command->next = NULL;
+    // command->command = NULL;
+    // command->path = NULL;
+    // command->redirect_in = NULL;
+    // command->redirect_out = NULL;
+    // command->redirect_append = NULL;
+    // command->infile_fd = -1;
+    // command->outfile_fd = -1;
+    // command->next = NULL;
+	ft_bzero(&command, sizeof(t_command));
 
     while (*current_token != NULL && (*current_token)->type != TOKEN_OP_PIPE)
     {

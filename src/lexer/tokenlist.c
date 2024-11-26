@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/19 21:10:39 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/19 21:34:23 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/26 13:37:25 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	tokenlist_free(t_tokenlist *list)
 	t_token	*current;
 
 	if (!list)
-		return;
+		return ;
 	current = list->head;
 	while (current)
 	{

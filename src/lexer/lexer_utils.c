@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/19 21:06:47 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/19 21:09:51 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/26 13:24:12 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_lexer	*lexer_init(char *input)
 	ft_bzero(lexer, sizeof(t_lexer));
 	lexer->input = ft_strdup(input);
 	if (!lexer->input)
-		return (NULL);
+		return (free(lexer), NULL);
 	lexer->tokens = NULL;
 	lexer->position = 0;
 	lexer->length = ft_strlen(input);

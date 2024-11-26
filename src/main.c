@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:09:38 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/24 20:23:30 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/26 13:21:57 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	exit_code(int code)
 
 /* 
 -1 for failure: envp doesnt exist - malloc error
+0 for success: envp added - t_env created - hstory file opened
 */
 int	init_minishell(t_data *data, char **envp)
 {
@@ -37,7 +38,7 @@ int	init_minishell(t_data *data, char **envp)
 	//reset/flush terminal if necessary ?
 	// search for path herea nd save it data struct?
 	if (get_env(data, envp) == -1)
-		return (-1); // no cleanup necessary
+		return (-1); // no cleanup necessary for failure - for success envp and env list
 	//ft_bzero(&data->history, sizeof(t_history)); malloc here or not??
 	if (load_history(&data->history, HISTORY_FILE) == -1)
 		return (cleanup_memory_alloc(data), -1); // is it cleanning up history properly?
@@ -61,7 +62,8 @@ int	main(int argc, char **argv, char **envp)
 		input = get_commandline(&data);
 		if (!input)
 			end_shell(&data); // also pass in the exit_code?
-		process_cmdline(&data, input); // error check
+		if (process_cmdline(&data, input) == -1)
+			end_shell(&data);
 	}
 	save_history(&data.history, HISTORY_FILE);
 	free_history(&data.history);
@@ -69,6 +71,6 @@ int	main(int argc, char **argv, char **envp)
 	rl_free_line_state();
 	rl_cleanup_after_signal();
 	
-	//end_shell(&data);
+	end_shell(&data);
 	return (data.exit_status);
 }

@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 12:41:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/24 20:03:07 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/26 13:42:21 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,17 @@ void	write_stderr(char *errmsg)
 
 void	free_command(t_command *command)
 {
-	if (command == NULL)
-		return;
+	int	i;
+
+	i = 0;
+	if (!command)
+		return ;
 	if (command->command != NULL)
+	{
+		while (command->command[i])
+			free(command->command[i]);
 		free(command->command);
+	}
 	if (command->redirect_in != NULL)
 		free(command->redirect_in);
 	if (command->redirect_out != NULL)
@@ -48,20 +55,25 @@ void	free_command_list(t_command *cmdlist)
 	t_command	*current;
 	t_command	*next;
 
-	current = cmdlist;
+	if (!cmdlist)
+		return ;
+	current = cmdlist->head;
 	while (current != NULL)
 	{
 		next = current->next;
 		free_command(current);
 		current = next;
 	}
+	free(cmdlist);
 }
 
 
 void	cleanup_memory_alloc(t_data *data)
 {
-	free_2d((void ***)data->envp);
-	free_env_list(data->env);
+	if (data->envp)
+		free_2d((void ***)&data->envp);
+	if (data->env)
+		free_env_list(data->env);
 	free_history(&data->history); // is it doing its job?
 	
 }
@@ -69,17 +81,19 @@ void	cleanup_memory_alloc(t_data *data)
 /* when things went well and you wanna exit */
 void	end_shell(t_data *data)
 {
-	//free all malloced
+	cleanup_memory_alloc(data);
 	//reset_terminal();
 	//close_fds();
-	cleanup_memory_alloc(data);
 }
 
 
 void	free_nullify(void **thing)
 {
-	free(*thing);
-	*thing = NULL;
+	if (*thing != NULL)
+	{
+		free(*thing);
+		*thing = NULL;
+	}
 }
 
 void	free_2d(void ***thing)
