@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/20 11:11:04 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/03/25 11:24:35 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/11/26 15:50:58 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,24 @@
 ** strlcpy() copies up to dstsize - 1 characters from the string src to dst,
 ** NUL-terminating the result if dstsize is not 0. Returns the length of src.
 */
+
 #include "libft.h"
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
 	size_t	i;
 
+	if (size == 0)
+		return (ft_strlen(src));
 	i = 0;
-	if (size != 0 && dst != src)
+	while (i < size - 1 && src[i] != '\0')
 	{
-		while (i < size - 1 && src[i] != 0)
-		{
-			dst[i] = src[i];
-			i++;
-		}
-		dst[i] = 0;
+		dst[i] = src[i];
+		i++;
 	}
-	while (src[i] != 0)
+	if (size > 0)
+		dst[i] = '\0';
+	while (src[i] != '\0')
 		i++;
 	return (i);
 }

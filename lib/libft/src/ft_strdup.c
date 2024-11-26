@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/20 11:18:54 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/11/19 21:18:36 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/26 16:07:19 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ char	*ft_strdup(const char *s)
 	size_t	len;
 	char	*str;
 
+	if (!s)
+		return (NULL);
 	len = ft_strlen(s);
 	str = (char *)malloc(sizeof(char) * (len + 1));
 	if (str == NULL)

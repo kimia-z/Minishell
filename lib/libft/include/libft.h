@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/26 12:25:48 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/11/19 21:30:42 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/26 14:55:31 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	ft_bzero(void *s, size_t n);
 int		ft_atoi(const char *str);
 char	*ft_itoa(int n);
 void	*ft_calloc(size_t count, size_t size);
-void	*ft_realloc(void *ptr, size_t newSize);
+void	*ft_realloc(void *ptr, size_t new_size);
 
 /*
 ** Functions for writing

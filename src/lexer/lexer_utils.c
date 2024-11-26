@@ -6,11 +6,15 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/19 21:06:47 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 13:24:12 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/11/26 16:11:34 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
+
+// NOTES:
+// when we do ctl d lexer inout becoems null
+
 
 /*
 Initialize lexer with the given input
@@ -24,9 +28,11 @@ t_lexer	*lexer_init(char *input)
 	if (!lexer)
 		return (NULL);
 	ft_bzero(lexer, sizeof(t_lexer));
+	//printf("from lexer_init, input is: %s\n", input);
 	lexer->input = ft_strdup(input);
 	if (!lexer->input)
 		return (free(lexer), NULL);
+	//printf("from lexer_init after ft_strdup, input is: %s\n", lexer->input);
 	lexer->tokens = NULL;
 	lexer->position = 0;
 	lexer->length = ft_strlen(input);

@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:12:43 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 12:49:31 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/11/26 16:00:19 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,10 @@ void	free_env_list(t_env *env_list)
 	{
 		temp = env_list;
 		env_list = env_list->next;
+		//printf("Freeing key: %s, value: %s\n", temp->key, temp->value); // Debug statement
 		free(temp->key);
-        free(temp->value);
-        free(temp);
+		free(temp->value);
+		free(temp);
 	}
 }
 
@@ -86,7 +87,7 @@ static int	add_env_node(t_env **env_list, t_env **last_node, const char *env_var
 
 /*
 -1 on failure: malloc failure - ft_strdup failure
- */
+*/
 int	add_env_to_data(t_data *data, char **envp)
 {
 	int	env_count;
@@ -135,7 +136,7 @@ int	get_env(t_data *data, char **envp)
 	{
 		if (add_env_node(&env_list, &last_node, envp[i]) == -1)
 		{
-			//free_env_list(env_list); alrady cleaned up in function
+			//free_env_list(env_list); //alrady cleaned up in function
 			free_2d((void ***)&data->envp);
 			return (write_stderr("Failure to make envp nodes"), -1);
 		}

@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 12:41:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 13:42:21 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/11/26 17:57:31 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,11 @@ void	free_command(t_command *command)
 	if (command->command != NULL)
 	{
 		while (command->command[i])
+		{
+			printf("Freeing command[%d]: %s\n", i, command->command[i]); // Debug statement
 			free(command->command[i]);
+			i++;
+		}
 		free(command->command);
 	}
 	if (command->redirect_in != NULL)
@@ -47,10 +51,12 @@ void	free_command(t_command *command)
 		free(command->redirect_out);
 	if (command->redirect_append != NULL)
 		free(command->redirect_append);
+	if (command->path != NULL)
+		free(command->path);
 	free(command);
 }
 
-void	free_command_list(t_command *cmdlist)
+void	free_command_list(t_cmdlist *cmdlist)
 {
 	t_command	*current;
 	t_command	*next;
@@ -71,9 +77,18 @@ void	free_command_list(t_command *cmdlist)
 void	cleanup_memory_alloc(t_data *data)
 {
 	if (data->envp)
-		free_2d((void ***)&data->envp);
+	{
+		//printf("Freeing envp\n");
+        //print_envp(data->envp); // Debug statement
+        free_2d((void ***)&data->envp);
+	}
 	if (data->env)
+	{
+		//printf("Freeing env list\n");
+        //print_env_list(data->env);
+		//printf("\n\n");
 		free_env_list(data->env);
+	}
 	free_history(&data->history); // is it doing its job?
 	
 }
@@ -84,6 +99,11 @@ void	end_shell(t_data *data)
 	cleanup_memory_alloc(data);
 	//reset_terminal();
 	//close_fds();
+	save_history(&data->history, HISTORY_FILE);
+	free_history(&data->history);
+	clear_history(); // ? rl_ ?
+	rl_free_line_state();
+	rl_cleanup_after_signal();
 }
 
 

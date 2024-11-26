@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:33:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 13:36:57 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/11/26 17:59:13 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ t_tokenlist	*tokenizer(char **envp, char *input)
 	lexer = lexer_init(input);
 	if (!lexer)
 		return (write_stderr("Lexer initialization failed"), NULL);
-	//data->lexer = lexer;
 	tokenlist = tokenlist_init();
 	if (!tokenlist)
 	{
@@ -54,6 +53,7 @@ t_tokenlist	*tokenizer(char **envp, char *input)
 	return (tokenlist);
 }
 
+
 /*
 -l on failure - tokenizer fails 
 */
@@ -67,20 +67,19 @@ int	process_cmdline(t_data *data, char *input)
 	if (!tokenlist)
 		return (-1);
 	if (syntax_checker(tokenlist) == -1)
-	{
-		tokenlist_free(tokenlist);
-		return (-1);
-	}
+		return (tokenlist_free(tokenlist), -1);
+	commandlist = NULL;
 	commandlist = parser(tokenlist);
 	tokenlist_free(tokenlist);
 	if (!commandlist)
 	{
-		printf("parser failed\n");
+		write_stderr("Parser failed miserably.");
 		return (-1);
 	}	
 	//status = ft_execute(data, commandlist);
-	// error check
-	//cleanup for parser if any
+
+	print_command_list(commandlist);
+	free_command_list(commandlist);
 	return (0); // status
 	
 }

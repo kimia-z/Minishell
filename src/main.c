@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:09:38 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 13:21:57 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/11/26 17:58:41 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,16 +61,16 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		input = get_commandline(&data);
 		if (!input)
+		{
 			end_shell(&data); // also pass in the exit_code?
+			return (EXIT_FAILURE);
+		}
 		if (process_cmdline(&data, input) == -1)
+		{
 			end_shell(&data);
+			return (EXIT_FAILURE);
+		}
 	}
-	save_history(&data.history, HISTORY_FILE);
-	free_history(&data.history);
-	clear_history(); // ? rl_ ?
-	rl_free_line_state();
-	rl_cleanup_after_signal();
-	
 	end_shell(&data);
-	return (data.exit_status);
+	return (0);
 }

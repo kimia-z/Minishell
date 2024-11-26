@@ -1,18 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   ft_realloc.c                                       :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/11/26 14:46:50 by ykarimi       #+#    #+#                 */
+/*   Updated: 2024/11/26 14:56:05 by ykarimi       ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-void *ft_realloc(void *ptr, size_t newSize)
+void	*ft_realloc(void *ptr, size_t new_size)
 {
-	void	*newPtr;
+	void	*new_ptr;
+	size_t	min_size;
 
-	newPtr = malloc(newSize);
-	if (!newPtr)
+	min_size = 0;
+	if (new_size == 0)
 	{
-		return (NULL); // Allocation failed
+		free(ptr);
+		return (NULL);
 	}
-	if (newSize > 0 && ptr != NULL) {
-		size_t minSize = newSize < sizeof(*ptr) ? newSize : sizeof(*ptr);
-		ft_memcpy(newPtr, ptr, minSize);
+	new_ptr = malloc(new_size);
+	if (!new_ptr)
+		return (NULL);
+	if (ptr != NULL)
+	{
+		ft_memcpy(new_ptr, ptr, min_size);
+		free(ptr);
 	}
-	free(ptr); // Free the old block
-	return (newPtr);
+	return (new_ptr);
 }

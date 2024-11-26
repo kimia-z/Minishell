@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:58:32 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/24 20:04:41 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/26 17:30:47 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,15 @@
 # define FATAL_ERROR_SIG 128
 # define ERROR_CTRL_C_ 130
 
-// max commands kept in history
+/* max commands kept in history */
 # ifndef HISTORY_MAX
 #  define HISTORY_MAX 100
 # endif
 
 extern int	g_exit_code;
 
+/************************************************************/
+/*  Structs */
 
 typedef enum e_sig
 {
@@ -88,7 +90,6 @@ typedef enum e_errtype
 	
 }			t_errtype;
 
-
 // define what kind of errors you wanna specify(keywords)
 typedef struct s_error
 {
@@ -121,10 +122,6 @@ typedef struct s_env
 /* more things need to be added as we go */
 typedef struct s_data
 {
-	//t_lexer			*lexer;
-	//t_token			*tokenlist;
-	//t_parser		*parser;
-	//t_command		*cmdlist;
 	t_env			*env;
 	t_error			error;
 	t_history		history;
@@ -132,8 +129,8 @@ typedef struct s_data
 	int				signal;
 	int				exit_status;
 }					t_data;
-
-
+				
+/************************************************************/
 /* Setup functions */
 int			init_minishell(t_data *data,  char **envp);
 char		*get_prompt();
@@ -159,9 +156,7 @@ int			save_history(t_history *history, const char *filename);
 void		trim_newline(char *str);
 
 /* Parsing */
-//int			parser_entry(t_data *data, char *input);
 t_tokenlist	*tokenizer(char **envp, char *input);
-
 
 
 
@@ -170,21 +165,23 @@ void	free_2d(void ***thing);
 void	free_nullify(void **thing);
 void	cleanup_memory_alloc(t_data *data);
 void	write_stderr(char *errmsg);
-
+void	end_shell(t_data *data);
 // void    ft_perror(char *msg);
 // void	exit_error(int exit_status, char *msg);
 //void	reset_terminal(t_data *data);
 //void	exit_shell(t_data *data, char *err_msg);
-void	end_shell(t_data *data);
 // void	exit_error(int exit_status, char *msg);
 // void	ft_perror(t_errtype);
 //void clear_screen();
 
 
 /* Utils */
-void print_command_list(t_command *cmdlist);
+//void print_command_list(t_command *cmdlist);
 // add more printing and testing functions
-
+void print_envp(char **envp);
+void print_env_list(t_env *env_list);
+void print_command(t_command *command);
+void print_command_list(t_cmdlist *commandlist);
 
 
 
