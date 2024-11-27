@@ -125,6 +125,7 @@ typedef struct s_data
 	t_env			*env;
 	t_error			error;
 	t_history		history;
+	t_cmdlist		*commands;
 	char			**envp;
 	int				signal;
 	int				exit_status;
