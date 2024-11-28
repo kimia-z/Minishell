@@ -35,7 +35,7 @@ int	ft_pwd(t_command *commands, t_data *data)
 		else
 		ft_putendl_fd("pwd: too many arguments", outfile);
 			//ft_putstr("pwd: too many arguments\n");
-		data->exit_status = 1;
+		data->exit_status = ERROR_GENERIC;
 		return (-1);
 	}
 	return (0);

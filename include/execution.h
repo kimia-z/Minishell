@@ -57,10 +57,10 @@ typedef enum e_builtin
 
 int		ft_execute(t_data *data);
 
-void	ft_echo(t_command *commands, t_data *data);
+int		ft_echo(t_command *commands, t_data *data);
 int		ft_pwd(t_command *commands, t_data *data);
 void	ft_exit(t_command *commands, t_data *data, int nb_pipes);
-void	ft_env(t_command *commands, t_data *data);
+int		ft_env(t_command *commands, t_data *data);
 void	ft_unset(t_command *commands, t_data *data, int nb_pipes);
 int		ft_cd(t_command *commands, t_data *data);
 //void	ft_export(t_command *commands, t_data *data);
