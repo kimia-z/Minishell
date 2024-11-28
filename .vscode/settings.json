@@ -11,6 +11,8 @@
         "ranges": "c",
         "signal.h": "c",
         "termcap.h": "c",
-        "termios.h": "c"
+        "termios.h": "c",
+        "fcntl.h": "c",
+        "errno.h": "c"
     }
 }

@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 14:08:07 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 18:38:01 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/11/28 12:47:42 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 //check functions for errors
 // check return values
 // cursor movement is wacky - not necessary
-
+// fix mem management for getcwd (0,0)
 // NOTES
 // in bash, what happens if getcwd or gethostname fail? what does minishell need to do in those cases?
 
