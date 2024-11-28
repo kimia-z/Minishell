@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 12:41:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 18:54:04 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/11/28 10:22:51 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	end_shell(t_data *data)
 	//close_fds();
 	save_history(&data->history, HISTORY_FILE);
 	free_history(&data->history);
-	rl_clear_history(); // ? rl_ ?
+	//rl_clear_history(); // ? rl_ ?
 	rl_free_line_state();
 	rl_cleanup_after_signal();
 }
