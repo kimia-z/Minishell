@@ -95,7 +95,8 @@ void	ft_exit(t_command *commands, t_data *data, int nb_pipes)
 	{
 		ft_putstr_fd("exit\n", 2);
 		data->exit_status = 0;
-		ft_terminate(0, parser);
+		ft_terminate(0, data);
+		//ft_terminate(0, parser);
 	}
 	if (!is_num(commands->command[1]))
 	{
@@ -103,7 +104,8 @@ void	ft_exit(t_command *commands, t_data *data, int nb_pipes)
 		ft_putstr_fd(commands->command[1], 2);
 		ft_putstr_fd(": numeric argument required\n", 2);
 		data->exit_status = 2;
-		ft_terminate(2, parser);
+		ft_terminate(2, data);
+		//ft_terminate(2, parser);
 	}
 	if (commands->command[2])
 	{
@@ -113,5 +115,7 @@ void	ft_exit(t_command *commands, t_data *data, int nb_pipes)
 	}
 	ft_putstr_fd("exit\n", 2);
 	data->exit_status = (ft_atoll(commands->command[1]) % 256);
-	ft_terminate(data->exit_status, parser);
+	ft_terminate(data->exit_status, data);
+	//ft_terminate(data->exit_status, parser);
+
 }

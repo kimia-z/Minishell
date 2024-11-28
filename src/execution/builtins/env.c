@@ -1,4 +1,5 @@
 #include "execution.h"
+#include "minishell.h"
 
 void	ft_env(t_command *commands, t_data *data)
 {
@@ -9,10 +10,10 @@ void	ft_env(t_command *commands, t_data *data)
 	outfile = commands->outfile_fd;
 	if (outfile == -2)
 		outfile = STDOUT_FILENO;
-	if (!parser || !data->env)
-	{
-		return(ft_putstr_fd("Error: no env variables available\n", 2));
-	}
+	// if (!parser || !data->env)
+	// {
+	// 	return(ft_putstr_fd("Error: no env variables available\n", 2));
+	// }
 	if (commands->command[1])
 	{
 		printf("env: '%s': No such file or directory\n", commands->command[1]);

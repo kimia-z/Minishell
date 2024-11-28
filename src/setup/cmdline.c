@@ -6,13 +6,14 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:33:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/28 10:24:31 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/11/28 10:37:34 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "parser.h"
 #include "minishell.h"
+#include "execution.h"
 
 /*
 NULL for failure: lexer failure - tokenlist failure
@@ -49,7 +50,7 @@ t_tokenlist	*tokenizer(char **envp, char *input)
 */
 int	process_cmdline(t_data *data, char *input)
 {
-	int	status; //to track exit code
+	int	status;
 	t_cmdlist	*commandlist;
 	t_tokenlist	*tokenlist;
 
@@ -65,14 +66,13 @@ int	process_cmdline(t_data *data, char *input)
 	{
 		write_stderr("Parser failed miserably.");
 		return (-1);
-	}	
-	status = ft_execute(data, commandlist);
+	}
+	data->commands = commandlist;
+	status = ft_execute(data);
 	printf("exit code from execution: %d\n", status);
-
 	print_command_list(commandlist);
 	free_command_list(commandlist);
 	return (0); // status
-	
 }
 
 static int	no_input(char *str)

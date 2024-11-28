@@ -17,7 +17,12 @@ SRCS = src/expansion/expansion.c src/setup/history.c \
 		src/parser/syntax_checker.c src/execution/find_path.c \
 		src/setup/cmdline.c src/setup/env_var.c src/setup/signals.c \
 		src/utils/error_handling.c src/utils/test_functions.c \
-		 src/main.c src/setup/prompt.c src/parser/heredoc.c
+		src/main.c src/setup/prompt.c src/parser/heredoc.c \
+		src/execution/builtins/cd.c src/execution/builtins/echo.c \
+		src/execution/builtins/env.c src/execution/builtins/exit.c \
+		src/execution/builtins/export.c src/execution/builtins/pwd.c \
+		src/execution/builtins/unset.c src/execution/execute.c \
+		src/execution/test.c src/execution/utils.c src/execution/pipe.c
 
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
