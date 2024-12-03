@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 16:42:09 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/11/26 16:26:21 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/03 11:05:17 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ bool	is_pipe(enum e_token_type type)
 }
 bool	is_redirection(enum e_token_type type)
 {
-	if (type == TOKEN_OP_REDIRECTION_APPEND || type == TOKEN_OP_REDIRECTION_IN || type == TOKEN_OP_REDIRECTION_OUT)
+	if (type == TOKEN_OP_REDIRECTION_APPEND || type == TOKEN_OP_REDIRECTION_IN \
+	|| type == TOKEN_OP_REDIRECTION_OUT || type == TOKEN_OP_HEREDOC)
 		return (true);
 	return (false);
 }

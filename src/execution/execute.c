@@ -120,54 +120,121 @@ void	ft_parent(t_command *temp, t_exe *exec)
 }
 
 
-
-int	execute_one_cmd(t_data *data, t_command *commands)
+int execute_one_cmd(t_data *data, t_command *commands)
 {
-	int	pid;
-	int	status;
+	int pid;
+	int status;
+	int pipefd[2];
+
+	if (commands->redirect_in)
+	{
+		if (pipe(pipefd) == -1)
+		{
+			perror("pipe");
+			return -1;
+		}
+	}
 
 	pid = fork();
 	if (pid == -1)
+	{
 		write_stderr("failed in fork");
+		return -1;
+	}
 	if (pid == 0)
 	{
 		if (commands->infile_fd == -1 || commands->outfile_fd == -1)
-			return (EXIT_FAILURE);
+			exit(EXIT_FAILURE);
 		if (commands->infile_fd >= 0)
 		{
 			if (dup2(commands->infile_fd, STDIN_FILENO) == -1)
-				return (EXIT_FAILURE);
+				exit(EXIT_FAILURE);
 		}
 		if (commands->outfile_fd >= 0)
 		{
 			if (dup2(commands->outfile_fd, STDOUT_FILENO) == -1)
-				return (EXIT_FAILURE);
+				exit(EXIT_FAILURE);
 		}
-		// for (int j = 0; commands->command[j]; j++)
-		// {
-		// 	printf("command[%d]:%s\n", j, commands->command[j]);
-		// }
-		// for (int k = 0; parser->arg_env[k]; k++)
-		// {
-		// 	printf("arg[%d]:%s\n", k, parser->arg_env[k]);
-		// }
-		// printf("path:%s\n", commands->path);
+		if (commands->redirect_in)
+		{
+			close(pipefd[1]);
+			dup2(pipefd[0], STDIN_FILENO);
+			close(pipefd[0]);
+		}
 		if (commands->path != NULL)
 			execve(commands->path, commands->command, data->envp);
 		write_stderr("Command not found");
-		//free everything
 		exit(127);
 	}
+	else
+	{
+		if (commands->redirect_in)
+		{
+			close(pipefd[0]);
+			write(pipefd[1], commands->redirect_in, strlen(commands->redirect_in));
+			close(pipefd[1]);
+		}
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			data->exit_status = WEXITSTATUS(status);
+	}
+
 	if (commands->infile_fd != -2)
-		close (commands->infile_fd);
+		close(commands->infile_fd);
 	if (commands->outfile_fd != -2)
-		close (commands->outfile_fd);
-	// if there is here doc -> unlink
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-		data->exit_status = WEXITSTATUS(status);
-	return (data->exit_status);
+		close(commands->outfile_fd);
+	return data->exit_status;
 }
+
+
+
+// int	execute_one_cmd(t_data *data, t_command *commands)
+// {
+// 	int	pid;
+// 	int	status;
+
+// 	pid = fork();
+// 	if (pid == -1)
+// 		write_stderr("failed in fork");
+// 	if (pid == 0)
+// 	{
+// 		if (commands->infile_fd == -1 || commands->outfile_fd == -1)
+// 			return (EXIT_FAILURE);
+// 		if (commands->infile_fd >= 0)
+// 		{
+// 			if (dup2(commands->infile_fd, STDIN_FILENO) == -1)
+// 				return (EXIT_FAILURE);
+// 		}
+// 		if (commands->outfile_fd >= 0)
+// 		{
+// 			if (dup2(commands->outfile_fd, STDOUT_FILENO) == -1)
+// 				return (EXIT_FAILURE);
+// 		}
+// 		// for (int j = 0; commands->command[j]; j++)
+// 		// {
+// 		// 	printf("command[%d]:%s\n", j, commands->command[j]);
+// 		// }
+// 		// for (int k = 0; parser->arg_env[k]; k++)
+// 		// {
+// 		// 	printf("arg[%d]:%s\n", k, parser->arg_env[k]);
+// 		// }
+// 		// printf("path:%s\n", commands->path);
+// 		if (commands->path != NULL)
+// 			execve(commands->path, commands->command, data->envp);
+// 		write_stderr("Command not found");
+// 		//free everything
+// 		exit(127);
+// 	}
+// 	if (commands->infile_fd != -2)
+// 		close (commands->infile_fd);
+// 	if (commands->outfile_fd != -2)
+// 		close (commands->outfile_fd);
+// 	// if there is here doc -> unlink
+// 	waitpid(pid, &status, 0);
+// 	if (WIFEXITED(status))
+// 		data->exit_status = WEXITSTATUS(status);
+// 	return (data->exit_status);
+// }
 
 
 /*
@@ -197,22 +264,3 @@ int	ft_execute(t_data *data)
 	}
 	return (data->exit_status);
 }
-
-// int main(int argc, char **argv, char **env)
-// {
-// 	(void)argc;
-// 	(void)argv;
-// 	//(void)env;
-// 	//test_echo();
-// 	//test_pwd();
-// 	//test_exit();
-// 	//test_env(env);
-// 	//test_unset(env);
-// 	//test_cd(env);
-// 	//test_pwd();
-// 	//test_export(env);
-// 	//test_one(env);
-// 	//test_one_pipe(env);
-// 	//test_two_pipe(env);
-// 	return 0;
-// }

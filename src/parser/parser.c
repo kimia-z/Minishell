@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/30 17:49:42 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 18:50:32 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/03 11:16:15 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,12 @@ void parse_redirection(t_command *command, t_token **current_token)
         {
             command->redirect_in = handle_heredoc((*current_token)->value);
             printf("here_doc: %s\n", command->redirect_in);
+			//printf("meoww\n");
         }
     }
 }
+
+
 
 
 static int	handle_first_arg(t_command *command, t_token *current_token)
@@ -118,24 +121,34 @@ t_command	*parse_command(t_token **current_token)
 	if (!command)
 		return (NULL);
 	ft_bzero(command, sizeof(t_command));
+	//printf("here3\n");
 	while (*current_token && (*current_token)->type != TOKEN_OP_PIPE)
 	{
+		//printf("here4\n");
 		if (is_command((*current_token)->type))
 		{
 			if (command_count == 0)
 			{
 				if (handle_first_arg(command, *current_token) == -1)
 					return (free(command), NULL);
+				//printf("here5\n");
 			}
 			else
 			{
+				//printf("here6\n");
 				if (handle_subsequent_args(command, *current_token, command_count) == -1)
 					return (free_command_resources(command, command_count), NULL);
 			}
+			//printf("here7\n");
 			command_count++;
 		}
+		//printf("here8\n");
 		if (is_redirection((*current_token)->type))
+		{
 			parse_redirection(command, current_token);
+			//continue;
+		}
+		//printf("here9\n");
 		*current_token = (*current_token)->next;
 	}
 	return (command);
@@ -147,6 +160,7 @@ NULL on failure: cmdinit malloc fails -
 */
 t_cmdlist	*parser(t_tokenlist *tokenlist)
 {
+	//printf("here1\n");
 	t_command	*last_command;
 	t_command	*current_command;
 	t_cmdlist	*cmdlist;
@@ -159,6 +173,7 @@ t_cmdlist	*parser(t_tokenlist *tokenlist)
 		return (NULL);
 	while (current_token != NULL)
 	{
+		//printf("here2\n");
 		current_command = parse_command(&current_token);
 		if (!current_command)
 		{
