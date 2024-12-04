@@ -16,8 +16,7 @@ void	ft_unset(t_command *commands, t_data *data, int nb_pipes)
 	i = 1;
 	if (nb_pipes > 0 || !commands->command[1])
 	{
-		data->exit_status = 0;
-		//test_print_env(parser->envs);
+		data->exit_status = SUCCESS;
 		return ;
 	}
 	while (commands->command[i])
@@ -29,13 +28,9 @@ void	ft_unset(t_command *commands, t_data *data, int nb_pipes)
 			if (strcmp(current->key, commands->command[i]) == 0)
 			{
 				if (previous == NULL)
-				{
 					data->env = current->next;
-				}
 				else
-				{
 					previous->next = current->next;
-				}
 				free(current->key);
 				free(current->value);
 				free (current);
@@ -46,6 +41,5 @@ void	ft_unset(t_command *commands, t_data *data, int nb_pipes)
 		}
 		i++;
 	}
-	data->exit_status = 0;
-	//test_print_env(parser->envs);
+	data->exit_status = SUCCESS;
 }

@@ -1,7 +1,7 @@
 #include "execution.h"
 #include "minishell.h"
 
-int	ft_env(t_command *commands, t_data *data)
+void	ft_env(t_command *commands, t_data *data)
 {
 	int		outfile;
 	t_env	*temp;
@@ -14,7 +14,7 @@ int	ft_env(t_command *commands, t_data *data)
 	{
 		ft_putstr_fd("env: invalid file descriptor\n", STDERR_FILENO);
 		data->exit_status = ERROR_GENERIC;
-		return (-1);
+		return ;
 	}
 	if (commands->command[1])
 	{
@@ -23,7 +23,7 @@ int	ft_env(t_command *commands, t_data *data)
         ft_putstr_fd(commands->command[1], STDERR_FILENO);
         ft_putstr_fd("': No such file or directory\n", STDERR_FILENO);
         data->exit_status = ERROR_GENERIC;
-        return (-1);
+        return ;
 	}
 	while (temp)
 	{
@@ -36,5 +36,4 @@ int	ft_env(t_command *commands, t_data *data)
 		temp = temp->next;
 	}
 	data->exit_status = SUCCESS;
-	return (0);
 }

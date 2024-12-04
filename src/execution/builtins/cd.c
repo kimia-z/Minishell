@@ -44,7 +44,7 @@ static t_env	*ft_search_list(const char *key, t_env *env)
 	return (NULL);
 }
 
-int	ft_cd(t_command *commands, t_data *data)
+void	ft_cd(t_command *commands, t_data *data)
 {
 	t_env	*home_env;
 	char	*dir;
@@ -54,19 +54,18 @@ int	ft_cd(t_command *commands, t_data *data)
 	{
 		home_env = ft_search_list("HOME", data->env);
 		if (!home_env)
-			return (ft_cd_error(data, "cd: HOME not set", NULL), -1);
+			return (ft_cd_error(data, "cd: HOME not set", NULL));
 		dir = home_env->value;
 	}
 	else if (commands->command[2])
-		return (ft_cd_error(data, "cd: too many arguments: ", commands->command[2]), -1);
+		return (ft_cd_error(data, "cd: too many arguments: ", commands->command[2]));
 	else
 		dir = commands->command[1];
-	if (access(dir, F_OK) != 0)
-		return (ft_cd_error(data, "cd: no such file or directory: ", dir), -1);
-	if (access(dir, X_OK) != 0)
-		return (ft_cd_error(data, "cd: permission denied: ", dir), -1);
+	// if (access(dir, F_OK) != 0)
+	// 	return (ft_cd_error(data, "cd: no such file or directory: ", dir));
+	// if (access(dir, X_OK) != 0)
+	// 	return (ft_cd_error(data, "cd: permission denied: ", dir));
 	if (chdir(dir) != 0)
-		return (ft_cd_error(data, "cd: error changing directory: ", dir), -1);
+		return (ft_cd_error(data, "cd: error changing directory: ", dir));
 	data->exit_status = SUCCESS;
-	return (0);
 }

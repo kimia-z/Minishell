@@ -46,6 +46,8 @@ t_cmdlist	*cmdlist_init()
 	return (cmdlist);
 }
 
+// there is also a function for free cmd list!
+
 void	free_command_resources(t_command *command, int command_count)
 {
 	int	i;

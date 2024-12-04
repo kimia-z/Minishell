@@ -51,7 +51,7 @@ static bool	check_newline(t_command *commands, int *position)
 	return (newline);
 }
 
-int	ft_echo(t_command *commands, t_data *data)
+void	ft_echo(t_command *commands, t_data *data)
 {
 	int		outfile;
 	bool	is_newline;
@@ -65,7 +65,7 @@ int	ft_echo(t_command *commands, t_data *data)
 	{
 		ft_putstr_fd("echo: invalid file descriptor\n", STDERR_FILENO);
 		data->exit_status = ERROR_GENERIC;
-		return (-1);
+		return ;
 	}
 	position = 1;
 	is_newline = check_newline(commands, &position);
@@ -77,6 +77,5 @@ int	ft_echo(t_command *commands, t_data *data)
 	}
 	if (is_newline)
 		ft_putchar_fd('\n', outfile);
-	data->exit_status = 0;
-	return (0);
+	data->exit_status = SUCCESS;
 }

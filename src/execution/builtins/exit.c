@@ -1,19 +1,19 @@
 #include "execution.h"
 
 
-// void	free_arrs(char **str)
-// {
-// 	int	i;
+void	free_arrs(char **str)
+{
+	int	i;
 
-// 	i = 0;
-// 	while (str[i])
-// 	{
-// 		printf("str: %s\n", str[i]);
-// 		free(str[i]);
-// 		i++;
-// 	}
-// 	free(str);
-// }
+	i = 0;
+	while (str[i])
+	{
+		printf("str: %s\n", str[i]);
+		free(str[i]);
+		i++;
+	}
+	free(str);
+}
 
 static long long	ft_atoll(const char *str)
 {
@@ -75,11 +75,12 @@ static bool	is_num(char *str)
 
 void	ft_terminate(int status, t_data *data)
 {
-	//free
-	//free_arrs(parser->commands->command);
+	//unlink?
 	printf("status:%d\n", data->exit_status);
-	free(data->commands->head);
-	free(data->commands);
+	free_env_list_2(data->env);
+	free(data->env);
+	free_command_list(data->commands);
+	free_arrs(data->envp);
 	free(data);
 	exit(status);
 }
@@ -88,34 +89,30 @@ void	ft_exit(t_command *commands, t_data *data, int nb_pipes)
 {
 	if (nb_pipes > 0)
 	{
-		data->exit_status = 0;
+		data->exit_status = SUCCESS;
 		return ;
 	}
 	if (commands->command[0] && !commands->command[1])
 	{
 		ft_putstr_fd("exit\n", 2);
-		data->exit_status = 0;
+		data->exit_status = SUCCESS;
 		ft_terminate(0, data);
-		//ft_terminate(0, parser);
 	}
 	if (!is_num(commands->command[1]))
 	{
 		ft_putstr_fd("exit\nminishell: exit: ", 2);
 		ft_putstr_fd(commands->command[1], 2);
 		ft_putstr_fd(": numeric argument required\n", 2);
-		data->exit_status = 2;
+		data->exit_status = ERROR_BUILTIN_IMPROPER;
 		ft_terminate(2, data);
-		//ft_terminate(2, parser);
 	}
 	if (commands->command[2])
 	{
 		ft_putstr_fd("exit\nminishell: exit: too many arguments\n", 2);
-		data->exit_status = 1;
+		data->exit_status = ERROR_GENERIC;
 		return ;
 	}
 	ft_putstr_fd("exit\n", 2);
 	data->exit_status = (ft_atoll(commands->command[1]) % 256);
 	ft_terminate(data->exit_status, data);
-	//ft_terminate(data->exit_status, parser);
-
 }

@@ -15,34 +15,6 @@ typedef struct s_exe
 }	t_exe;
 
 
-// typedef struct s_env
-// {
-// 	char			*key;
-// 	char			*value;
-// 	struct s_env	*next;
-// }	t_env;
-
-
-// typedef struct s_command
-// {
-// 	char				**command;
-// 	char				*path; //char **path;
-// 	int					infile_fd;
-// 	int					outfile_fd;
-// 	char				*infile;
-// 	char				*outfile;
-// 	struct s_command	*next;
-// }				t_command;
-
-// typedef struct s_parser
-// {
-// 	int					exit_status;
-// 	int					nb_pipes;
-// 	struct s_command	*commands;
-// 	char				**arg_env;
-// 	struct s_env		*envs;
-// }				t_parser;
-
 typedef enum e_builtin
 {
 	ECH,
@@ -57,12 +29,12 @@ typedef enum e_builtin
 
 int		ft_execute(t_data *data);
 
-int		ft_echo(t_command *commands, t_data *data);
-int		ft_pwd(t_command *commands, t_data *data);
+void	ft_echo(t_command *commands, t_data *data);
+void	ft_pwd(t_command *commands, t_data *data);
 void	ft_exit(t_command *commands, t_data *data, int nb_pipes);
-int		ft_env(t_command *commands, t_data *data);
+void	ft_env(t_command *commands, t_data *data);
 void	ft_unset(t_command *commands, t_data *data, int nb_pipes);
-int		ft_cd(t_command *commands, t_data *data);
+void	ft_cd(t_command *commands, t_data *data);
 //void	ft_export(t_command *commands, t_data *data);
 
 
