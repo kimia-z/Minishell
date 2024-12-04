@@ -26,7 +26,6 @@ int	last_pipe(t_command *temp, t_exe *exec)
 		{
 			return (EXIT_FAILURE);
 		}
-		//close(temp->outfile_fd);
 	}
 	if (temp->infile_fd == -1)
 		return(EXIT_FAILURE);

@@ -28,9 +28,9 @@ void	parent_sig_handler(int sig)
 	{
 		exit_code(ERROR_CTRL_C_);
 		write(STDOUT_FILENO, "\n", 1);
-		//rl_on_new_line();
-		//rl_replace_line("", 0);
-		//rl_redisplay();
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
 	}
 }
 
@@ -39,8 +39,8 @@ void	heredoc_sig_handler(int sig)
 	if (sig == SIGINT)
 	{
 		write(STDOUT_FILENO, "\n", 1);
-		//rl_replace_line("", 0);
-		//rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_on_new_line();
 		exit(ERROR_CTRL_C_);
 	}
 }

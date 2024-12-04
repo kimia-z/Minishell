@@ -251,7 +251,6 @@ int	ft_execute(t_data *data)
 	{
 		if (check_builtin(data->commands->head, data, number_pipe) == false)
 		{
-			// find/have/check path
 			data->exit_status = execute_one_cmd(data, data->commands->head);
 			//printf("status:%d\n", parser->exit_status);
 			//free path

@@ -103,7 +103,7 @@ void	end_shell(t_data *data)
 	//close_fds();
 	save_history(&data->history, HISTORY_FILE);
 	free_history(&data->history);
-	//rl_clear_history(); // ? rl_ ?
+	rl_clear_history(); // ? rl_ ?
 	rl_free_line_state();
 	rl_cleanup_after_signal();
 }

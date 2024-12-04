@@ -61,8 +61,13 @@ void parse_redirection(t_command *command, t_token **current_token)
         *current_token = (*current_token)->next;
         if (*current_token && is_command((*current_token)->type))
         {
-            command->redirect_in = handle_heredoc((*current_token)->value);
-            printf("here_doc: %s\n", command->redirect_in);
+			command->redirect_in = handle_heredoc((*current_token)->value);
+			//char *temp;
+            command->infile_fd = open (command->redirect_in, O_CREAT | O_RDWR);
+			if (command->infile_fd == -1)
+				perror("open");
+			write(command->infile_fd, command->redirect_in, ft_strlen(command->redirect_in));
+            //printf("here_doc: %s\n", command->redirect_in);
 			//printf("meoww\n");
         }
     }
