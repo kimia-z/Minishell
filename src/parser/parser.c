@@ -27,9 +27,9 @@ void parse_redirection(t_command *command, t_token **current_token)
 		{
 			command->redirect_append = ft_strdup((*current_token)->value); // dont need append - just out
 			printf("redirect append: %s\n", command->redirect_append);
-			//command->outfile_fd = open(command->redirect_out, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			//if (command->outfile_fd == -1)
-			//perror("open");
+			command->outfile_fd = open(command->redirect_out, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			if (command->outfile_fd == -1)
+				perror("open");
 		}
 	}
 	else if ((*current_token)->type == TOKEN_OP_REDIRECTION_OUT)
@@ -39,9 +39,9 @@ void parse_redirection(t_command *command, t_token **current_token)
 		{
 			command->redirect_out = ft_strdup((*current_token)->value);
 			printf("redirect out: %s\n", command->redirect_out);
-			//command->outfile_fd = open(command->redirect_out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			//if (command->outfile_fd == -1)
-				//perror("open");
+			command->outfile_fd = open(command->redirect_out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			if (command->outfile_fd == -1)
+				perror("open");
 		}
 	}
 	else if ((*current_token)->type == TOKEN_OP_REDIRECTION_IN)
@@ -51,9 +51,9 @@ void parse_redirection(t_command *command, t_token **current_token)
 		{
 			command->redirect_in = ft_strdup((*current_token)->value);
 			printf("redirect in: %s\n", command->redirect_out);
-			//command->infile_fd = open(command->redirect_in, O_RDONLY);
-			//if (command->infile_fd == -1)
-				//perror("open");
+			command->infile_fd = open(command->redirect_in, O_RDONLY);
+			if (command->infile_fd == -1)
+				perror("open");
 		}
 	}
 	else if ((*current_token)->type == TOKEN_OP_HEREDOC)
@@ -122,6 +122,8 @@ t_command	*parse_command(t_token **current_token)
 		return (NULL);
 	ft_bzero(command, sizeof(t_command));
 	//printf("here3\n");
+	command->infile_fd = -2;
+	command->outfile_fd = -2;
 	while (*current_token && (*current_token)->type != TOKEN_OP_PIPE)
 	{
 		//printf("here4\n");

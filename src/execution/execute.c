@@ -76,7 +76,6 @@ int	ft_dup(t_command *temp, t_exe *exec, int i, int nb_pipes)
 
 void	ft_child(t_data *data, t_command *temp, t_exe *exec, int nb_pipes)
 {
-	// find/have/check path
 	if (ft_dup(temp, exec, exec->i, nb_pipes) == EXIT_FAILURE)
 	{
 		close(exec->fd[0]);
