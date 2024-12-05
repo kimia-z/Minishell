@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:33:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/28 10:37:34 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/12/05 22:14:39 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_tokenlist	*tokenizer(char **envp, char *input)
 		lexer_free(lexer);
 		return (write_stderr("Tokenlist initialization failed"), NULL);
 	}
-	if (lexer_main(lexer, tokenlist) == -1)
+	if (lexer_main(lexer, tokenlist, envp) == -1)
 	{
 		write_stderr("Lexer failed");
 		tokenlist_free(tokenlist);

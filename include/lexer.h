@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/19 21:07:57 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/05 21:58:03 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/12/05 22:11:20 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,9 @@ enum e_token_type
 	TOKEN_OP_REDIRECTION_APPEND, // >> 
 	TOKEN_OP_PIPE,
 	TOKEN_OP_HEREDOC, // <<
+	TOKEN_SINGLE_QUOTES,
+	TOKEN_DOUBLE_QUOTES,
+	TOKEN_DOLLA,
 	TOKEN_UNKNOWN
 };
 
@@ -71,11 +74,11 @@ typedef struct s_lexer
 t_lexer				*lexer_init(char *input);
 enum e_token_type	get_operator_type(char *value);
 void				lexer_free(t_lexer *lexer);
-void				*lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op);
-int					lexer_main(t_lexer *lexer, t_tokenlist *tokenlist);
-void				*lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist, bool is_op);
+void				*lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op, char **envp);
+int					lexer_main(t_lexer *lexer, t_tokenlist *tokenlist, char **envp);
+int					lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist, bool is_op, char **envp);
 void				lexer_skip_whitespace(t_lexer *lexer);
-
+char				*extract_quoted_string(t_lexer *lexer, char quote_char);
 
 /* Token functions */
 t_token		*token_create(enum e_token_type type, char *value);
