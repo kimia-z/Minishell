@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/26 18:52:18 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/05 22:16:13 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/12/05 22:23:36 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 // TODO
 // Implement realloc
+
 static char	*append_line_to_heredoc(char *heredoc_content, size_t *heredoc_size, const char *line, ssize_t read)
 {
 	heredoc_content = realloc(heredoc_content, *heredoc_size + read + 1);
