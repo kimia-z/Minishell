@@ -8,7 +8,7 @@ void	free_arrs(char **str)
 	i = 0;
 	while (str[i])
 	{
-		printf("str: %s\n", str[i]);
+		//printf("str: %s\n", str[i]);
 		free(str[i]);
 		i++;
 	}
@@ -76,12 +76,13 @@ static bool	is_num(char *str)
 void	ft_terminate(int status, t_data *data)
 {
 	//unlink?
-	printf("status:%d\n", data->exit_status);
-	free_env_list_2(data->env);
-	free(data->env);
-	free_command_list(data->commands);
-	free_arrs(data->envp);
-	free(data);
+	//printf("status:%d\n", data->exit_status);
+	if (data->env)
+		free_env_list_2(data->env);
+	if (data->commands)
+		free_command_list(data->commands);
+	if (data->envp)
+		free_arrs(data->envp);
 	exit(status);
 }
 

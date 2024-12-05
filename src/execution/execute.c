@@ -88,18 +88,25 @@ void	ft_child(t_data *data, t_command *temp, t_exe *exec, int nb_pipes)
 	}
 	if (check_builtin(temp, data, nb_pipes) == false)
 	{
-		if (temp->path != NULL)
+		temp->path = find_command_path(temp->command[0]);
+		if (!temp->path)
 		{
-			// for(int j = 0; temp->command[j]; j++)
-			// {
-			// 	write_stderr(temp->command[j]);
-			// }
-			//write_stderr(temp->path);
-			execve(temp->path, temp->command, data->envp);
+			//free all
+			free(data->commands->head->command[0]);
+			free(data->commands->head->command);
+			write_stderr("Command not found");
+			exit(ERROR_GENERIC);
+			// data->exit_status = ERROR_GENERIC;
+			// return (data->exit_status);
 		}
-		write_stderr("Command not found");
+		// for(int j = 0; temp->command[j]; j++)
+		// {
+		// 	write_stderr(temp->command[j]);
+		// }
+		//write_stderr(temp->path);
+		execve(temp->path, temp->command, data->envp);
 		//free
-		exit(127);
+		exit(ERROR_CMD_NOT_FOUND);
 	}
 	//free
 	exit(EXIT_SUCCESS);
@@ -251,6 +258,14 @@ int	ft_execute(t_data *data)
 	{
 		if (check_builtin(data->commands->head, data, number_pipe) == false)
 		{
+			data->commands->head->path = find_command_path(data->commands->head->command[0]);
+			if (!data->commands->head->path)
+			{
+				free(data->commands->head->command[0]);
+				free(data->commands->head->command);
+				data->exit_status = ERROR_GENERIC;
+				return (data->exit_status);
+			}
 			data->exit_status = execute_one_cmd(data, data->commands->head);
 			//printf("status:%d\n", parser->exit_status);
 			//free path

@@ -87,13 +87,13 @@ static int	handle_first_arg(t_command *command, t_token *current_token)
 		return (free(command->command), -1);
 	//printf("First argument: %s\n", command->command[0]);
 	command->command[1] = NULL;
-	command->path = find_command_path(command->command[0]);
-	if (!command->path)
-	{
-		free(command->command[0]);
-		free(command->command);
-		return (-1);
-	}
+	// command->path = find_command_path(command->command[0]);
+	// if (!command->path)
+	// {
+	// 	free(command->command[0]);
+	// 	free(command->command);
+	// 	return (-1);
+	// }
 	//printf("Command path: %s\n", command->path);
 	return (0);
 }

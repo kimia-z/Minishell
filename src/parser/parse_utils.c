@@ -59,6 +59,7 @@ void	free_command_resources(t_command *command, int command_count)
 		i++;
 	}
 	free(command->command);
-	free(command->path);
+	if (command->path != NULL)
+		free(command->path);
 	free(command);
 }
