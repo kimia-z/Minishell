@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/19 21:07:57 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 19:32:34 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/05 21:58:03 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,12 @@ t_tokenlist	*tokenlist_init(void);
 void		tokenlist_free(t_tokenlist *list);
 void		tokenlist_add(t_tokenlist *list, t_token *token);
 void		tokenlist_print(t_token *head);
+
+/* Expansion fucntions */
+char		*expand_variables(const char *input, char **envp);
+char		*replace_variable(char *expanded, char *var_start, char *var_value);
+char		*get_var_name(const char *var_start);
+char		*get_env_value(const char *var_name, char **envp);
 
 
 #endif
