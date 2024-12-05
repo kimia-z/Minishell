@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/19 21:15:24 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/05 22:14:08 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/12/05 22:20:10 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,12 @@ int	lexer_main(t_lexer *lexer, t_tokenlist *tokenlist, char **envp)
 			if (!lexer_collect_quotes(lexer, &current_char, tokenlist, is_op, envp))
 				return (-1);
 		}
-		if (is_word_token(current_char) == true)
+		else if (current_char == '$')
+		{
+			if (!lexer_collect_token(lexer, tokenlist, is_op, envp))
+				return (-1);
+		}
+		else if (is_word_token(current_char) == true)
 		{
 			if (!lexer_collect_token(lexer, tokenlist, is_op, envp))
 				return (-1);

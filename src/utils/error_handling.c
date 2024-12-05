@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 12:41:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/28 10:22:51 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/12/05 22:17:16 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	free_command(t_command *command)
 	{
 		while (command->command[i])
 		{
-			printf("Freeing command[%d]: %s\n", i, command->command[i]); // Debug statement
+			//printf("Freeing command[%d]: %s\n", i, command->command[i]); // Debug statement
 			free(command->command[i]);
 			i++;
 		}
@@ -103,7 +103,7 @@ void	end_shell(t_data *data)
 	//close_fds();
 	save_history(&data->history, HISTORY_FILE);
 	free_history(&data->history);
-	rl_clear_history(); // ? rl_ ?
+	//rl_clear_history(); // ? rl_ ?
 	rl_free_line_state();
 	rl_cleanup_after_signal();
 }

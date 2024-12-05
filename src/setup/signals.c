@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/30 16:36:12 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/28 10:22:36 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/12/05 22:17:31 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ void	parent_sig_handler(int sig)
 	{
 		exit_code(ERROR_CTRL_C_);
 		write(STDOUT_FILENO, "\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
+		//rl_on_new_line();
+		//rl_replace_line("", 0);
 		rl_redisplay();
 	}
 }
@@ -39,7 +39,7 @@ void	heredoc_sig_handler(int sig)
 	if (sig == SIGINT)
 	{
 		write(STDOUT_FILENO, "\n", 1);
-		rl_replace_line("", 0);
+		//rl_replace_line("", 0);
 		rl_on_new_line();
 		exit(ERROR_CTRL_C_);
 	}
