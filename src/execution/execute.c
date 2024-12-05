@@ -176,6 +176,8 @@ int execute_one_cmd(t_data *data, t_command *commands)
 	{
 		if (commands->redirect_in)
 		{
+			if (ft_strncmp(commands->heredoc_content, commands->redirect_in , ft_strlen(commands->heredoc_content)) == 0)
+				unlink(commands->redirect_in);
 			close(pipefd[0]);
 			write(pipefd[1], commands->redirect_in, strlen(commands->redirect_in));
 			close(pipefd[1]);
@@ -184,12 +186,11 @@ int execute_one_cmd(t_data *data, t_command *commands)
 		if (WIFEXITED(status))
 			data->exit_status = WEXITSTATUS(status);
 	}
-
 	if (commands->infile_fd != -2)
 		close(commands->infile_fd);
 	if (commands->outfile_fd != -2)
 		close(commands->outfile_fd);
-	return data->exit_status;
+	return (data->exit_status);
 }
 
 
@@ -261,11 +262,16 @@ int	ft_execute(t_data *data)
 			data->commands->head->path = find_command_path(data->commands->head->command[0]);
 			if (!data->commands->head->path)
 			{
-				free(data->commands->head->command[0]);
-				free(data->commands->head->command);
 				data->exit_status = ERROR_GENERIC;
 				return (data->exit_status);
 			}
+			// if (!data->commands->head->path)
+			// {
+			// 	free(data->commands->head->command[0]);
+			// 	free(data->commands->head->command);
+			// 	data->exit_status = ERROR_GENERIC;
+			// 	return (data->exit_status);
+			// }
 			data->exit_status = execute_one_cmd(data, data->commands->head);
 			//printf("status:%d\n", parser->exit_status);
 			//free path

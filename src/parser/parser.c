@@ -63,7 +63,7 @@ void parse_redirection(t_command *command, t_token **current_token)
         {
 			command->redirect_in = handle_heredoc((*current_token)->value);
 			//char *temp;
-            command->infile_fd = open (command->redirect_in, O_CREAT | O_RDWR);
+            command->infile_fd = open (command->redirect_in, O_CREAT | O_RDWR | O_TRUNC);
 			if (command->infile_fd == -1)
 				perror("open");
 			write(command->infile_fd, command->redirect_in, ft_strlen(command->redirect_in));
