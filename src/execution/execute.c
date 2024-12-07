@@ -13,8 +13,8 @@ static t_builtin	get_builtin_command(const char *cmd)
 		return (PWD);
 	if (!strcmp(cmd, "env"))
 		return (ENV);
-	// if (!strcmp(cmd, "export"))
-	// 	return (EXPORT);
+	if (!strcmp(cmd, "export"))
+		return (EXPORT);
 	if (!strcmp(cmd, "unset"))
 		return (UNSET);
 	if (!strcmp(cmd, "exit"))
@@ -35,8 +35,8 @@ bool	check_builtin(t_command *commands, t_data *data, int nb_pipes)
 		return (ft_pwd(commands, data), true);
 	if (cmd == ENV)
 		return (ft_env(commands, data), true);
-	// if (cmd == EXPORT)
-	// 	return (ft_export(commands, data), true);
+	if (cmd == EXPORT)
+		return (ft_export(commands, data), true);
 	if (cmd == UNSET)
 		return (ft_unset(commands, data, nb_pipes), true);
 	if (cmd == EXIT)

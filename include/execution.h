@@ -35,7 +35,7 @@ void	ft_exit(t_command *commands, t_data *data, int nb_pipes);
 void	ft_env(t_command *commands, t_data *data);
 void	ft_unset(t_command *commands, t_data *data, int nb_pipes);
 void	ft_cd(t_command *commands, t_data *data);
-//void	ft_export(t_command *commands, t_data *data);
+void	ft_export(t_command *commands, t_data *data);
 
 
 // void	ft_putendl_fd(char *s, int fd);

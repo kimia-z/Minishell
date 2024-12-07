@@ -52,3 +52,5 @@ memcheck:
 	valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
 
 .PHONY: $(LIBFT) all clean fclean re
+
+#-g -fsanitize=address
