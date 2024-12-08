@@ -1,15 +1,39 @@
 #include "execution.h"
 
-static t_env	*create_new_env_node(char *key, char *value)
+void	f_env_list(t_env **env_list)
+{
+	t_env *current;
+	t_env *next;
+
+	if (!env_list || !*env_list)
+		return;
+
+	current = *env_list;
+	while (current)
+	{
+		next = current->next;
+		free(current);
+		current = next;
+	}
+	*env_list = NULL;
+}
+
+static t_env	*create_new_env_node(char *key, char *value, bool is_with_sign)
 {
 	t_env	*node;
 
 	node = malloc(1 * sizeof(t_env));
 	if (node == NULL)
 		return (NULL);
+	node->next = NULL;
 	node->key = ft_strdup(key);
 	if (node->key == NULL)
 		return (NULL);
+	if (is_with_sign == false)
+	{
+		node->value = NULL;
+		return (node);
+	}
 	if (value != NULL)
 	{
 		node->value = ft_strdup(value);
@@ -19,25 +43,23 @@ static t_env	*create_new_env_node(char *key, char *value)
 	else
 	{
 		node->value = ft_strdup("");
-		return (NULL);
+		if (node->value == NULL)
+			return (NULL);
 	}
-	node->next = NULL;
 	return (node);
 }
 
-bool	add_node_env(t_env **env, char *key, char *value)
+bool	add_node_env(t_env *env, char *key, char *value, bool is_with_sign)
 {
 	t_env	*temp;
 	t_env	*new_node;
 
-	temp = (*env);
+	temp = env;
 	while (temp->next != NULL)
 	{
 		temp = temp->next;
 	}
-	new_node = create_new_env_node(key, value);
-	write_stderr(new_node->key);
-	write_stderr(new_node->value);
+	new_node = create_new_env_node(key, value, is_with_sign);
 	if (new_node == NULL)
 		return (false);
 	temp->next = new_node;
@@ -47,7 +69,7 @@ bool	add_node_env(t_env **env, char *key, char *value)
 //return value: found=1
 //return value: not_found=0
 //return value: failed=-1
-int	search_node_env(t_data *data, t_env *env, char *key, char *value)
+int	search_node_env(t_env *env, char *key, char *value, bool is_with_sign)
 {
 	t_env	*temp;
 
@@ -62,6 +84,17 @@ int	search_node_env(t_data *data, t_env *env, char *key, char *value)
 				temp->value = ft_strdup(value);
 				if (temp->value == NULL)
 					return (-1);
+			}
+			else if (value == NULL && is_with_sign == true)
+			{
+				free(temp->value);
+				temp->value = ft_strdup("");
+				if (temp->value == NULL)
+					return (-1);
+			}
+			else if (value == NULL && is_with_sign == false)
+			{
+				return(1);
 			}
 			return (1);
 		}
@@ -81,17 +114,16 @@ bool	key_with_value(t_data *data, t_env *env, char *cmd)
 	temp = cmd;
 	position = ft_strchr_pos(cmd, '=');
 	value = ft_strchr(temp, '=') + 1;
-	write_stderr(value);
 	key = malloc((position + 1) * sizeof(char));
 	if (key == NULL)
 		return (false);
 	ft_strlcpy(key, cmd, position + 1);
-	is_found = search_node_env(data, env, key, value);
+	is_found = search_node_env(env, key, value, true);
 	if (is_found == -1)
 		return (false);
 	if (is_found == 0)
 	{
-		if (add_node_env(&env, key, value) == false)
+		if (add_node_env(env, key, value, true) == false)
 		{
 			if (key != NULL)
 				free(key);
@@ -183,6 +215,7 @@ t_env *ft_copy_list(t_env *env_vars)
 		new_node = my_lstnew(env_vars->key, env_vars->value);
 		if (new_node == NULL)
 		{
+			f_env_list(&copy_list);
 			return (NULL);
 		}
 		my_lstadd_back(&copy_list, new_node);
@@ -192,7 +225,6 @@ t_env *ft_copy_list(t_env *env_vars)
 	return (copy_list);
 }
 
-// bubble sort the env variables
 t_env *ft_sort_env(t_env *env_vars)
 {
 	t_env *temp_list;
@@ -204,7 +236,6 @@ t_env *ft_sort_env(t_env *env_vars)
 	copy_list = ft_copy_list(temp_list);
 	if (copy_list == NULL)
 	{
-		//free before them
 		return (NULL);
 	}
 	len_list = my_lstsize(copy_list);
@@ -229,24 +260,6 @@ t_env *ft_sort_env(t_env *env_vars)
 	return (copy_list);
 }
 
-void	f_env_list(t_env **env_list)
-{
-	t_env *current;
-	t_env *next;
-
-	if (!env_list || !*env_list)
-		return;
-
-	current = *env_list;
-	while (current)
-	{
-		next = current->next;
-		free(current);
-		current = next;
-	}
-	*env_list = NULL;
-}
-
 bool print_export(t_data *data, int outfile)
 {
 	t_env *sorted_env;
@@ -263,7 +276,11 @@ bool print_export(t_data *data, int outfile)
 	{
 		ft_putstr_fd("declare -x ", outfile);
 		ft_putstr_fd(temp->key, outfile);
-		if (temp->value)
+		if (temp->value == NULL)
+		{
+			ft_putchar_fd('\n', outfile);
+		}
+		else if (temp->value)
 		{
 			ft_putstr_fd("=\"", outfile);
 			ft_putstr_fd(temp->value, outfile);
@@ -318,10 +335,10 @@ void ft_export(t_command *commands, t_data *data)
 			}
 			else
 			{
-				is_found = search_node_env(data, data->env, commands->command[i], NULL);
+				is_found = search_node_env(data->env, commands->command[i], NULL, false);
 				if (is_found == 0)
 				{
-					if (add_node_env((&data->env), commands->command[i], NULL) == false)
+					if (add_node_env((data->env), commands->command[i], NULL, false) == false)
 					{
 						write_stderr("failed in memory allocate");
 						data->exit_status = ERROR_GENERIC;
