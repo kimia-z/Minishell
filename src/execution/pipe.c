@@ -1,6 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipe.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kziari <kziari@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/09 18:24:33 by kziari            #+#    #+#             */
+/*   Updated: 2024/12/09 18:24:34 by kziari           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+// write_stderr("++++temp->infile_fd+++++");
+// ft_putnbr_fd(temp->infile_fd, 2);
+// write_stderr("\n+++++temp->infile_fd++++");
+
 #include "execution.h"
 #include "minishell.h"
-
 
 int	pipe_count(t_cmdlist *commands)
 {
@@ -17,12 +32,8 @@ int	pipe_count(t_cmdlist *commands)
 	return (nb_pipe);
 }
 
-
 int	last_pipe(t_command *temp, t_exe *exec)
 {
-	// write_stderr("++++temp->infile_fd+++++");
-	// ft_putnbr_fd(temp->infile_fd, 2);
-	// write_stderr("\n+++++temp->infile_fd++++");
 	if (temp->outfile_fd != -2)
 	{
 		if (dup2(temp->outfile_fd, STDOUT_FILENO) == -1)
@@ -31,7 +42,7 @@ int	last_pipe(t_command *temp, t_exe *exec)
 		}
 	}
 	if (temp->infile_fd == -1)
-		return(EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	if (temp->infile_fd != -2)
 	{
 		if (dup2(temp->infile_fd, STDIN_FILENO) == -1)
@@ -50,7 +61,7 @@ int	last_pipe(t_command *temp, t_exe *exec)
 int	middle_pipe(t_command *temp, t_exe *exec)
 {
 	if (temp->infile_fd == -1)
-		return(EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	if (temp->infile_fd != -2)
 	{
 		if (dup2(temp->infile_fd, STDIN_FILENO) == -1)
@@ -95,16 +106,13 @@ int	first_pipe(t_command *temp, int *fds)
 	}
 	else
 	{
-		//write_stderr("before");
-		if (dup2(fds[1], STDOUT_FILENO) == -1) {
-			//write_stderr("in");
+		if (dup2(fds[1], STDOUT_FILENO) == -1)
+		{
 			return (EXIT_FAILURE);
 		}
-		//write_stderr("after");
 	}
 	return (EXIT_SUCCESS);
 }
-
 
 int	pipeline(t_data *data, int nb_pipes)
 {
@@ -121,9 +129,12 @@ int	pipeline(t_data *data, int nb_pipes)
 		exec.pid = fork();
 		if (exec.pid == -1)
 			return (write_stderr("failed in fork"), EXIT_FAILURE);
+		signal_mode(CHILD);
 		if (exec.pid == 0)
 			ft_child(data, temp, &exec, nb_pipes);
 		ft_parent(temp, &exec);
+		if (data->exit_status == ERROR_CTRL_C_)
+			break ;
 		exec.i++;
 		temp = temp->next;
 	}
@@ -131,9 +142,10 @@ int	pipeline(t_data *data, int nb_pipes)
 	waitpid(exec.pid, &exec.status, 0);
 	if (WIFEXITED(exec.status))
 		data->exit_status = WEXITSTATUS(exec.status);
+	else if (WIFSIGNALED(exec.status))
+		data->exit_status = (WTERMSIG(exec.status) + 128);
 	while (waitpid(-1, &exec.status, 0) > 0)
 	{
 	}
 	return (data->exit_status);
 }
-

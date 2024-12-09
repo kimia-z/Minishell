@@ -15,7 +15,7 @@
 #include "minishell.h"
 
 // Function to get the PATH directories
-static char	**path_variable()
+static char	**path_variable(void)
 {
 	char	**directories;
 	char	*path;
@@ -66,12 +66,12 @@ static char	*construct_command(char *commandname)
 		ft_strlcat(command_path, "/", len);
 		ft_strlcat(command_path, commandname, len);
 		if (is_command_legit(command_path))
-			break;
-	    // if (is_command_legit(command_path))
-        // {
-        //     free_2d((void ***)&path_v);
-        //     return (command_path);
-        // }
+			break ;
+		// if (is_command_legit(command_path))
+		// {
+		//     free_2d((void ***)&path_v);
+		//     return (command_path);
+		// }
 		free(command_path);
 		command_path = NULL;
 		i++;
@@ -91,10 +91,9 @@ char	*find_command_path(char *commandname)
 		return (NULL);
 	}
 	if (commandname[0] == '/' && is_command_legit(commandname))
-	    return (ft_strdup(commandname));
+		return (ft_strdup(commandname));
 	if (ft_strncmp(commandname, "./", 2) == 0)
-	    return (ft_strdup(commandname));
-	
+		return (ft_strdup(commandname));
 	command_path = construct_command(commandname);
 	if (command_path == NULL)
 		return (NULL);

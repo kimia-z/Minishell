@@ -1,7 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kziari <kziari@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/09 18:31:46 by kziari            #+#    #+#             */
+/*   Updated: 2024/12/09 18:31:49 by kziari           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "execution.h"
 #include "minishell.h"
-
-
 
 static t_builtin	get_builtin_command(const char *cmd)
 {
@@ -44,9 +54,6 @@ bool	check_builtin(t_command *commands, t_data *data, int nb_pipes)
 	return (false);
 }
 
-
-
-
 /*
 	* manage the fd in pipes according to the 
 		command's place (first,middle,last) in pipeline
@@ -57,17 +64,17 @@ int	ft_dup(t_command *temp, t_exe *exec, int i, int nb_pipes)
 	if (i == 0)
 	{
 		if (first_pipe(temp, exec->fd) == EXIT_FAILURE)
-			return(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 	}
 	else if (i == nb_pipes)
 	{
 		if (last_pipe(temp, exec) == EXIT_FAILURE)
-			return(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 	}
 	else
 	{
 		if (middle_pipe(temp, exec) == EXIT_FAILURE)
-			return(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 	}
 	close(exec->fd[0]);
 	close(exec->fd[1]);
@@ -84,39 +91,32 @@ void	ft_child(t_data *data, t_command *temp, t_exe *exec, int nb_pipes)
 		if (exec->read != STDIN_FILENO)
 			close (exec->read);
 		//free
+		clean_up(data);
 		write_stderr("failed in dup");
 		exit(EXIT_FAILURE);
 	}
 	if (check_builtin(temp, data, nb_pipes) == false)
 	{
 		temp->path = find_command_path(temp->command[0]);
-		if (!temp->path)
-		{
-			//free all
-			free(data->commands->head->command[0]);
-			free(data->commands->head->command);
-			write_stderr("Command not found");
-			exit(ERROR_GENERIC);
-			// data->exit_status = ERROR_GENERIC;
-			// return (data->exit_status);
-		}
 		// for(int j = 0; temp->command[j]; j++)
 		// {
 		// 	write_stderr(temp->command[j]);
 		// }
-
 		// write_stderr("+++start++++");
 		// write_stderr(temp->command[0]);
 		// ft_putnbr_fd(temp->outfile_fd, 2);
 		// write_stderr("\n+++end++++");
-		execve(temp->path, temp->command, data->envp);
-		//free
+		if (temp->path)
+			execve(temp->path, temp->command, data->envp);
+		write_stderr("Command not found");
+		clean_up(data);
+		// free(data->commands->head->command[0]);
+		// free(data->commands->head->command);
 		exit(ERROR_CMD_NOT_FOUND);
 	}
-	//free
+	clean_up(data);
 	exit(EXIT_SUCCESS);
 }
-
 
 void	ft_parent(t_command *temp, t_exe *exec)
 {
@@ -130,43 +130,54 @@ void	ft_parent(t_command *temp, t_exe *exec)
 	exec->read = exec->fd[0];
 }
 
-
-int execute_one_cmd(t_data *data, t_command *commands)
+int	execute_one_cmd(t_data *data, t_command *commands)
 {
-	int pid;
-	int status;
-	int pipefd[2];
+	int	pid;
+	int	status;
+	int	pipefd[2];
 
 	if (commands->redirect_in)
 	{
 		if (pipe(pipefd) == -1)
 		{
 			perror("pipe");
-			return -1;
+			return (-1);
 		}
 	}
-
 	pid = fork();
 	if (pid == -1)
 	{
 		write_stderr("failed in fork");
-		return -1;
+		return (-1);
 	}
+	signal_mode(CHILD);
 	if (pid == 0)
 	{
 		// write_stderr(commands->command[0]);
 		// write_stderr(commands->command[1]);
 		if (commands->infile_fd == -1 || commands->outfile_fd == -1)
+		{
+			write_stderr("failed in open");
+			//clean_up(data);
 			exit(EXIT_FAILURE);
+		}
 		if (commands->infile_fd >= 0)
 		{
 			if (dup2(commands->infile_fd, STDIN_FILENO) == -1)
+			{
+				write_stderr("failed in dup");
+				//clean_up(data);
 				exit(EXIT_FAILURE);
+			}
 		}
 		if (commands->outfile_fd >= 0)
 		{
 			if (dup2(commands->outfile_fd, STDOUT_FILENO) == -1)
+			{
+				write_stderr("failed in dup");
+				//clean_up(data);
 				exit(EXIT_FAILURE);
+			}
 		}
 		if (commands->redirect_in)
 		{
@@ -177,13 +188,14 @@ int execute_one_cmd(t_data *data, t_command *commands)
 		if (commands->path != NULL)
 			execve(commands->path, commands->command, data->envp);
 		write_stderr("Command not found");
-		exit(127);
+		//clean_up(data);
+		exit(ERROR_CMD_NOT_FOUND);
 	}
 	else
 	{
 		if (commands->redirect_in)
 		{
-			if (ft_strncmp(commands->heredoc_content, commands->redirect_in , ft_strlen(commands->heredoc_content)) == 0)
+			if (ft_strncmp(commands->heredoc_content, commands->redirect_in, ft_strlen(commands->heredoc_content)) == 0)
 				unlink(commands->redirect_in);
 			close(pipefd[0]);
 			write(pipefd[1], commands->redirect_in, strlen(commands->redirect_in));
@@ -199,8 +211,6 @@ int execute_one_cmd(t_data *data, t_command *commands)
 		close(commands->outfile_fd);
 	return (data->exit_status);
 }
-
-
 
 // int	execute_one_cmd(t_data *data, t_command *commands)
 // {
@@ -249,8 +259,6 @@ int execute_one_cmd(t_data *data, t_command *commands)
 // 		data->exit_status = WEXITSTATUS(status);
 // 	return (data->exit_status);
 // }
-
-
 /*
 	-start of execution
 	-check the number of pipes for execution
@@ -280,6 +288,8 @@ int	ft_execute(t_data *data)
 			// 	return (data->exit_status);
 			// }
 			data->exit_status = execute_one_cmd(data, data->commands->head);
+			if (data->commands->head->path)
+				free (data->commands->head->path);
 			//printf("status:%d\n", parser->exit_status);
 			//free path
 		}

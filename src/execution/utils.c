@@ -93,6 +93,18 @@
 // 	return (dest);
 // }
 
+void	clean_up(t_data *data)
+{
+	if (data->envp)
+		free_2arr(data->envp);
+	if (data->env)
+		free_env_list(data->env);
+	if (data->commands)
+		free_command_list(data->commands);
+	//free history?
+	//free (data);
+}
+
 void	free_env_list_2(t_env *head)
 {
 	t_env	*temp;
