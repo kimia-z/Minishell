@@ -20,6 +20,9 @@ int	pipe_count(t_cmdlist *commands)
 
 int	last_pipe(t_command *temp, t_exe *exec)
 {
+	// write_stderr("++++temp->infile_fd+++++");
+	// ft_putnbr_fd(temp->infile_fd, 2);
+	// write_stderr("\n+++++temp->infile_fd++++");
 	if (temp->outfile_fd != -2)
 	{
 		if (dup2(temp->outfile_fd, STDOUT_FILENO) == -1)

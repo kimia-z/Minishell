@@ -1,13 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kziari <kziari@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/09 13:18:32 by kziari            #+#    #+#             */
+/*   Updated: 2024/12/09 13:18:33 by kziari           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "execution.h"
 
 void	f_env_list(t_env **env_list)
 {
-	t_env *current;
-	t_env *next;
+	t_env	*current;
+	t_env	*next;
 
 	if (!env_list || !*env_list)
-		return;
-
+		return ;
 	current = *env_list;
 	while (current)
 	{
@@ -65,10 +76,12 @@ bool	add_node_env(t_env *env, char *key, char *value, bool is_with_sign)
 	temp->next = new_node;
 	return (true);
 }
+/*
+	return value: found=1
+	return value: not_found=0
+	return value: failed=-1
+*/
 
-//return value: found=1
-//return value: not_found=0
-//return value: failed=-1
 int	search_node_env(t_env *env, char *key, char *value, bool is_with_sign)
 {
 	t_env	*temp;
@@ -93,9 +106,7 @@ int	search_node_env(t_env *env, char *key, char *value, bool is_with_sign)
 					return (-1);
 			}
 			else if (value == NULL && is_with_sign == false)
-			{
-				return(1);
-			}
+				return (1);
 			return (1);
 		}
 		temp = temp->next;
@@ -148,67 +159,13 @@ static bool	is_valid(t_data *data, char **current_cmd, int i)
 	return (true);
 }
 
-int my_lstsize(t_env *lst)
+t_env	*ft_copy_list(t_env *env_vars)
 {
-	int count;
+	t_env	*copy_list;
+	t_env	*new_node;
+	int		len;
 
-	count = 0;
-	if (lst == NULL)
-		return (count);
-	while (lst)
-	{
-		count++;
-		lst = lst->next;
-	}
-	return (count);
-}
-
-t_env *my_lstnew(char *key, char *value)
-{
-	t_env *new_node;
-
-	new_node = (t_env *)malloc(1 * sizeof(t_env));
-	if (!new_node)
-		return (NULL);
-	new_node->key = key;
-	new_node->value = value;
-	new_node->next = NULL;
-	return (new_node);
-}
-
-t_env *my_lstlast(t_env *lst)
-{
-	while (lst)
-	{
-		if (!lst->next)
-			return (lst);
-		lst = lst->next;
-	}
-	return (lst);
-}
-
-void my_lstadd_back(t_env **lst, t_env *new)
-{
-	t_env	*last;
-
-	if (lst)
-	{
-		if (*lst)
-		{
-			last = my_lstlast(*lst);
-			last->next = new;
-		}
-		else
-			*lst = new;
-	}
-}
-
-t_env *ft_copy_list(t_env *env_vars)
-{
-	t_env *copy_list = NULL;
-	t_env *new_node;
-	int len;
-
+	copy_list = NULL;
 	len = my_lstsize(env_vars);
 	while (len > 0)
 	{
@@ -225,19 +182,17 @@ t_env *ft_copy_list(t_env *env_vars)
 	return (copy_list);
 }
 
-t_env *ft_sort_env(t_env *env_vars)
+t_env	*ft_sort_env(t_env *env_vars)
 {
-	t_env *temp_list;
-	t_env *copy_list;
-	char *temp;
-	int len_list;
+	t_env	*temp_list;
+	t_env	*copy_list;
+	char	*temp;
+	int		len_list;
 
 	temp_list = env_vars;
 	copy_list = ft_copy_list(temp_list);
 	if (copy_list == NULL)
-	{
 		return (NULL);
-	}
 	len_list = my_lstsize(copy_list);
 	while (len_list > 0)
 	{
@@ -260,26 +215,22 @@ t_env *ft_sort_env(t_env *env_vars)
 	return (copy_list);
 }
 
-bool print_export(t_data *data, int outfile)
+bool	print_export(t_data *data, int outfile)
 {
-	t_env *sorted_env;
-	t_env *temp;
+	t_env	*sorted_env;
+	t_env	*temp;
 
 	temp = data->env;
 	sorted_env = ft_sort_env(temp);
 	if (sorted_env == NULL)
-	{
 		return (false);
-	}
 	temp = sorted_env;
 	while (temp)
 	{
 		ft_putstr_fd("declare -x ", outfile);
 		ft_putstr_fd(temp->key, outfile);
 		if (temp->value == NULL)
-		{
 			ft_putchar_fd('\n', outfile);
-		}
 		else if (temp->value)
 		{
 			ft_putstr_fd("=\"", outfile);
@@ -293,45 +244,43 @@ bool print_export(t_data *data, int outfile)
 	return (true);
 }
 
+void	error_export(char *msg, t_data *data)
+{
+	write_stderr(msg);
+	data->exit_status = ERROR_GENERIC;
+}
 
 //Handles the export of environment variables in the shell.
 //either display all environment variables in the current shell (sorted env)
 //or to add/update environment variables based on the provided
 
-
-void ft_export(t_command *commands, t_data *data)
+void	ft_export(t_command *commands, t_data *data)
 {
-	int outfile;
-	int i;
-	int is_found;
+	int	outfile;
+	int	i;
+	int	is_found;
 
-	i = 1;
+	i = 0;
 	outfile = commands->outfile_fd;
+	if (outfile == -1)
+		return (error_export("export: invalid file descriptor", data));
 	if (outfile == -2)
 		outfile = STDOUT_FILENO;
 	if (commands->command[1] == NULL)
 	{
 		if (print_export(data, outfile) == false)
-		{
-			write_stderr("failed in memory allocate");
-			data->exit_status = ERROR_GENERIC;
-			return ;
-		}
+			return (error_export("failed in memory allocate", data));
 		data->exit_status = SUCCESS;
 		return ;
 	}
-	while (commands->command[i])
+	while (commands->command[++i])
 	{
 		if (is_valid(data, commands->command, i) == true)
 		{
 			if (ft_strchr(commands->command[i], '=') != NULL)
 			{
 				if (key_with_value(data, data->env, commands->command[i]) == false)
-				{
-					write_stderr("failed in memory allocate");
-					data->exit_status = ERROR_GENERIC;
-					return ;
-				}
+					return (error_export("failed in memory allocate", data));
 			}
 			else
 			{
@@ -339,23 +288,12 @@ void ft_export(t_command *commands, t_data *data)
 				if (is_found == 0)
 				{
 					if (add_node_env((data->env), commands->command[i], NULL, false) == false)
-					{
-						write_stderr("failed in memory allocate");
-						data->exit_status = ERROR_GENERIC;
-						return ;
-					}
+						return (error_export("failed in memory allocate", data));
 				}
 				else if (is_found == -1)
-				{
-					write_stderr("failed in memory allocate");
-					data->exit_status = ERROR_GENERIC;
-					return ;
-				}
+					return (error_export("failed in memory allocate", data));
 			}
 		}
-		i++;
 	}
 	data->exit_status = SUCCESS;
-
 }
-

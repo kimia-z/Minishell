@@ -50,7 +50,7 @@ void parse_redirection(t_command *command, t_token **current_token)
 		if (*current_token && is_command((*current_token)->type)) // is_command is unnecessary
 		{
 			command->redirect_in = ft_strdup((*current_token)->value);
-			printf("redirect in: %s\n", command->redirect_out);
+			printf("redirect in: %s\n", command->redirect_in);
 			command->infile_fd = open(command->redirect_in, O_RDONLY);
 			if (command->infile_fd == -1)
 				perror("open");
@@ -66,6 +66,9 @@ void parse_redirection(t_command *command, t_token **current_token)
             command->infile_fd = open (command->redirect_in, O_CREAT | O_RDWR | O_TRUNC);
 			if (command->infile_fd == -1)
 				perror("open");
+			// write_stderr("++++command->infile_fd+++++");
+			// printf("%d\n", command->infile_fd);
+			// write_stderr("+++++command->infile_fd++++");
 			write(command->infile_fd, command->redirect_in, ft_strlen(command->redirect_in));
             //printf("here_doc: %s\n", command->redirect_in);
 			//printf("meoww\n");

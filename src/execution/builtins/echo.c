@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kziari <kziari@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/09 11:10:16 by kziari            #+#    #+#             */
+/*   Updated: 2024/12/09 11:10:18 by kziari           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "execution.h"
 
 /* This function will check if the ECHO is called
@@ -18,37 +30,40 @@ Collected operator token: /dev/full, type: 6
 should behave as :
 echo: write error\n or  minishel: operation not permitted: <directory>
 */
-static bool	check_newline(t_command *commands, int *position)
+
+static void	error_echo(t_data *data)
 {
-	bool	newline;
-	int		count;
+	write_stderr("echo: invalid file descriptor");
+	data->exit_status = ERROR_GENERIC;
+}
+
+static bool	check_newline(t_command *commands, int *pos, int count, bool nline)
+{
 	char	*temp;
 	int		i;
 
-	newline = true;
-	count = 1;
 	while (commands->command[count] && commands->command[count][0] == '-')
 	{
 		i = 1;
 		temp = commands->command[count];
 		count++;
 		if (ft_strncmp(temp, "-n", 3) == 0)
-			newline = false;
+			nline = false;
 		else if (ft_strncmp(temp, "-n", 2) == 0)
 		{
 			while (temp[i] && temp[i] == 'n')
 				i++;
 			if (temp[i - 1] == 'n' && !temp[i])
-				newline = false;
+				nline = false;
 		}
 		else
 		{
 			count--;
-			break;
+			break ;
 		}
 	}
-	(*position) = count;
-	return (newline);
+	(*pos) = count;
+	return (nline);
 }
 
 void	ft_echo(t_command *commands, t_data *data)
@@ -56,19 +71,19 @@ void	ft_echo(t_command *commands, t_data *data)
 	int		outfile;
 	bool	is_newline;
 	int		position;
+	int		count;
+	bool	newline;
 
+	count = 1;
+	newline = true;
 	if (commands->outfile_fd == -2)
 		outfile = STDOUT_FILENO;
 	else
 		outfile = commands->outfile_fd;
 	if (outfile < 0)
-	{
-		ft_putstr_fd("echo: invalid file descriptor\n", STDERR_FILENO);
-		data->exit_status = ERROR_GENERIC;
-		return ;
-	}
+		return (error_echo(data));
 	position = 1;
-	is_newline = check_newline(commands, &position);
+	is_newline = check_newline(commands, &position, count, newline);
 	while (commands->command[position])
 	{
 		ft_putstr_fd(commands->command[position], outfile);

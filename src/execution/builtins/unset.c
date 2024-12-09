@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kziari <kziari@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/09 10:46:31 by kziari            #+#    #+#             */
+/*   Updated: 2024/12/09 10:46:34 by kziari           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "execution.h"
 
 /*
@@ -5,7 +17,25 @@
 	if without argument ignored
 	examples:
 	*- unset USER PWD
+
+	*****************strcmp***************
 */
+
+static void	ft_unset_helper(t_env *previous, t_env *current, t_data *data)
+{
+	if (previous == NULL)
+		data->env = current->next;
+	else
+		previous->next = current->next;
+	free (current->key);
+	free (current->value);
+	free (current);
+}
+
+static void	set_status(t_data *data)
+{
+	data->exit_status = SUCCESS;
+}
 
 void	ft_unset(t_command *commands, t_data *data, int nb_pipes)
 {
@@ -13,13 +43,10 @@ void	ft_unset(t_command *commands, t_data *data, int nb_pipes)
 	t_env	*current;
 	t_env	*previous;
 
-	i = 1;
+	i = 0;
 	if (nb_pipes > 0 || !commands->command[1])
-	{
-		data->exit_status = SUCCESS;
-		return ;
-	}
-	while (commands->command[i])
+		return (set_status(data));
+	while (commands->command[++i])
 	{
 		current = data->env;
 		previous = NULL;
@@ -27,19 +54,12 @@ void	ft_unset(t_command *commands, t_data *data, int nb_pipes)
 		{
 			if (strcmp(current->key, commands->command[i]) == 0)
 			{
-				if (previous == NULL)
-					data->env = current->next;
-				else
-					previous->next = current->next;
-				free(current->key);
-				free(current->value);
-				free (current);
-				break;
+				ft_unset_helper(previous, current, data);
+				break ;
 			}
 			previous = current;
 			current = current->next;
 		}
-		i++;
 	}
 	data->exit_status = SUCCESS;
 }

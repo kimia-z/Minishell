@@ -76,6 +76,7 @@ int	ft_dup(t_command *temp, t_exe *exec, int i, int nb_pipes)
 
 void	ft_child(t_data *data, t_command *temp, t_exe *exec, int nb_pipes)
 {
+	// write_stderr(temp->command[1]);
 	if (ft_dup(temp, exec, exec->i, nb_pipes) == EXIT_FAILURE)
 	{
 		close(exec->fd[0]);
@@ -103,7 +104,11 @@ void	ft_child(t_data *data, t_command *temp, t_exe *exec, int nb_pipes)
 		// {
 		// 	write_stderr(temp->command[j]);
 		// }
-		//write_stderr(temp->path);
+
+		// write_stderr("+++start++++");
+		// write_stderr(temp->command[0]);
+		// ft_putnbr_fd(temp->outfile_fd, 2);
+		// write_stderr("\n+++end++++");
 		execve(temp->path, temp->command, data->envp);
 		//free
 		exit(ERROR_CMD_NOT_FOUND);
@@ -149,6 +154,8 @@ int execute_one_cmd(t_data *data, t_command *commands)
 	}
 	if (pid == 0)
 	{
+		// write_stderr(commands->command[0]);
+		// write_stderr(commands->command[1]);
 		if (commands->infile_fd == -1 || commands->outfile_fd == -1)
 			exit(EXIT_FAILURE);
 		if (commands->infile_fd >= 0)
