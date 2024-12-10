@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:05:22 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/10/29 12:00:55 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/12/10 17:56:16 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,3 @@
 #include "parser.h"
 #include "minishell.h"
 
-// void    reset_terminal()
-// {
-    
-// }
-
-// void

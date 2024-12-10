@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/26 18:52:18 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/10 17:34:56 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/10 18:09:02 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@
 // TODO
 // Implement realloc
 
-static char	*append_line_to_heredoc(char *heredoc_content, size_t *heredoc_size, const char *line, ssize_t read)
+static char	*append_line_to_heredoc(char *heredoc_content, size_t \
+*heredoc_size, const char *line, ssize_t read)
 {
 	heredoc_content = realloc(heredoc_content, *heredoc_size + read + 1);
 	if (!heredoc_content)
 	{
-		perror("realloc");
 		return (NULL);
 	}
 	ft_memcpy(heredoc_content + *heredoc_size, line, read);
@@ -43,6 +43,13 @@ static char	*read_heredoc_content(const char *delimiter)
 	len = 0;
 	heredoc_content = NULL;
 	heredoc_size = 0;
+	
+	if (signal_mode(MINISHELL) == -1)
+	{
+		free(heredoc_content);
+		return (NULL);
+	}
+	
 	write(STDOUT_FILENO, "> ", 2);
 	while ((read = getline(&line, &len, stdin)) != -1)
 	{
@@ -70,20 +77,14 @@ int	handle_heredoc(const char *delimiter)
 	if (signal_mode(HERE_DOC) == -1)
 		return (-1);
 	heredoc_content = read_heredoc_content(delimiter);
-	if (signal_mode(MINISHELL) == -1)
-	{
-		free(heredoc_content);
-		return (-1);
-	}
 	temp_fd = open(temp_filename, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (temp_fd == -1)
 	{
-		perror("open temp file");
 		free(heredoc_content);
 		return (-1);
 	}
 	write(temp_fd, heredoc_content, ft_strlen(heredoc_content));
 	free(heredoc_content);
-	lseek(temp_fd, 0, SEEK_SET);
+	lseek(temp_fd, 0, SEEK_SET); //replace
 	return (temp_fd);
 }

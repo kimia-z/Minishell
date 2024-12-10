@@ -133,4 +133,3 @@ int	pipeline(t_data *data, int nb_pipes)
 	}
 	return (data->exit_status);
 }
-

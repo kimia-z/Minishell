@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kziari <kziari@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/09 11:10:16 by kziari            #+#    #+#             */
-/*   Updated: 2024/12/09 11:10:18 by kziari           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   echo.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: kziari <kziari@42.fr>                        +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/12/09 11:10:16 by kziari        #+#    #+#                 */
+/*   Updated: 2024/12/10 18:57:20 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ void	ft_echo(t_command *commands, t_data *data)
 	if (outfile < 0)
 		return (error_echo(data));
 	position = 1;
+	if(ft_strncmp(commands->command[1], "$?", 2) == 0)
+		ft_putnbr_fd(data->exit_status, outfile);
 	is_newline = check_newline(commands, &position, count, newline);
 	while (commands->command[position])
 	{

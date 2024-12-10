@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/30 17:49:42 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/10 17:28:21 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/10 18:19:00 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "minishell.h"
 
 
-void	parse_redirection(t_command *command, t_token **current_token)
+int	parse_redirection(t_command *command, t_token **current_token)
 {
 	int	heredoc_fd;
 
@@ -27,7 +27,7 @@ void	parse_redirection(t_command *command, t_token **current_token)
 			command->redirect_append = ft_strdup((*current_token)->value);
 			command->outfile_fd = open(command->redirect_append, O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (command->outfile_fd == -1)
-				perror("open");
+				return (-1);
 		}
 	}
 	else if ((*current_token)->type == TOKEN_OP_REDIRECTION_OUT)
@@ -38,7 +38,7 @@ void	parse_redirection(t_command *command, t_token **current_token)
 			command->redirect_out = ft_strdup((*current_token)->value);
 			command->outfile_fd = open(command->redirect_out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (command->outfile_fd == -1)
-				perror("open");
+				return (-1);
 		}
 	}
 	else if ((*current_token)->type == TOKEN_OP_REDIRECTION_IN)
@@ -49,7 +49,7 @@ void	parse_redirection(t_command *command, t_token **current_token)
 			command->redirect_in = ft_strdup((*current_token)->value);
 			command->infile_fd = open(command->redirect_in, O_RDONLY);
 			if (command->infile_fd == -1)
-				perror("open");
+				return (-1);
 		}
 	}
 	else if ((*current_token)->type == TOKEN_OP_HEREDOC)
@@ -60,10 +60,11 @@ void	parse_redirection(t_command *command, t_token **current_token)
 			heredoc_fd = handle_heredoc((*current_token)->value);
             command->infile_fd = open (command->redirect_in, O_CREAT | O_RDWR | O_TRUNC);
 			if (heredoc_fd == -1)
-				perror("open");
+				return (-1);
 			command->infile_fd = heredoc_fd;
         }
     }
+	return (0);
 }
 
 
@@ -90,6 +91,7 @@ static int	handle_first_arg(t_command *command, t_token *current_token)
 static int	handle_subsequent_args(t_command *command, t_token *current_token, int command_count)
 {
 	char	**new_command;
+
     new_command = ft_realloc(command->command, (command_count + 1) * sizeof(char *), (command_count + 2) * sizeof(char *));
 	if (!new_command)
 		return (-1);

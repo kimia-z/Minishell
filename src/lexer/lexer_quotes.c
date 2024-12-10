@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/12/05 22:03:33 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/10 17:19:56 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/10 18:26:28 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist, bo
 	if (!token_value)
 		return (-1);
 	token_value = expand_if_double_quotes(token_value, quote_char, envp);
-	if (!create_and_add_token(tokenlist, token_value))
+	if (create_and_add_token(tokenlist, token_value) == -1)
 		return (-1);
 	if (lexer->input[lexer->position] == '\'' || lexer->input[lexer->position] == '"')
 		return (-1);

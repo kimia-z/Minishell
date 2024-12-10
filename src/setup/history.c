@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 13:19:36 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/10 17:12:00 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/10 17:43:35 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	save_history(t_history *history, const char *filename)
 
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
-		return (write_stderr("Saving commands to history file failed"), -1);
+		return (-1);
 	current = history->head;
 	while (current)
 	{
@@ -111,10 +111,7 @@ int	load_history(t_history *history, const char *filename)
 	{
 		fd = open(filename, O_CREAT | O_WRONLY, 0644);
 		if (fd == -1)
-		{
 			return (-1);
-			//return (write_stderr("Failure to open history file"), -1);
-		}
 		close(fd);
 		return (0); 
 	}
@@ -128,7 +125,6 @@ int	load_history(t_history *history, const char *filename)
 		{
 			free(line);
 			close(fd);
-			//return (write_stderr("Failure to populate history struct"), -1);
 			return (-1);
 		}
 		free(line);

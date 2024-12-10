@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:12:43 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/10 17:10:13 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/10 17:42:59 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	free_env_list(t_env *env_list)
 	{
 		temp = env_list;
 		env_list = env_list->next;
-		//printf("Freeing key: %s, value: %s\n", temp->key, temp->value); // Debug statement
 		free(temp->key);
 		free(temp->value);
 		free(temp);
@@ -56,8 +55,6 @@ static t_env	*create_env_node(const char *env_var)
 		return (free(node), NULL);
 	}
 	node->next = NULL;
-	// if (!node->key || !node->value)
-	// 	return (NULL);
 	return (node);
 }
 
@@ -126,16 +123,12 @@ int	get_env(t_data *data, char **envp)
 	last_node = NULL;
 	i = 0;
 	if (!envp || add_env_to_data(data, envp) == -1)
-	{
 		return (-1);
-		//return (write_stderr("No envp was provided"), -1);
-	}
 	while (envp[i])
 	{
 		if (add_env_node(&env_list, &last_node, envp[i]) == -1)
 		{
 			free_2d((void ***)&data->envp);
-			//return (write_stderr("Failure to make envp nodes"), -1);
 			return (-1);
 		}
 		i++;

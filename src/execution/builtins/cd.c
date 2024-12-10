@@ -1,32 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kziari <kziari@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/09 10:59:26 by kziari            #+#    #+#             */
-/*   Updated: 2024/12/09 10:59:29 by kziari           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   cd.c                                               :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: kziari <kziari@42.fr>                        +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/12/09 10:59:26 by kziari        #+#    #+#                 */
+/*   Updated: 2024/12/10 18:51:02 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
-/*
-	If no directory argument is provided, it changes to the `HOME` dir.
-	if HOME is not availabe, print error
-	If more than one argument is provided, -> error).
-	validation of the directory provided
-	-permissions fot the directory are met - fixed
-	relative path - yes
-	-absolute path (gives unknown token)
-	PWD should be updated - yes
-	fd always 2? - fixed
-	tilda support?
-	// if (access(dir, F_OK) != 0)
-	// 	return (ft_cd_error(data, "cd: no such file or directory: ", dir));
-	// if (access(dir, X_OK) != 0)
-	// 	return (ft_cd_error(data, "cd: permission denied: ", dir));
-*/
 
 static void	ft_cd_error(t_data *data, const char *msg, const char *arg)
 {

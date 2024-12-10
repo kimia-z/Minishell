@@ -148,6 +148,13 @@ int execute_one_cmd(t_data *data, t_command *commands)
 	}
 	if (pid == 0)
 	{
+		// testing 
+		if (signal_mode(CHILD) == -1)
+        {
+            perror("signal");
+            exit(EXIT_FAILURE);
+        }
+		// testing
 		if (commands->infile_fd == -1 || commands->outfile_fd == -1)
 			exit(EXIT_FAILURE);
 		if (commands->infile_fd >= 0)
