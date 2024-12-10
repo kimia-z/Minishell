@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:09:38 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/10 17:06:03 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/10 17:07:12 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	main(int argc, char **argv, char **envp)
 		if (!input)
 		{
 			end_shell(&data); // also pass in the exit_code?
-			return (EXIT_FAILURE);
+			return (data.exit_status);
 		}
 		if (process_cmdline(&data, input) == -1)
 		{
@@ -66,5 +66,5 @@ int	main(int argc, char **argv, char **envp)
 		free(input);
 	}
 	end_shell(&data);
-	return (0);
+	return (data.exit_status);
 }
