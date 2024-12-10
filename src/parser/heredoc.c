@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/26 18:52:18 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/10 18:09:02 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/10 23:55:21 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,10 @@ int	handle_heredoc(const char *delimiter)
 	}
 	write(temp_fd, heredoc_content, ft_strlen(heredoc_content));
 	free(heredoc_content);
-	lseek(temp_fd, 0, SEEK_SET); //replace
+	//lseek(temp_fd, 0, SEEK_SET); //replace
+	close(temp_fd);
+	temp_fd = open(temp_filename, O_RDWR);
+	if (temp_fd == -1)
+		return (-1);
 	return (temp_fd);
 }
