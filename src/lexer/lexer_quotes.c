@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/12/05 22:03:33 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/05 22:13:41 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/12/10 17:19:56 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static int	create_and_add_token(t_tokenlist *tokenlist, char *token_value)
 	if (!token)
 	{
 		free(token_value);
-		return (0);
+		return (-1);
 	}
 	tokenlist_add(tokenlist, token);
 	free(token_value);

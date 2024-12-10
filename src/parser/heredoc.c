@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/26 18:52:18 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/05 22:23:36 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/12/10 17:23:17 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static char	*read_heredoc_content(const char *delimiter)
 	len = 0;
 	heredoc_content = NULL;
 	heredoc_size = 0;
-	printf("> ");
+	write(STDOUT_FILENO, "> ", 2);
 	while ((read = getline(&line, &len, stdin)) != -1)
 	{
 		if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0 && line[ft_strlen(delimiter)] == '\n')
@@ -54,23 +54,36 @@ static char	*read_heredoc_content(const char *delimiter)
 			free(line);
 			return (NULL);
 		}
-		printf("> ");
+		write(STDOUT_FILENO, "> ", 2);
 	}
 	free(line);
 	return (heredoc_content);
 }
 
-char	*handle_heredoc(const char *delimiter)
+int	handle_heredoc(const char *delimiter)
 {
 	char	*heredoc_content;
+	int		temp_fd;
+	char	*temp_filename;
 
+	temp_filename = "/tmp/hredoc_temp.txt";
 	if (signal_mode(HERE_DOC) == -1)
-		return (NULL);
+		return (-1);
 	heredoc_content = read_heredoc_content(delimiter);
 	if (signal_mode(MINISHELL) == -1)
 	{
 		free(heredoc_content);
-		return (NULL);
+		return (-1);
 	}
+	temp_fd = open(temp_filename, O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (temp_fd == -1)
+	{
+		perror("open temp file");
+		free(heredoc_content);
+		return (-1);
+	}
+	write(temp_fd, heredoc_content, ft_strlen(heredoc_content));
+	free(heredoc_content);
+	lseek(temp_fd, 0, SEEK_SET);
 	return (heredoc_content);
 }
