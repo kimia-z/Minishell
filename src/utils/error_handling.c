@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 12:41:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/05 22:17:16 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/12/10 17:37:29 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ void	free_command(t_command *command)
 		free(command->redirect_out);
 	if (command->redirect_append != NULL)
 		free(command->redirect_append);
-	if (command->heredoc_content != NULL)
-        free(command->heredoc_content);
+	// if (command->heredoc_content != NULL)
+    //     free(command->heredoc_content);
 	if (command->path != NULL)
 		free(command->path);
 	free(command);

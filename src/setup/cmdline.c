@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:33:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/10 17:17:40 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/10 17:40:36 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ int	process_cmdline(t_data *data, char *input)
 	}
 	data->commands = commandlist;
 	status = ft_execute(data);
-	printf("exit code from execution: %d\n", status);
-	print_command_list(commandlist);
+	//printf("exit code from execution: %d\n", status);
+	//print_command_list(commandlist);
 	free_command_list(commandlist);
 	return (0); // status
 }

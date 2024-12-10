@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 16:47:59 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/10 17:22:43 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/10 17:37:01 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef struct s_command
 	char				*redirect_in;
 	char				*redirect_out;
 	char 				*redirect_append;//do not need it?
-	char				*heredoc_content;
+	//char				*heredoc_content;
 	int					infile_fd;
 	int					outfile_fd;
 	struct s_command	*next;

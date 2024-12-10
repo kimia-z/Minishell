@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/26 19:17:01 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/11/28 14:33:46 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/12/10 17:37:42 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ void print_command(t_command *command)
         printf("Redirect out: %s\n", command->redirect_out);
     if (command->redirect_append)
         printf("Redirect append: %s\n", command->redirect_append);
-    if (command->heredoc_content)
-        printf("Heredoc content: %s\n", command->heredoc_content);
+    // if (command->heredoc_content)
+    //     printf("Heredoc content: %s\n", command->heredoc_content);
 }
 
 

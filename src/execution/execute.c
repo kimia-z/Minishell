@@ -1,8 +1,6 @@
 #include "execution.h"
 #include "minishell.h"
 
-
-
 static t_builtin	get_builtin_command(const char *cmd)
 {
 	if (!strcmp(cmd, "echo"))
@@ -45,8 +43,6 @@ bool	check_builtin(t_command *commands, t_data *data, int nb_pipes)
 }
 
 
-
-
 /*
 	* manage the fd in pipes according to the 
 		command's place (first,middle,last) in pipeline
@@ -76,7 +72,6 @@ int	ft_dup(t_command *temp, t_exe *exec, int i, int nb_pipes)
 
 void	ft_child(t_data *data, t_command *temp, t_exe *exec, int nb_pipes)
 {
-	// write_stderr(temp->command[1]);
 	if (ft_dup(temp, exec, exec->i, nb_pipes) == EXIT_FAILURE)
 	{
 		close(exec->fd[0]);
@@ -145,7 +140,6 @@ int execute_one_cmd(t_data *data, t_command *commands)
 			return -1;
 		}
 	}
-
 	pid = fork();
 	if (pid == -1)
 	{
@@ -154,8 +148,6 @@ int execute_one_cmd(t_data *data, t_command *commands)
 	}
 	if (pid == 0)
 	{
-		// write_stderr(commands->command[0]);
-		// write_stderr(commands->command[1]);
 		if (commands->infile_fd == -1 || commands->outfile_fd == -1)
 			exit(EXIT_FAILURE);
 		if (commands->infile_fd >= 0)
@@ -183,8 +175,8 @@ int execute_one_cmd(t_data *data, t_command *commands)
 	{
 		if (commands->redirect_in)
 		{
-			if (ft_strncmp(commands->heredoc_content, commands->redirect_in , ft_strlen(commands->heredoc_content)) == 0)
-				unlink(commands->redirect_in);
+			// if (ft_strncmp(commands->heredoc_content, commands->redirect_in , ft_strlen(commands->heredoc_content)) == 0)
+			// 	unlink(commands->redirect_in);
 			close(pipefd[0]);
 			write(pipefd[1], commands->redirect_in, strlen(commands->redirect_in));
 			close(pipefd[1]);

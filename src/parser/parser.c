@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/30 17:49:42 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/10 17:26:48 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/10 17:28:21 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,18 +67,14 @@ void	parse_redirection(t_command *command, t_token **current_token)
 }
 
 
-
-
 static int	handle_first_arg(t_command *command, t_token *current_token)
 {
-	//printf("Handling first argument: %s\n", current_token->value);
 	command->command = malloc(2 * sizeof(char *));
 	if (!command->command)
 		return (-1);
 	command->command[0] = ft_strdup(current_token->value);
 	if (!command->command[0])
 		return (free(command->command), -1);
-	//printf("First argument: %s\n", command->command[0]);
 	command->command[1] = NULL;
 	// command->path = find_command_path(command->command[0]);
 	// if (!command->path)
@@ -93,17 +89,14 @@ static int	handle_first_arg(t_command *command, t_token *current_token)
 
 static int	handle_subsequent_args(t_command *command, t_token *current_token, int command_count)
 {
-	//printf("Handling subsequent argument: %s\n", current_token->value);
 	char	**new_command;
     new_command = ft_realloc(command->command, (command_count + 1) * sizeof(char *), (command_count + 2) * sizeof(char *));
 	if (!new_command)
 		return (-1);
 	command->command = new_command;
-	//printf("from sub arg, cmd count: %d\n", command_count);
 	command->command[command_count] = ft_strdup(current_token->value);
 	if (!command->command[command_count])
 		return (-1);
-	//printf("Subsequent argument[%d]: %s\n", command_count, command->command[command_count]);
 	command->command[command_count + 1] = NULL;
 	return (0);
 }
@@ -119,36 +112,29 @@ t_command	*parse_command(t_token **current_token)
 	if (!command)
 		return (NULL);
 	ft_bzero(command, sizeof(t_command));
-	//printf("here3\n");
 	command->infile_fd = -2;
 	command->outfile_fd = -2;
 	while (*current_token && (*current_token)->type != TOKEN_OP_PIPE)
 	{
-		//printf("here4\n");
 		if (is_command((*current_token)->type))
 		{
 			if (command_count == 0)
 			{
 				if (handle_first_arg(command, *current_token) == -1)
 					return (free(command), NULL);
-				//printf("here5\n");
 			}
 			else
 			{
-				//printf("here6\n");
 				if (handle_subsequent_args(command, *current_token, command_count) == -1)
 					return (free_command_resources(command, command_count), NULL);
 			}
-			//printf("here7\n");
 			command_count++;
 		}
-		//printf("here8\n");
 		if (is_redirection((*current_token)->type))
 		{
 			parse_redirection(command, current_token);
 			//continue;
 		}
-		//printf("here9\n");
 		*current_token = (*current_token)->next;
 	}
 	return (command);
@@ -160,7 +146,6 @@ NULL on failure: cmdinit malloc fails -
 */
 t_cmdlist	*parser(t_tokenlist *tokenlist)
 {
-	//printf("here1\n");
 	t_command	*last_command;
 	t_command	*current_command;
 	t_cmdlist	*cmdlist;
@@ -173,14 +158,13 @@ t_cmdlist	*parser(t_tokenlist *tokenlist)
 		return (NULL);
 	while (current_token != NULL)
 	{
-		//printf("here2\n");
 		current_command = parse_command(&current_token);
 		if (!current_command)
 		{
 			free_command_list(cmdlist);
 			return (NULL);
 		}
-		if (!cmdlist->head) // first command
+		if (!cmdlist->head)
 			cmdlist->head = current_command;
 		else
 			last_command->next = current_command;
@@ -191,4 +175,3 @@ t_cmdlist	*parser(t_tokenlist *tokenlist)
 	}
 	return (cmdlist);
 }
-
