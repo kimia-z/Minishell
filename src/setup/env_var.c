@@ -6,18 +6,13 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:12:43 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 16:00:19 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/10 17:10:13 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "parser.h"
 #include "minishell.h"
-
-// TODO:
-// probably need a function to make a copy of it for builtins - verify
-// implement proper error handling - DONE
-// check for leaks
 
 void	free_env_list(t_env *env_list)
 {
@@ -76,7 +71,7 @@ static int	add_env_node(t_env **env_list, t_env **last_node, const char *env_var
 
 	new_node = create_env_node(env_var);
 	if (!new_node)
-		return (-1); //cleanup for data->envp
+		return (-1);
 	if (!*env_list)
 		*env_list = new_node;
 	else
@@ -112,7 +107,7 @@ int	add_env_to_data(t_data *data, char **envp)
 		}
 		i++;
 	}
-	data->envp[env_count] = NULL; // delete?
+	data->envp[env_count] = NULL;
 	return (0);
 }
 
@@ -131,14 +126,17 @@ int	get_env(t_data *data, char **envp)
 	last_node = NULL;
 	i = 0;
 	if (!envp || add_env_to_data(data, envp) == -1)
-		return (write_stderr("No envp was provided"), -1); // no cleanup
+	{
+		return (-1);
+		//return (write_stderr("No envp was provided"), -1);
+	}
 	while (envp[i])
 	{
 		if (add_env_node(&env_list, &last_node, envp[i]) == -1)
 		{
-			//free_env_list(env_list); //alrady cleaned up in function
 			free_2d((void ***)&data->envp);
-			return (write_stderr("Failure to make envp nodes"), -1);
+			//return (write_stderr("Failure to make envp nodes"), -1);
+			return (-1);
 		}
 		i++;
 	}

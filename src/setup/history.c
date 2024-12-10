@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 13:19:36 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 13:11:09 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/10 17:12:00 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,6 @@
 #include "parser.h"
 #include "minishell.h"
 
-// TODO
-// check for leaks
-// check return values
-// implement proper error handling
 
 void	trim_newline(char *str)
 {
@@ -115,7 +111,10 @@ int	load_history(t_history *history, const char *filename)
 	{
 		fd = open(filename, O_CREAT | O_WRONLY, 0644);
 		if (fd == -1)
-			return (write_stderr("Failure to open history file"), -1);
+		{
+			return (-1);
+			//return (write_stderr("Failure to open history file"), -1);
+		}
 		close(fd);
 		return (0); 
 	}
@@ -129,7 +128,8 @@ int	load_history(t_history *history, const char *filename)
 		{
 			free(line);
 			close(fd);
-			return (write_stderr("Failure to populate history struct"), -1);
+			//return (write_stderr("Failure to populate history struct"), -1);
+			return (-1);
 		}
 		free(line);
 	}

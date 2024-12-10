@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:09:38 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/10 17:07:12 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/10 17:11:11 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,15 @@ int	init_minishell(t_data *data, char **envp)
 	ft_bzero(data, sizeof(t_data));
 
 	if (get_env(data, envp) == -1)
+	{
+		write_stderr("Setting up envp failed");
 		return (-1);
+	}
 	if (load_history(&data->history, HISTORY_FILE) == -1)
+	{
+		write_stderr("Loading history faield");
 		return (cleanup_memory_alloc(data), -1); // is it cleanning up history properly?
+	}
 	return (SUCCESS);
 }
 

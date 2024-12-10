@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:33:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/05 22:14:39 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/12/10 17:17:40 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,23 @@ int	process_cmdline(t_data *data, char *input)
 
 	tokenlist = tokenizer(data->envp, input);
 	if (!tokenlist)
+	{
+		data->exit_status = ERROR_GENERIC;
+		write_stderr("Lexer failed");
 		return (-1);
+	}
 	if (syntax_checker(tokenlist) == -1)
+	{
+		data->exit_status = ERROR_GENERIC;
 		return (tokenlist_free(tokenlist), -1);
+	}
 	commandlist = NULL;
 	commandlist = parser(tokenlist);
 	tokenlist_free(tokenlist);
 	if (!commandlist)
 	{
-		write_stderr("Parser failed miserably.");
+		data->exit_status = ERROR_GENERIC;
+		write_stderr("Parser failed");
 		return (-1);
 	}
 	data->commands = commandlist;
@@ -103,11 +111,17 @@ char	*get_commandline(t_data *data)
 	{
 		prompt = get_prompt();
 		if (!prompt)
+		{
+			data->exit_status = ERROR_GENERIC;
 			return (write_stderr("failed to get prompt"), NULL);
+		}
 		input = readline(prompt);
 		free(prompt);
 		if (!input)
+		{
+			data->exit_status = SUCCESS;
 			return (NULL);
+		}
 		if (no_input(input))
 		{
 			free(input);
@@ -117,11 +131,15 @@ char	*get_commandline(t_data *data)
 		if (add_history_node(&data->history, input) == -1)
 		{
 			free(input);
+			data->exit_status = ERROR_GENERIC;
 			return (write_stderr("Adding commands to history failed"), NULL);
 		}
 		break ;
 	}
 	if (save_history(&data->history, HISTORY_FILE) == -1)
+	{
+		data->exit_status = ERROR_GENERIC;
 		return (free(input), NULL);
+	}
 	return (input);
 }
