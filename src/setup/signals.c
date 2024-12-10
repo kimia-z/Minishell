@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/30 16:36:12 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 18:33:50 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/10 23:03:10 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,24 @@
 
 int	g_exit_code;
 
+void clear_line() {
+    write(STDOUT_FILENO, "\r", 1); // Carriage return
+    for (int i = 0; i < 80; i++) { // Assuming a maximum line length of 80 characters
+        write(STDOUT_FILENO, " ", 1); // Overwrite with spaces
+    }
+    write(STDOUT_FILENO, "\r", 1); // Move the cursor back to the beginning
+}
+
 void	parent_sig_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
 		exit_code(ERROR_CTRL_C_);
 		write(STDOUT_FILENO, "\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
+		//rl_on_new_line();
+		rl_on_new_line(); // on mac
+		//rl_replace_line("", 0);
+		clear_line(); //on mac
 		rl_redisplay();
 	}
 }
@@ -39,7 +49,7 @@ void	heredoc_sig_handler(int sig)
 	if (sig == SIGINT)
 	{
 		write(STDOUT_FILENO, "\n", 1);
-		rl_replace_line("", 0);
+		//rl_replace_line("", 0);
 		rl_on_new_line();
 		exit(ERROR_CTRL_C_);
 	}
