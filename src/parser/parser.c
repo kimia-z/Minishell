@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/30 17:49:42 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/03 11:16:15 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/12/10 17:26:48 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,17 @@
 #include "minishell.h"
 
 
-/*
-is there a difference whether in/append/out comes first?
-*/
-void parse_redirection(t_command *command, t_token **current_token)
+void	parse_redirection(t_command *command, t_token **current_token)
 {
+	int	heredoc_fd;
+
 	if ((*current_token)->type == TOKEN_OP_REDIRECTION_APPEND)
 	{
 		*current_token = (*current_token)->next;
 		if (*current_token && is_command((*current_token)->type))
 		{
-			command->redirect_append = ft_strdup((*current_token)->value); // dont need append - just out
-			printf("redirect append: %s\n", command->redirect_append);
-			command->outfile_fd = open(command->redirect_out, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			command->redirect_append = ft_strdup((*current_token)->value);
+			command->outfile_fd = open(command->redirect_append, O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (command->outfile_fd == -1)
 				perror("open");
 		}
@@ -38,7 +36,6 @@ void parse_redirection(t_command *command, t_token **current_token)
 		if (*current_token && is_command((*current_token)->type))
 		{
 			command->redirect_out = ft_strdup((*current_token)->value);
-			printf("redirect out: %s\n", command->redirect_out);
 			command->outfile_fd = open(command->redirect_out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (command->outfile_fd == -1)
 				perror("open");
@@ -50,7 +47,6 @@ void parse_redirection(t_command *command, t_token **current_token)
 		if (*current_token && is_command((*current_token)->type)) // is_command is unnecessary
 		{
 			command->redirect_in = ft_strdup((*current_token)->value);
-			printf("redirect in: %s\n", command->redirect_in);
 			command->infile_fd = open(command->redirect_in, O_RDONLY);
 			if (command->infile_fd == -1)
 				perror("open");
@@ -61,17 +57,11 @@ void parse_redirection(t_command *command, t_token **current_token)
         *current_token = (*current_token)->next;
         if (*current_token && is_command((*current_token)->type))
         {
-			command->redirect_in = handle_heredoc((*current_token)->value);
-			//char *temp;
+			heredoc_fd = handle_heredoc((*current_token)->value);
             command->infile_fd = open (command->redirect_in, O_CREAT | O_RDWR | O_TRUNC);
-			if (command->infile_fd == -1)
+			if (heredoc_fd == -1)
 				perror("open");
-			// write_stderr("++++command->infile_fd+++++");
-			// printf("%d\n", command->infile_fd);
-			// write_stderr("+++++command->infile_fd++++");
-			write(command->infile_fd, command->redirect_in, ft_strlen(command->redirect_in));
-            //printf("here_doc: %s\n", command->redirect_in);
-			//printf("meoww\n");
+			command->infile_fd = heredoc_fd;
         }
     }
 }
