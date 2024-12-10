@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:33:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/10 17:40:36 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/10 23:33:16 by yasamankari   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	process_cmdline(t_data *data, char *input)
 	//printf("exit code from execution: %d\n", status);
 	//print_command_list(commandlist);
 	free_command_list(commandlist);
-	return (0); // status
+	return (status); // status
 }
 
 static int	no_input(char *str)

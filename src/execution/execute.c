@@ -173,10 +173,14 @@ int execute_one_cmd(t_data *data, t_command *commands)
 			dup2(pipefd[0], STDIN_FILENO);
 			close(pipefd[0]);
 		}
+		printf("comamnd path: %s\n", commands->path);
 		if (commands->path != NULL)
 			execve(commands->path, commands->command, data->envp);
-		write_stderr("Command not found");
-		exit(127);
+		else if (commands->path == NULL)
+		{
+			write_stderr("Command not found");
+			exit(127);
+		}
 	}
 	else
 	{
@@ -268,6 +272,7 @@ int	ft_execute(t_data *data)
 			data->commands->head->path = find_command_path(data->commands->head->command[0]);
 			if (!data->commands->head->path)
 			{
+				write_stderr("Command not found");
 				data->exit_status = ERROR_GENERIC;
 				return (data->exit_status);
 			}
