@@ -23,13 +23,11 @@ static char	**path_variable()
 	path = getenv("PATH");
 	if (path == NULL)
 	{
-		//perror("Error extracting the PATH variable");
 		return (NULL);
 	}
 	directories = ft_split(path, ':');
 	if (directories == NULL)
 	{
-		//perror("Error getting the PATH directories from ft_split");
 		return (NULL);
 	}
 	return (directories);

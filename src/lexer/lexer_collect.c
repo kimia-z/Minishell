@@ -42,6 +42,7 @@ void	*lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op, ch
 	t_token	*token;
 	int		op_type;
 	char	*expanded_word;
+	char	*sign;
 
 	lexer_skip_whitespace(lexer);
 	start = lexer->position;
@@ -51,7 +52,8 @@ void	*lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op, ch
 	word = ft_strndup(lexer->input + start, len);
 	if (!word)
 		return (NULL);
-    if (ft_strchr(word, '$'))
+	sign = ft_strchr(word, '$');
+    if (sign && ft_strncmp(sign + 1, "?", 1) != 0)
     {
         expanded_word = expand_variables(word, envp);
         free(word);

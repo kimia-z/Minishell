@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                         ::::::::           */
+/*   execute.c                                           :+:    :+:           */
+/*                                                      +:+                   */
+/*   By: kziari <marvin@42.fr>                         +#+                    */
+/*                                                    +#+                     */
+/*   Created: 2024/12/11 13:17:40 by kziari         #+#    #+#                */
+/*   Updated: 2024/12/11 13:17:42 by kziari         ########   odam.nl        */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "execution.h"
 #include "minishell.h"
 
@@ -42,12 +54,10 @@ bool	check_builtin(t_command *commands, t_data *data, int nb_pipes)
 	return (false);
 }
 
-
 /*
 	* manage the fd in pipes according to the 
 		command's place (first,middle,last) in pipeline
 */
-
 int	ft_dup(t_command *temp, t_exe *exec, int i, int nb_pipes)
 {
 	if (i == 0)
@@ -78,8 +88,10 @@ void	ft_child(t_data *data, t_command *temp, t_exe *exec, int nb_pipes)
 		close(exec->fd[1]);
 		if (exec->read != STDIN_FILENO)
 			close (exec->read);
-		//free
 		write_stderr("failed in dup");
+		cleanup_memory_alloc(data);
+		if (data->commands)
+			free_command_list(data->commands);
 		exit(EXIT_FAILURE);
 	}
 	if (check_builtin(temp, data, nb_pipes) == false)
@@ -87,31 +99,25 @@ void	ft_child(t_data *data, t_command *temp, t_exe *exec, int nb_pipes)
 		temp->path = find_command_path(temp->command[0]);
 		if (!temp->path)
 		{
-			//free all
-			free(data->commands->head->command[0]);
-			free(data->commands->head->command);
 			write_stderr("Command not found");
+			cleanup_memory_alloc(data);
+			if (data->commands)
+				free_command_list(data->commands);
 			exit(ERROR_GENERIC);
 			// data->exit_status = ERROR_GENERIC;
 			// return (data->exit_status);
 		}
-		// for(int j = 0; temp->command[j]; j++)
-		// {
-		// 	write_stderr(temp->command[j]);
-		// }
-
-		// write_stderr("+++start++++");
-		// write_stderr(temp->command[0]);
-		// ft_putnbr_fd(temp->outfile_fd, 2);
-		// write_stderr("\n+++end++++");
 		execve(temp->path, temp->command, data->envp);
-		//free
+		cleanup_memory_alloc(data);
+		if (data->commands)
+			free_command_list(data->commands);
 		exit(ERROR_CMD_NOT_FOUND);
 	}
-	//free
+	cleanup_memory_alloc(data);
+	if (data->commands)
+		free_command_list(data->commands);
 	exit(EXIT_SUCCESS);
 }
-
 
 void	ft_parent(t_command *temp, t_exe *exec)
 {
@@ -125,26 +131,25 @@ void	ft_parent(t_command *temp, t_exe *exec)
 	exec->read = exec->fd[0];
 }
 
-
-int execute_one_cmd(t_data *data, t_command *commands)
+int	execute_one_cmd(t_data *data, t_command *commands)
 {
-	int pid;
-	int status;
-	int pipefd[2];
+	int	pid;
+	int	status;
+	int	pipefd[2];
 
 	if (commands->redirect_in)
 	{
 		if (pipe(pipefd) == -1)
 		{
 			perror("pipe");
-			return -1;
+			return (-1);
 		}
 	}
 	pid = fork();
 	if (pid == -1)
 	{
 		write_stderr("failed in fork");
-		return -1;
+		return (-1);
 	}
 	if (pid == 0)
 	{
@@ -152,20 +157,36 @@ int execute_one_cmd(t_data *data, t_command *commands)
 		if (signal_mode(CHILD) == -1)
         {
             perror("signal");
+			//free?
             exit(EXIT_FAILURE);
         }
 		// testing
 		if (commands->infile_fd == -1 || commands->outfile_fd == -1)
+		{
+			cleanup_memory_alloc(data);
+			if (data->commands)
+				free_command_list(data->commands);
 			exit(EXIT_FAILURE);
+		}
 		if (commands->infile_fd >= 0)
 		{
 			if (dup2(commands->infile_fd, STDIN_FILENO) == -1)
+			{
+				cleanup_memory_alloc(data);
+				if (data->commands)
+					free_command_list(data->commands);
 				exit(EXIT_FAILURE);
+			}
 		}
 		if (commands->outfile_fd >= 0)
 		{
 			if (dup2(commands->outfile_fd, STDOUT_FILENO) == -1)
+			{
+				cleanup_memory_alloc(data);
+				if (data->commands)
+					free_command_list(data->commands);
 				exit(EXIT_FAILURE);
+			}
 		}
 		if (commands->redirect_in)
 		{
@@ -179,7 +200,10 @@ int execute_one_cmd(t_data *data, t_command *commands)
 		else if (commands->path == NULL)
 		{
 			write_stderr("Command not found");
-			exit(127);
+			cleanup_memory_alloc(data);
+			if (data->commands)
+				free_command_list(data->commands);
+			exit(ERROR_CMD_NOT_FOUND);
 		}
 	}
 	else
@@ -202,57 +226,6 @@ int execute_one_cmd(t_data *data, t_command *commands)
 		close(commands->outfile_fd);
 	return (data->exit_status);
 }
-
-
-
-// int	execute_one_cmd(t_data *data, t_command *commands)
-// {
-// 	int	pid;
-// 	int	status;
-
-// 	pid = fork();
-// 	if (pid == -1)
-// 		write_stderr("failed in fork");
-// 	if (pid == 0)
-// 	{
-// 		if (commands->infile_fd == -1 || commands->outfile_fd == -1)
-// 			return (EXIT_FAILURE);
-// 		if (commands->infile_fd >= 0)
-// 		{
-// 			if (dup2(commands->infile_fd, STDIN_FILENO) == -1)
-// 				return (EXIT_FAILURE);
-// 		}
-// 		if (commands->outfile_fd >= 0)
-// 		{
-// 			if (dup2(commands->outfile_fd, STDOUT_FILENO) == -1)
-// 				return (EXIT_FAILURE);
-// 		}
-// 		// for (int j = 0; commands->command[j]; j++)
-// 		// {
-// 		// 	printf("command[%d]:%s\n", j, commands->command[j]);
-// 		// }
-// 		// for (int k = 0; parser->arg_env[k]; k++)
-// 		// {
-// 		// 	printf("arg[%d]:%s\n", k, parser->arg_env[k]);
-// 		// }
-// 		// printf("path:%s\n", commands->path);
-// 		if (commands->path != NULL)
-// 			execve(commands->path, commands->command, data->envp);
-// 		write_stderr("Command not found");
-// 		//free everything
-// 		exit(127);
-// 	}
-// 	if (commands->infile_fd != -2)
-// 		close (commands->infile_fd);
-// 	if (commands->outfile_fd != -2)
-// 		close (commands->outfile_fd);
-// 	// if there is here doc -> unlink
-// 	waitpid(pid, &status, 0);
-// 	if (WIFEXITED(status))
-// 		data->exit_status = WEXITSTATUS(status);
-// 	return (data->exit_status);
-// }
-
 
 /*
 	-start of execution

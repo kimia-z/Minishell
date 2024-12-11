@@ -83,12 +83,9 @@ static bool	is_num(char *str)
 
 static void	ft_terminate(int status, t_data *data)
 {
-	if (data->env)
-		free_env_list_2(data->env);
+	cleanup_memory_alloc(data);
 	if (data->commands)
 		free_command_list(data->commands);
-	if (data->envp)
-		free_2arr(data->envp);
 	exit(status);
 }
 
@@ -105,16 +102,16 @@ void	ft_exit(t_command *commands, t_data *data, int nb_pipes)
 		data->exit_status = SUCCESS;
 		ft_terminate(0, data);
 	}
+	if (!is_num(commands->command[1]))
+	{
+		exit_helper(data, commands->command[1]);
+		ft_terminate(2, data);
+	}
 	if (commands->command[2])
 	{
 		ft_putstr_fd("exit\nminishell: exit: too many arguments\n", 2);
 		data->exit_status = ERROR_GENERIC;
 		return ;
-	}
-	if (!is_num(commands->command[1]))
-	{
-		exit_helper(data, commands->command[1]);
-		ft_terminate(2, data);
 	}
 	ft_putstr_fd("exit\n", 2);
 	data->exit_status = (ft_atoll(commands->command[1]) % 256);

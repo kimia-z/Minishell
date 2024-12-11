@@ -83,14 +83,19 @@ void	ft_echo(t_command *commands, t_data *data)
 	if (outfile < 0)
 		return (error_echo(data));
 	position = 1;
-	if(ft_strncmp(commands->command[1], "$?", 2) == 0)
-		ft_putnbr_fd(data->exit_status, outfile);
 	is_newline = check_newline(commands, &position, count, newline);
-	while (commands->command[position])
+	if(ft_strncmp(commands->command[position], "$?", 2) == 0)
+		ft_putnbr_fd(data->exit_status, outfile);
+	else
 	{
-		ft_putstr_fd(commands->command[position], outfile);
-		if (commands->command[++position])
-			ft_putchar_fd(' ', outfile);
+		while (commands->command[position])
+		{
+			// if(ft_strncmp(commands->command[position], "$?", 2) == 0)
+			// 	ft_putnbr_fd(data->exit_status, outfile);
+			ft_putstr_fd(commands->command[position], outfile);
+			if (commands->command[++position])
+				ft_putchar_fd(' ', outfile);
+		}
 	}
 	if (is_newline)
 		ft_putchar_fd('\n', outfile);

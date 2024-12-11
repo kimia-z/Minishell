@@ -1,6 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                         ::::::::           */
+/*   pipe.c                                              :+:    :+:           */
+/*                                                      +:+                   */
+/*   By: kziari <marvin@42.fr>                         +#+                    */
+/*                                                    +#+                     */
+/*   Created: 2024/12/11 13:32:28 by kziari         #+#    #+#                */
+/*   Updated: 2024/12/11 13:32:30 by kziari         ########   odam.nl        */
+/*                                                                            */
+/* ************************************************************************** */
 #include "execution.h"
 #include "minishell.h"
-
 
 int	pipe_count(t_cmdlist *commands)
 {
@@ -17,7 +27,6 @@ int	pipe_count(t_cmdlist *commands)
 	return (nb_pipe);
 }
 
-
 int	last_pipe(t_command *temp, t_exe *exec)
 {
 	if (temp->outfile_fd != -2)
@@ -28,7 +37,7 @@ int	last_pipe(t_command *temp, t_exe *exec)
 		}
 	}
 	if (temp->infile_fd == -1)
-		return(EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	if (temp->infile_fd != -2)
 	{
 		if (dup2(temp->infile_fd, STDIN_FILENO) == -1)
@@ -47,7 +56,7 @@ int	last_pipe(t_command *temp, t_exe *exec)
 int	middle_pipe(t_command *temp, t_exe *exec)
 {
 	if (temp->infile_fd == -1)
-		return(EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	if (temp->infile_fd != -2)
 	{
 		if (dup2(temp->infile_fd, STDIN_FILENO) == -1)
@@ -92,16 +101,13 @@ int	first_pipe(t_command *temp, int *fds)
 	}
 	else
 	{
-		//write_stderr("before");
-		if (dup2(fds[1], STDOUT_FILENO) == -1) {
-			//write_stderr("in");
+		if (dup2(fds[1], STDOUT_FILENO) == -1)
+		{
 			return (EXIT_FAILURE);
 		}
-		//write_stderr("after");
 	}
 	return (EXIT_SUCCESS);
 }
-
 
 int	pipeline(t_data *data, int nb_pipes)
 {
