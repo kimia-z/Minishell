@@ -29,8 +29,6 @@
 		kimia (0)
 	*- exit > outfile
 		exit (127)
-	//unlink?
-	//printf("status:%d\n", data->exit_status);
 */
 
 #include "execution.h"

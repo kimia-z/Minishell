@@ -13,15 +13,7 @@
 #include "execution.h"
 
 /*
-This function is doing the pwd builtin
-	* What should it do when pwd variable was not found?
-error check for getcwd
-fail scenarios:
-	- getcwd fails
-	-invalid arguments
-//how commands->command[0] could be NULL?
-	// if (!commands->command[0])
-	// 	return (1);
+	This function is doing the pwd builtin
 */
 void	ft_pwd(t_command *commands, t_data *data)
 {

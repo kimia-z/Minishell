@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "execution.h"
-#include "minishell.h"
 
 static t_builtin	get_builtin_command(const char *cmd)
 {
@@ -249,16 +248,7 @@ int	ft_execute(t_data *data)
 				data->exit_status = ERROR_GENERIC;
 				return (data->exit_status);
 			}
-			// if (!data->commands->head->path)
-			// {
-			// 	free(data->commands->head->command[0]);
-			// 	free(data->commands->head->command);
-			// 	data->exit_status = ERROR_GENERIC;
-			// 	return (data->exit_status);
-			// }
 			data->exit_status = execute_one_cmd(data, data->commands->head);
-			//printf("status:%d\n", parser->exit_status);
-			//free path
 		}
 	}
 	else if (number_pipe >= 1)
