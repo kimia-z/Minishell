@@ -66,6 +66,16 @@ static bool	check_newline(t_command *commands, int *pos, int count, bool nline)
 	return (nline);
 }
 
+static void	print_echo(t_data *data, t_command *commands, int outfile, int *pos)
+{
+	if (ft_strncmp(commands->command[*pos], "$?", 2) == 0)
+		ft_putnbr_fd(data->exit_status, outfile);
+	else
+		ft_putstr_fd(commands->command[*pos], outfile);
+	if (commands->command[++(*pos)])
+		ft_putchar_fd(' ', outfile);
+}
+
 void	ft_echo(t_command *commands, t_data *data)
 {
 	int		outfile;
@@ -85,14 +95,7 @@ void	ft_echo(t_command *commands, t_data *data)
 	position = 1;
 	is_newline = check_newline(commands, &position, count, newline);
 	while (commands->command[position])
-	{
-		if (ft_strncmp(commands->command[position], "$?", 2) == 0)
-			ft_putnbr_fd(data->exit_status, outfile);
-		else
-			ft_putstr_fd(commands->command[position], outfile);
-		if (commands->command[++position])
-			ft_putchar_fd(' ', outfile);
-	}
+		print_echo(data, commands, outfile, &position);
 	if (is_newline)
 		ft_putchar_fd('\n', outfile);
 	data->exit_status = SUCCESS;

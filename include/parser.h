@@ -47,7 +47,7 @@ int			parse_redirection(t_command *command, t_token **current_token);
 t_cmdlist		*cmdlist_init();
 
 /* Command Path */
-char			*find_command_path(char *commandname);
+char			*find_path(char *commandname);
 
 /* Parser Utils */
 bool			is_redirection(enum e_token_type type);

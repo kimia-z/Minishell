@@ -63,17 +63,17 @@ int	ft_dup(t_command *temp, t_exe *exec, int i, int nb_pipes)
 	if (i == 0)
 	{
 		if (first_pipe(temp, exec->fd) == EXIT_FAILURE)
-			return(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 	}
 	else if (i == nb_pipes)
 	{
 		if (last_pipe(temp, exec) == EXIT_FAILURE)
-			return(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 	}
 	else
 	{
 		if (middle_pipe(temp, exec) == EXIT_FAILURE)
-			return(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 	}
 	close(exec->fd[0]);
 	close(exec->fd[1]);
@@ -96,7 +96,7 @@ void	ft_child(t_data *data, t_command *temp, t_exe *exec, int nb_pipes)
 	}
 	if (check_builtin(temp, data, nb_pipes) == false)
 	{
-		temp->path = find_command_path(temp->command[0]);
+		temp->path = find_path(temp->command[0]);
 		if (!temp->path)
 		{
 			write_stderr("Command not found");
@@ -166,7 +166,6 @@ void	one_cmd_child(t_data *data, t_command *commands, int *pipefd)
 		dup2(pipefd[0], STDIN_FILENO);
 		close(pipefd[0]);
 	}
-	//printf("comamnd path: %s\n", commands->path);
 	if (commands->path != NULL)
 		execve(commands->path, commands->command, data->envp);
 	else if (commands->path == NULL)
@@ -222,7 +221,7 @@ int	ft_execute(t_data *data)
 	{
 		if (check_builtin(data->commands->head, data, number_pipe) == false)
 		{
-			data->commands->head->path = find_command_path(data->commands->head->command[0]);
+			data->commands->head->path = find_path(data->commands->head->command[0]);
 			if (!data->commands->head->path)
 			{
 				write_stderr("Command not found");

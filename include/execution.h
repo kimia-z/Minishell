@@ -51,6 +51,15 @@ t_env	*my_lstnew(char *key, char *value);
 t_env	*my_lstlast(t_env *lst);
 void	my_lstadd_back(t_env **lst, t_env *new);
 
+/* Export Utils */
+void	error_export(char *msg, t_data *data);
+void	f_env_list(t_env **env_list);
+bool	is_valid(t_data *data, char **current_cmd, int i);
+bool	add_node(t_env *env, char *key, char *value, bool is_with_sign);
+
+/* Export Print */
+bool	print_export(t_data *data, int outfile);
+
 /* Utils */
 void	status_handler(t_data *data, t_exe *exec);
 void	wait_helper(t_exe *exec);
