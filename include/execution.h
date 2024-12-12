@@ -44,12 +44,16 @@ void	ft_unset(t_command *commands, t_data *data, int nb_pipes);
 void	ft_cd(t_command *commands, t_data *data);
 void	ft_export(t_command *commands, t_data *data);
 
-/* Utils */
+/* Extra_libft */
 int		ft_strchr_pos(const char *s, int c);
 int		my_lstsize(t_env *lst);
 t_env	*my_lstnew(char *key, char *value);
 t_env	*my_lstlast(t_env *lst);
 void	my_lstadd_back(t_env **lst, t_env *new);
+
+/* Utils */
+void	status_handler(t_data *data, t_exe *exec);
+void	wait_helper(t_exe *exec);
 
 /* Pipe functions */
 int		pipe_count(t_cmdlist *commands);

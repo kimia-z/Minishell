@@ -1,80 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                         ::::::::           */
-/*   utils.c                                             :+:    :+:           */
-/*                                                      +:+                   */
-/*   By: kziari <marvin@42.fr>                         +#+                    */
-/*                                                    +#+                     */
-/*   Created: 2024/12/11 13:18:17 by kziari         #+#    #+#                */
-/*   Updated: 2024/12/11 13:18:18 by kziari         ########   odam.nl        */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kziari <kziari@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/12 14:12:36 by kziari            #+#    #+#             */
+/*   Updated: 2024/12/12 14:12:37 by kziari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-int	ft_strchr_pos(const char *s, int c)
+void	status_handler(t_data *data, t_exe *exec)
 {
-	unsigned int	i;
-
-	i = 0;
-	while (s[i] != '\0' && s[i] != (unsigned char)c)
-		i++;
-	if (s[i] == (unsigned char)c)
-		return (i);
-	return (0);
+	if (WIFEXITED(exec->status))
+		data->exit_status = WEXITSTATUS(exec->status);
+	else if (WIFSIGNALED(exec->status))
+		data->exit_status = WTERMSIG(exec->status) + 128;
 }
 
-int	my_lstsize(t_env *lst)
+void	wait_helper(t_exe *exec)
 {
-	int	count;
-
-	count = 0;
-	if (lst == NULL)
-		return (count);
-	while (lst)
+	while (waitpid(-1, &exec->status, 0) > 0)
 	{
-		count++;
-		lst = lst->next;
-	}
-	return (count);
-}
-
-t_env	*my_lstnew(char *key, char *value)
-{
-	t_env	*new_node;
-
-	new_node = (t_env *)malloc(1 * sizeof(t_env));
-	if (!new_node)
-		return (NULL);
-	new_node->key = key;
-	new_node->value = value;
-	new_node->next = NULL;
-	return (new_node);
-}
-
-t_env	*my_lstlast(t_env *lst)
-{
-	while (lst)
-	{
-		if (!lst->next)
-			return (lst);
-		lst = lst->next;
-	}
-	return (lst);
-}
-
-void	my_lstadd_back(t_env **lst, t_env *new)
-{
-	t_env	*last;
-
-	if (lst)
-	{
-		if (*lst)
-		{
-			last = my_lstlast(*lst);
-			last->next = new;
-		}
-		else
-			*lst = new;
 	}
 }

@@ -22,8 +22,8 @@ SRCS = src/expansion/expansion.c src/setup/history.c \
 		src/execution/builtins/env.c src/execution/builtins/exit.c \
 		src/execution/builtins/export.c src/execution/builtins/pwd.c \
 		src/execution/builtins/unset.c src/execution/execute.c \
-		src/execution/utils.c src/execution/pipe.c \
-		src/utils/free_functions.c
+		src/execution/extra_libft.c src/execution/pipe.c \
+		src/utils/free_functions.c src/execution/utils.c
 
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 

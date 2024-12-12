@@ -54,9 +54,10 @@ bool	check_builtin(t_command *commands, t_data *data, int nb_pipes)
 }
 
 /*
-	* manage the fd in pipes according to the 
-		command's place (first,middle,last) in pipeline
+	manage the fd in pipes according to the
+	command's place (first,middle,last) in pipeline
 */
+
 int	ft_dup(t_command *temp, t_exe *exec, int i, int nb_pipes)
 {
 	if (i == 0)
@@ -103,8 +104,6 @@ void	ft_child(t_data *data, t_command *temp, t_exe *exec, int nb_pipes)
 			if (data->commands)
 				free_command_list(data->commands);
 			exit(ERROR_GENERIC);
-			// data->exit_status = ERROR_GENERIC;
-			// return (data->exit_status);
 		}
 		execve(temp->path, temp->command, data->envp);
 		cleanup_memory_alloc(data);
@@ -130,6 +129,50 @@ void	ft_parent(t_command *temp, t_exe *exec)
 	exec->read = exec->fd[0];
 }
 
+void	cleanup_helper(t_data *data, char *error_msg, int exit_code)
+{
+	write_stderr(error_msg);
+	cleanup_memory_alloc(data);
+	if (data->commands)
+		free_command_list(data->commands);
+	exit(exit_code);
+}
+
+void	one_cmd_child(t_data *data, t_command *commands, int *pipefd)
+{
+	// testing
+	if (signal_mode(CHILD) == -1)
+	{
+		perror("signal");
+		//free?
+		exit(EXIT_FAILURE);
+	}
+	// testing
+	if (commands->infile_fd == -1 || commands->outfile_fd == -1)
+		cleanup_helper(data, "Permission denied opening file", EXIT_FAILURE);
+	if (commands->infile_fd >= 0)
+	{
+		if (dup2(commands->infile_fd, STDIN_FILENO) == -1)
+			cleanup_helper(data, "dup2", EXIT_FAILURE);
+	}
+	if (commands->outfile_fd >= 0)
+	{
+		if (dup2(commands->outfile_fd, STDOUT_FILENO) == -1)
+			cleanup_helper(data, "dup2", EXIT_FAILURE);
+	}
+	if (commands->redirect_in)
+	{
+		close(pipefd[1]);
+		dup2(pipefd[0], STDIN_FILENO);
+		close(pipefd[0]);
+	}
+	//printf("comamnd path: %s\n", commands->path);
+	if (commands->path != NULL)
+		execve(commands->path, commands->command, data->envp);
+	else if (commands->path == NULL)
+		cleanup_helper(data, "Command not found", ERROR_CMD_NOT_FOUND);
+}
+
 int	execute_one_cmd(t_data *data, t_command *commands)
 {
 	int	pid;
@@ -139,86 +182,24 @@ int	execute_one_cmd(t_data *data, t_command *commands)
 	if (commands->redirect_in)
 	{
 		if (pipe(pipefd) == -1)
-		{
-			perror("pipe");
-			return (-1);
-		}
+			return (write_stderr("failed in pipe"), ERROR_GENERIC);
 	}
 	pid = fork();
 	if (pid == -1)
-	{
-		write_stderr("failed in fork");
-		return (-1);
-	}
+		return (write_stderr("failed in fork"), ERROR_GENERIC);
 	if (pid == 0)
+		one_cmd_child(data, commands, pipefd);
+	if (commands->redirect_in)
 	{
-		// testing 
-		if (signal_mode(CHILD) == -1)
-        {
-            perror("signal");
-			//free?
-            exit(EXIT_FAILURE);
-        }
-		// testing
-		if (commands->infile_fd == -1 || commands->outfile_fd == -1)
-		{
-			cleanup_memory_alloc(data);
-			if (data->commands)
-				free_command_list(data->commands);
-			exit(EXIT_FAILURE);
-		}
-		if (commands->infile_fd >= 0)
-		{
-			if (dup2(commands->infile_fd, STDIN_FILENO) == -1)
-			{
-				cleanup_memory_alloc(data);
-				if (data->commands)
-					free_command_list(data->commands);
-				exit(EXIT_FAILURE);
-			}
-		}
-		if (commands->outfile_fd >= 0)
-		{
-			if (dup2(commands->outfile_fd, STDOUT_FILENO) == -1)
-			{
-				cleanup_memory_alloc(data);
-				if (data->commands)
-					free_command_list(data->commands);
-				exit(EXIT_FAILURE);
-			}
-		}
-		if (commands->redirect_in)
-		{
-			close(pipefd[1]);
-			dup2(pipefd[0], STDIN_FILENO);
-			close(pipefd[0]);
-		}
-		printf("comamnd path: %s\n", commands->path);
-		if (commands->path != NULL)
-			execve(commands->path, commands->command, data->envp);
-		else if (commands->path == NULL)
-		{
-			write_stderr("Command not found");
-			cleanup_memory_alloc(data);
-			if (data->commands)
-				free_command_list(data->commands);
-			exit(ERROR_CMD_NOT_FOUND);
-		}
+		close(pipefd[0]);
+		write(pipefd[1], commands->redirect_in, strlen(commands->redirect_in));
+		close(pipefd[1]);
 	}
-	else
-	{
-		if (commands->redirect_in)
-		{
-			// if (ft_strncmp(commands->heredoc_content, commands->redirect_in , ft_strlen(commands->heredoc_content)) == 0)
-			// 	unlink(commands->redirect_in);
-			close(pipefd[0]);
-			write(pipefd[1], commands->redirect_in, strlen(commands->redirect_in));
-			close(pipefd[1]);
-		}
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			data->exit_status = WEXITSTATUS(status);
-	}
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		data->exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		data->exit_status = WTERMSIG(status) + 128;
 	if (commands->infile_fd != -2)
 		close(commands->infile_fd);
 	if (commands->outfile_fd != -2)

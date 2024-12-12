@@ -9,8 +9,8 @@
 /*   Updated: 2024/12/11 13:32:30 by kziari         ########   odam.nl        */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "execution.h"
-#include "minishell.h"
 
 int	pipe_count(t_cmdlist *commands)
 {
@@ -132,10 +132,7 @@ int	pipeline(t_data *data, int nb_pipes)
 	}
 	close (exec.read);
 	waitpid(exec.pid, &exec.status, 0);
-	if (WIFEXITED(exec.status))
-		data->exit_status = WEXITSTATUS(exec.status);
-	while (waitpid(-1, &exec.status, 0) > 0)
-	{
-	}
+	status_handler(data, &exec);
+	wait_helper(&exec);
 	return (data->exit_status);
 }
