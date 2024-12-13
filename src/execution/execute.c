@@ -99,7 +99,9 @@ void	ft_child(t_data *data, t_command *temp, t_exe *exec, int nb_pipes)
 		temp->path = find_path(temp->command[0]);
 		if (!temp->path)
 		{
-			write_stderr("Command not found");
+			ft_putstr_fd(temp->command[0], 2);
+			ft_putendl_fd(": command not found", 2);
+			// write_stderr("Command not found");
 			cleanup_memory_alloc(data);
 			if (data->commands)
 				free_command_list(data->commands);
@@ -169,7 +171,7 @@ void	one_cmd_child(t_data *data, t_command *commands, int *pipefd)
 	if (commands->path != NULL)
 		execve(commands->path, commands->command, data->envp);
 	else if (commands->path == NULL)
-		cleanup_helper(data, "Command not found", ERROR_CMD_NOT_FOUND);
+		cleanup_helper(data, "command not found", ERROR_CMD_NOT_FOUND);
 }
 
 int	execute_one_cmd(t_data *data, t_command *commands)
@@ -182,10 +184,12 @@ int	execute_one_cmd(t_data *data, t_command *commands)
 	{
 		if (pipe(pipefd) == -1)
 			return (write_stderr("failed in pipe"), ERROR_GENERIC);
+		//perror
 	}
 	pid = fork();
 	if (pid == -1)
 		return (write_stderr("failed in fork"), ERROR_GENERIC);
+	//perror
 	if (pid == 0)
 		one_cmd_child(data, commands, pipefd);
 	if (commands->redirect_in)

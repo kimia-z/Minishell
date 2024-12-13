@@ -31,6 +31,23 @@ should behave as :
 echo: write error\n or  minishel: operation not permitted: <directory>
 */
 
+static int	newline_helper(char *temp, bool nline, int *count)
+{
+	int	i;
+
+	i = 1;
+	while (temp[i] && temp[i] == 'n')
+		i++;
+	if (temp[i - 1] == 'n' && !temp[i])
+		nline = false;
+	else if (temp[i - 1] == 'n' && temp[i] && temp[i] != ' ')
+	{
+		(*count)--;
+		return (-1);
+	}
+	return (0);
+}
+
 static void	error_echo(t_data *data)
 {
 	write_stderr("echo: invalid file descriptor");
@@ -40,20 +57,18 @@ static void	error_echo(t_data *data)
 static bool	check_newline(t_command *commands, int *pos, int count, bool nline)
 {
 	char	*temp;
-	int		i;
 
 	while (commands->command[count] && commands->command[count][0] == '-')
 	{
-		i = 1;
 		temp = commands->command[count];
 		count++;
 		if (ft_strncmp(temp, "-n", 3) == 0)
 			nline = false;
 		else if (ft_strncmp(temp, "-n", 2) == 0)
 		{
-			while (temp[i] && temp[i] == 'n')
-				i++;
-			if (temp[i - 1] == 'n' && !temp[i])
+			if (newline_helper(temp, nline, &count) == -1)
+				break ;
+			else
 				nline = false;
 		}
 		else

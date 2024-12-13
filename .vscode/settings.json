@@ -16,6 +16,12 @@
         "errno.h": "c",
         "wait.h": "c",
         "stat.h": "c",
-        "readline.h": "c"
+        "readline.h": "c",
+        "*.tcc": "c",
+        "string": "c",
+        "streambuf": "c",
+        "array": "c",
+        "string_view": "c",
+        "span": "c"
     }
 }

@@ -1,7 +1,7 @@
 NAME := minishell
 CC := cc
 CFLAGS := -Wall -Werror
-LDFLAG := -lreadline -lncurses
+LDFLAG := -lreadline -lncurses -g
 INCLUDES := -I./include -I./lib/libft/include
 LIBFT := lib/libft/libft.a
 
