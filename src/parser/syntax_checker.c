@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 17:21:55 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/10 23:12:07 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/12/19 12:21:20 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	syntax_checker(t_tokenlist *tokenlist)
 			if (operator_checker(temp->type, i, tokenlist->token_count, left_op) == 1)
 				return (-1);
 		}
-		else if (temp->type == TOKEN_UNKNOWN)
+		if (temp->type == TOKEN_UNKNOWN)
 		{
 			return (-1);
 		}

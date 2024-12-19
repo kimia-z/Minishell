@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/26 18:52:18 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/10 23:55:21 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/12/19 12:29:33 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 // TODO
 // Implement realloc
+
 
 static char	*append_line_to_heredoc(char *heredoc_content, size_t \
 *heredoc_size, const char *line, ssize_t read)
@@ -34,13 +35,10 @@ static char	*append_line_to_heredoc(char *heredoc_content, size_t \
 static char	*read_heredoc_content(const char *delimiter)
 {
 	char	*line;
-	size_t	len;
-	ssize_t	read;
 	char	*heredoc_content;
 	size_t	heredoc_size;
 
 	line = NULL;
-	len = 0;
 	heredoc_content = NULL;
 	heredoc_size = 0;
 	
@@ -50,20 +48,27 @@ static char	*read_heredoc_content(const char *delimiter)
 		return (NULL);
 	}
 	
-	write(STDOUT_FILENO, "> ", 2);
-	while ((read = getline(&line, &len, stdin)) != -1)
+	while (1)
 	{
+		write(STDOUT_FILENO, "> ", 2);
+		line = get_next_line(STDIN_FILENO);
+		if (line == NULL)
+		{
+			write(STDOUT_FILENO, "EOF received\n", 13);
+			break ;
+		}
 		if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0 && line[ft_strlen(delimiter)] == '\n')
-			break;
-		heredoc_content = append_line_to_heredoc(heredoc_content, &heredoc_size, line, read);
-		if (!heredoc_content)
 		{
 			free(line);
+			break;
+		}
+		heredoc_content = append_line_to_heredoc(heredoc_content, &heredoc_size, line, ft_strlen(line));
+		free(line);
+		if (!heredoc_content)
+		{
 			return (NULL);
 		}
-		write(STDOUT_FILENO, "> ", 2);
 	}
-	free(line);
 	return (heredoc_content);
 }
 
@@ -77,6 +82,8 @@ int	handle_heredoc(const char *delimiter)
 	if (signal_mode(HERE_DOC) == -1)
 		return (-1);
 	heredoc_content = read_heredoc_content(delimiter);
+	if (heredoc_content == NULL)
+		return (-1);
 	temp_fd = open(temp_filename, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (temp_fd == -1)
 	{
