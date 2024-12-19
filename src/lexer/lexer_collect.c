@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:00:24 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/19 14:20:12 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 14:44:32 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ static char	*collect_word(t_lexer *lexer)
 
 	lexer_skip_whitespace(lexer);
 	start = lexer->position;
-	while (lexer->position < lexer->length && !ft_isspace(lexer->input[lexer->position]))
+	while (lexer->position < lexer->length && \
+	!ft_isspace(lexer->input[lexer->position]))
 		lexer->position++;
 	len = lexer->position - start;
 	word = ft_strndup(lexer->input + start, len);
@@ -67,7 +68,7 @@ static char	*expand_word(char *word, char **envp)
 static t_token	*create_token(char *word, bool is_op)
 {
 	t_token	*token;
-	int	op_type;
+	int		op_type;
 
 	if (is_op)
 	{
@@ -75,13 +76,12 @@ static t_token	*create_token(char *word, bool is_op)
 		token = token_create(op_type, word);
 	}
 	else
-	{
 		token = token_create(TOKEN_WORD, word);
-	}
 	return (token);
 }
 
-void	*lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op, char **envp)
+void	*lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, \
+bool is_op, char **envp)
 {
 	char	*word;
 	t_token	*token;
@@ -89,7 +89,6 @@ void	*lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op, ch
 	word = collect_word(lexer);
 	if (!word)
 		return (NULL);
-
 	word = expand_word(word, envp);
 	if (!word)
 		return (NULL);

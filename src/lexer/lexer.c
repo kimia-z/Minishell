@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/19 21:15:24 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/19 14:22:13 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 14:42:10 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,14 @@ static int	handle_quotes(t_lexer *lexer, t_tokenlist *tokenlist, char **envp)
 
 	current_char = lexer->input[lexer->position];
 	is_op = false;
-	if (lexer_collect_quotes(lexer, &current_char, tokenlist, is_op, envp) == -1)
+	if (lexer_collect_quotes(lexer, &current_char, tokenlist, is_op, envp) \
+	== -1)
 		return (-1);
 	return (0);
 }
 
-static int	handle_dollar_or_word(t_lexer *lexer, t_tokenlist *tokenlist, char **envp)
+static int	handle_dollar_or_word(t_lexer *lexer, t_tokenlist *tokenlist, \
+char **envp)
 {
 	bool	is_op;
 
@@ -52,7 +54,6 @@ int	lexer_main(t_lexer *lexer, t_tokenlist *tokenlist, char **envp)
 	{
 		lexer_skip_whitespace(lexer);
 		current_char = lexer->input[lexer->position];
-
 		if (is_quotes(current_char))
 		{
 			if (handle_quotes(lexer, tokenlist, envp) == -1)

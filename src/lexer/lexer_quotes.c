@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/12/05 22:03:33 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/19 14:34:30 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 14:45:38 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ char	*extract_quoted_string(t_lexer *lexer, char quote_char)
 	return (token_value);
 }
 
-char	*expand_if_double_quotes(char *token_value, char quote_char, char **envp)
+char	*expand_if_double_quotes(char *token_value, char quote_char, \
+char **envp)
 {
 	char	*expanded_value;
 
@@ -67,7 +68,8 @@ static int	create_and_add_token(t_tokenlist *tokenlist, char *token_value)
 	return (0);
 }
 
-int	lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist, bool is_op, char **envp)
+int	lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist, \
+bool is_op, char **envp)
 {
 	char	*token_value;
 	char	quote_char;
@@ -79,7 +81,8 @@ int	lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist, bo
 	token_value = expand_if_double_quotes(token_value, quote_char, envp);
 	if (create_and_add_token(tokenlist, token_value) == -1)
 		return (-1);
-	if (lexer->input[lexer->position] == '\'' || lexer->input[lexer->position] == '"')
+	if (lexer->input[lexer->position] == '\'' || \
+	lexer->input[lexer->position] == '"')
 		return (-1);
 	return (0);
 }
