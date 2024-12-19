@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/26 18:52:18 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/19 12:46:49 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 16:45:30 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,46 @@
 #include "parser.h"
 #include "minishell.h"
 
-static char	*append_line_to_heredoc(char *heredoc_content, size_t \
-*heredoc_size, const char *line, ssize_t read)
+static char	*append_line_to_heredoc(char *heredoc_content, \
+size_t *heredoc_size, const char *line, ssize_t read)
 {
 	heredoc_content = realloc(heredoc_content, *heredoc_size + read + 1);
 	if (!heredoc_content)
-	{
 		return (NULL);
-	}
 	ft_memcpy(heredoc_content + *heredoc_size, line, read);
 	*heredoc_size += read;
 	heredoc_content[*heredoc_size] = '\0';
+	return (heredoc_content);
+}
+
+static char	*read_line_and_check_delimiter(const char *delimiter)
+{
+	char	*line;
+
+	write(STDOUT_FILENO, "> ", 2);
+	line = get_next_line(STDIN_FILENO);
+	if (line == NULL)
+	{
+		write(STDOUT_FILENO, "EOF received\n", 13);
+		return (NULL);
+	}
+	if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0 && \
+	line[ft_strlen(delimiter)] == '\n')
+	{
+		free(line);
+		return (NULL);
+	}
+	return (line);
+}
+
+static char	*append_line(char *heredoc_content, size_t *heredoc_size, \
+char *line)
+{
+	heredoc_content = append_line_to_heredoc(heredoc_content, \
+	heredoc_size, line, ft_strlen(line));
+	free(line);
+	if (!heredoc_content)
+		return (NULL);
 	return (heredoc_content);
 }
 
@@ -34,10 +63,8 @@ static char	*read_heredoc_content(const char *delimiter)
 	char	*heredoc_content;
 	size_t	heredoc_size;
 
-	line = NULL;
 	heredoc_content = NULL;
 	heredoc_size = 0;
-	
 	if (signal_mode(MINISHELL) == -1)
 	{
 		free(heredoc_content);
@@ -45,20 +72,10 @@ static char	*read_heredoc_content(const char *delimiter)
 	}
 	while (1)
 	{
-		write(STDOUT_FILENO, "> ", 2);
-		line = get_next_line(STDIN_FILENO);
+		line = read_line_and_check_delimiter(delimiter);
 		if (line == NULL)
-		{
-			write(STDOUT_FILENO, "EOF received\n", 13);
 			break ;
-		}
-		if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0 && line[ft_strlen(delimiter)] == '\n')
-		{
-			free(line);
-			break;
-		}
-		heredoc_content = append_line_to_heredoc(heredoc_content, &heredoc_size, line, ft_strlen(line));
-		free(line);
+		heredoc_content = append_line(heredoc_content, &heredoc_size, line);
 		if (!heredoc_content)
 			return (NULL);
 	}

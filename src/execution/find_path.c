@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 15:54:56 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 17:50:13 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 16:11:39 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "parser.h"
 #include "minishell.h"
 
-// Function to get the PATH directories
 static char	**path_variable(void)
 {
 	char	**directories;

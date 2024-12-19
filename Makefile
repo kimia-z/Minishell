@@ -13,7 +13,7 @@ SRCS = src/expansion/expansion.c src/setup/history.c \
 		src/lexer/lexer_collect.c src/lexer/lexer_quotes.c \
 		src/lexer/lexer_utils.c src/lexer/lexer.c \
 		src/lexer/token.c src/lexer/tokenlist.c \
-		src/parser/parse_utils.c src/parser/parser.c \
+		src/parser/parse_utils.c src/parser/parser_main.c \
 		src/parser/syntax_checker.c src/execution/find_path.c \
 		src/setup/cmdline.c src/setup/env_var.c src/setup/signals.c \
 		src/utils/error_handling.c src/utils/test_functions.c \
@@ -27,7 +27,8 @@ SRCS = src/expansion/expansion.c src/setup/history.c \
 		src/execution/builtins/export_utils.c \
 		src/execution/builtins/export_print.c \
 		src/setup/cmdline_2.c src/setup/history_2.c \
-		src/lexer/lexer_utils_2.c src/expansion/expansion_utils.c 
+		src/lexer/lexer_utils_2.c src/expansion/expansion_utils.c \
+		src/parser/parse_redirection.c src/parser/parse_command.c
 
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 

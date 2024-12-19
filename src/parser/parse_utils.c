@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 16:42:09 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/19 14:34:58 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 16:04:19 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ bool	is_pipe(enum e_token_type type)
 		return (true);
 	return (false);
 }
+
 bool	is_redirection(enum e_token_type type)
 {
 	if (type == TOKEN_OP_REDIRECTION_APPEND || type == TOKEN_OP_REDIRECTION_IN \
@@ -33,7 +34,7 @@ bool	is_command(enum e_token_type type)
 	return (false);
 }
 
-t_cmdlist	*cmdlist_init()
+t_cmdlist	*cmdlist_init(void)
 {
 	t_cmdlist	*cmdlist;
 
@@ -49,7 +50,7 @@ void	free_command_resources(t_command *command, int command_count)
 	int	i;
 
 	i = 0;
-	while(i < command_count)
+	while (i < command_count)
 	{
 		free(command->command[i]);
 		i++;

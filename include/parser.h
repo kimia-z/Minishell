@@ -6,14 +6,14 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 16:47:59 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/10 18:04:10 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 16:48:42 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
-#include "lexer.h"
+# include "lexer.h"
 
 /************************************************************/
 /*  Structs */
@@ -24,7 +24,7 @@ typedef struct s_command
 	char				*path;
 	char				*redirect_in;
 	char				*redirect_out;
-	char 				*redirect_append;
+	char				*redirect_append;
 	int					infile_fd;
 	int					outfile_fd;
 	struct s_command	*next;
@@ -41,10 +41,10 @@ typedef struct s_cmdlist
 int				syntax_checker(t_tokenlist *tokenlist);
 
 /* Parser Functions */
-t_cmdlist		*parser(t_tokenlist *tokenlist);
+t_cmdlist		*parser_main(t_tokenlist *tokenlist);
 t_command		*parse_command(t_token **current_token);
-int			parse_redirection(t_command *command, t_token **current_token);
-t_cmdlist		*cmdlist_init();
+int				parse_redirection(t_command *command, t_token **current_token);
+t_cmdlist		*cmdlist_init(void);
 
 /* Command Path */
 char			*find_path(char *commandname);
@@ -60,6 +60,6 @@ void			free_command(t_command *command);
 void			free_command_resources(t_command *command, int command_count);
 
 /* Heredoc */
-int			handle_heredoc(const char *delimiter);
+int				handle_heredoc(const char *delimiter);
 
 #endif

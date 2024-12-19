@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/12/19 13:04:10 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/19 14:49:25 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 16:14:31 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static t_cmdlist	*parse_tokens(t_data *data, t_tokenlist *tokenlist)
 {
 	t_cmdlist	*commandlist;
 
-	commandlist = parser(tokenlist);
+	commandlist = parser_main(tokenlist);
 	tokenlist_free(tokenlist);
 	if (!commandlist)
 	{
