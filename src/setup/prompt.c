@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 14:08:07 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/28 12:47:42 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/12/19 14:55:40 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,8 @@
 #include "parser.h"
 #include "minishell.h"
 
-//TODO
-//check functions for errors
-// check return values
-// cursor movement is wacky - not necessary
-// fix mem management for getcwd (0,0)
-// NOTES
-// in bash, what happens if getcwd or gethostname fail? what does minishell need to do in those cases?
-
-
-
 /* get the current working directory */
-static char	*get_current_working_directory()
+static char	*get_current_working_directory(void)
 {
 	char	cwd[1024];
 
@@ -38,7 +28,7 @@ static char	*get_current_working_directory()
 }
 
 /* get the hostname */
-static char	*get_hostname()
+static char	*get_hostname(void)
 {
 	char	hostname[1024];
 
@@ -60,9 +50,9 @@ static char	*build_prompt(const char *hostname, const char *cwd)
 	char	*prompt;
 	size_t	prompt_len;
 
-	prompt_len = ft_strlen(GREEN) + ft_strlen(hostname) + ft_strlen(RESET) +
-				ft_strlen(":") + ft_strlen(BLUE) + ft_strlen(cwd) + ft_strlen(RESET) +
-				ft_strlen("$ ") + 1;
+	prompt_len = ft_strlen(GREEN) + ft_strlen(hostname) + ft_strlen(RESET) \
+	+ ft_strlen(":") + ft_strlen(BLUE) + ft_strlen(cwd) + ft_strlen(RESET) \
+	+ ft_strlen("$ ") + 1;
 	prompt = malloc(prompt_len);
 	if (!prompt)
 	{
@@ -81,11 +71,11 @@ static char	*build_prompt(const char *hostname, const char *cwd)
 	return (prompt);
 }
 
-char	*get_prompt()
+char	*get_prompt(void)
 {
-	char *cwd;
-	char *hostname;
-	char *prompt;
+	char	*cwd;
+	char	*hostname;
+	char	*prompt;
 
 	cwd = get_current_working_directory();
 	if (!cwd)

@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/12/19 13:04:10 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/19 13:23:50 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 14:49:25 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,14 +89,11 @@ int	process_cmdline(t_data *data, char *input)
 	tokenlist = tokenize_input(data, input);
 	if (!tokenlist)
 		return (-1);
-
 	if (check_syntax(data, tokenlist) == -1)
 		return (-1);
-
 	commandlist = parse_tokens(data, tokenlist);
 	if (!commandlist)
 		return (-1);
-
 	data->commands = commandlist;
 	status = ft_execute(data);
 	free_command_list(commandlist);

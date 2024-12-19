@@ -6,14 +6,13 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/12/19 13:30:30 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/19 13:36:59 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 14:51:42 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "parser.h"
 #include "minishell.h"
-
 
 static void	trim_newline(char *str)
 {
@@ -54,13 +53,12 @@ static int	open_history_file(const char *filename)
 	{
 		fd = open(filename, O_CREAT | O_WRONLY, 0644);
 		if (fd == -1)
-			return -1;
+			return (-1);
 		close(fd);
 		return (0);
 	}
 	return (fd);
 }
-
 
 int	load_history(t_history *history, const char *filename)
 {
@@ -69,10 +67,8 @@ int	load_history(t_history *history, const char *filename)
 	fd = open_history_file(filename);
 	if (fd <= 0)
 		return (fd);
-
 	if (read_history_from_file(history, fd) == -1)
 		return (-1);
-
 	close(fd);
 	return (0);
 }

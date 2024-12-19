@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:12:43 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/10 17:42:59 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 14:50:47 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,6 @@ void	free_env_list(t_env *env_list)
 	}
 }
 
-/*
-NULL on failure: malloc fail - delimiter (=) not found - error from strndup and ft_strdup - mem alrady cleaned up on failure
-node on success
-*/
 static t_env	*create_env_node(const char *env_var)
 {
 	t_env	*node;
@@ -62,7 +58,8 @@ static t_env	*create_env_node(const char *env_var)
 -l on failure: if node creation failed
 0 on success
 */
-static int	add_env_node(t_env **env_list, t_env **last_node, const char *env_var)
+static int	add_env_node(t_env **env_list, t_env **last_node, \
+const char *env_var)
 {
 	t_env	*new_node;
 
@@ -108,13 +105,8 @@ int	add_env_to_data(t_data *data, char **envp)
 	return (0);
 }
 
-/*
--1 for failure: envp null - malloc fail - no cleanup necessary upon failure from the callin function
-0 for success: envp nodes created and char **envp added 
-*/
 int	get_env(t_data *data, char **envp)
 {
-
 	t_env	*env_list;
 	t_env	*last_node;
 	int		i;
