@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/19 21:18:20 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/19 21:22:00 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/12/19 15:58:17 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*ft_strndup(const char *s, size_t n)
 	size_t	len;
 
 	len = ft_strlen(s);
-	if(len > n)
+	if (len > n)
 		len = n;
 	str = malloc(len + 1);
 	if (!str)
