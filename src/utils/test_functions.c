@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/26 19:17:01 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/10 18:00:52 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 14:59:46 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 
 void print_command(t_command *command)
 {
-	int i = 0;
+	int	i = 0;
 
 	if (!command)
-		return;
+		return ;
 	if (command->command)
 	{
 		//printf("Arguments:\n");
@@ -41,10 +41,10 @@ void print_command(t_command *command)
 
 void print_command_list(t_cmdlist *commandlist)
 {
-	t_command *current;
+	t_command	*current;
 
 	if (!commandlist)
-		return;
+		return ;
 
 	printf("Number of commands: %zu\n", commandlist->num_commands);
 	current = commandlist->head;
@@ -58,8 +58,11 @@ void print_command_list(t_cmdlist *commandlist)
 
 void tokenlist_print(t_token *head)
 {
-	int i = 0;
-	t_token *current = head;
+	int		i;
+	t_token	*current;
+
+	i = 0;
+	current = head;
 	while (current != NULL)
 	{
 		printf("%d  - ", i);
@@ -71,11 +74,13 @@ void tokenlist_print(t_token *head)
 
 void print_envp(char **envp)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	if (!envp)
 	{
 		printf("envp is NULL\n");
-		return;
+		return ;
 	}
 	printf("envp contents:\n");
 	while (envp[i])
@@ -85,9 +90,9 @@ void print_envp(char **envp)
 	}
 }
 
-void print_env_list(t_env *env_list)
+void	print_env_list(t_env *env_list)
 {
-	t_env *current = env_list;
+	t_env	*current = env_list;
 	if (!env_list)
 	{
 		printf("env_list is NULL\n");
