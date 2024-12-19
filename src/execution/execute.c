@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                         ::::::::           */
-/*   execute.c                                           :+:    :+:           */
-/*                                                      +:+                   */
-/*   By: kziari <marvin@42.fr>                         +#+                    */
-/*                                                    +#+                     */
-/*   Created: 2024/12/11 13:17:40 by kziari         #+#    #+#                */
-/*   Updated: 2024/12/11 13:17:42 by kziari         ########   odam.nl        */
+/*                                                        ::::::::            */
+/*   execute.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: kziari <marvin@42.fr>                        +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/12/11 13:17:40 by kziari        #+#    #+#                 */
+/*   Updated: 2024/12/19 17:06:47 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,6 +221,11 @@ int	ft_execute(t_data *data)
 	int	number_pipe;
 
 	number_pipe = pipe_count(data->commands);
+	if (!data->commands->head->command)
+	{
+		data->exit_status = SUCCESS;
+		return (data->exit_status);
+	}
 	if (number_pipe == 0)
 	{
 		if (check_builtin(data->commands->head, data, number_pipe) == false)
