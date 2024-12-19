@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/19 21:10:39 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 13:37:25 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 13:37:42 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void	tokenlist_add(t_tokenlist *list, t_token *token)
 	}
 	list->token_count++;
 }
-
 
 /* Free the memory allocated for the token list and its tokens */
 void	tokenlist_free(t_tokenlist *list)

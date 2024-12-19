@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/30 16:36:12 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/10 23:09:54 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/12/19 12:57:19 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,16 @@
 #include "parser.h"
 #include "minishell.h"
 
-//NOTES
-// or int *g_exit_code? or volatile? or atomic ? or both
-// to save the exit status for ctl c instead of exiting child
-// readline lib is annoying on mac :( try linux
-
-
 int	g_exit_code;
 
 void	parent_sig_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		exit_code(ERROR_CTRL_C_);
+		g_exit_code = ERROR_CTRL_C_;
 		write(STDOUT_FILENO, "\n", 1);
-		//rl_on_new_line();
 		rl_on_new_line();
-		//rl_replace_line("", 0);
+		rl_replace_line("", 0);
 		rl_redisplay();
 	}
 }
@@ -40,9 +33,8 @@ void	heredoc_sig_handler(int sig)
 	if (sig == SIGINT)
 	{
 		write(STDOUT_FILENO, "\n", 1);
-		//rl_replace_line("", 0);
-		//rl_on_new_line();
-		rl_on_new_line(); // on mac
+		rl_replace_line("", 0);
+		rl_on_new_line();
 		exit(ERROR_CTRL_C_);
 	}
 }

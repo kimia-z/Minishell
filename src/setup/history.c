@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 13:19:36 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/10 17:43:35 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 13:33:22 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,6 @@
 #include "parser.h"
 #include "minishell.h"
 
-
-void	trim_newline(char *str)
-{
-	char	*newline;
-
-	newline = ft_strchr(str, '\n');
-	if (newline)
-		*newline = '\0';
-}
 
 /* save history from the linked list to a file */
 int	save_history(t_history *history, const char *filename)
@@ -94,41 +85,5 @@ int	add_history_node(t_history *history, const char *command)
 		free(old_node);
 		history->size--;
 	}
-	return (0);
-}
-
-/*
--1 on failure: open fails - get_next_line fails(?)
-0 on success: file created successfully or/and read from
-*/
-int	load_history(t_history *history, const char *filename)
-{
-	char	*line;
-	int		fd;
-
-	fd = open(filename, O_RDONLY);
-	if (fd == -1)
-	{
-		fd = open(filename, O_CREAT | O_WRONLY, 0644);
-		if (fd == -1)
-			return (-1);
-		close(fd);
-		return (0); 
-	}
-	while (1)
-	{
-		line = get_next_line(fd);
-		if (!line)
-			break ;
-		trim_newline(line);
-		if (add_history_node(history, line) == -1)
-		{
-			free(line);
-			close(fd);
-			return (-1);
-		}
-		free(line);
-	}
-	close(fd);
 	return (0);
 }

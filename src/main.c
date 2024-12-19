@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:09:38 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/10 17:43:49 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 12:52:25 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,6 @@
 #include "parser.h"
 #include "minishell.h"
 
-//TODO
-// add appropriate exit codes
-// malloc for t_history or not?? 
-
-void	exit_code(int code)
-{
-	g_exit_code = code;
-}
 
 /* 
 -1 for failure: envp doesnt exist - malloc error
@@ -30,7 +22,6 @@ void	exit_code(int code)
 int	init_minishell(t_data *data, char **envp)
 {
 	ft_bzero(data, sizeof(t_data));
-
 	if (get_env(data, envp) == -1)
 	{
 		write_stderr("Setting up envp failed");
@@ -60,10 +51,7 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		input = get_commandline(&data);
 		if (!input)
-		{
-			end_shell(&data); // also pass in the exit_code?
-			return (data.exit_status);
-		}
+			return (end_shell(&data), data.exit_status);
 		if (process_cmdline(&data, input) == -1)
 		{
 			free(input);

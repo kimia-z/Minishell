@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 16:42:09 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/10 18:01:33 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 14:34:58 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ t_cmdlist	*cmdlist_init()
 	ft_bzero(cmdlist, sizeof(t_cmdlist));
 	return (cmdlist);
 }
-
 
 void	free_command_resources(t_command *command, int command_count)
 {

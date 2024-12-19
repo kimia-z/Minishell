@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:58:32 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 17:30:47 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 13:36:51 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,6 @@ int			init_minishell(t_data *data,  char **envp);
 char		*get_prompt();
 char		*get_commandline(t_data *data);
 int			process_cmdline(t_data *data, char *input);
-void		exit_code(int code);
 
 /* Envp functions */
 int			get_env(t_data *data, char **envp);
@@ -154,7 +153,6 @@ int			load_history(t_history *history, const char *filename);
 int			add_history_node(t_history *history, const char *command);
 void		free_history(t_history *history);
 int			save_history(t_history *history, const char *filename);
-void		trim_newline(char *str);
 
 /* Parsing */
 t_tokenlist	*tokenizer(char **envp, char *input);

@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/19 21:07:57 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/05 22:11:20 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/12/19 14:21:58 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@
 enum e_token_type
 {
 	TOKEN_WORD,
-	TOKEN_OP_REDIRECTION_OUT, // >
-	TOKEN_OP_REDIRECTION_IN, // <
-	TOKEN_OP_REDIRECTION_APPEND, // >> 
+	TOKEN_OP_REDIRECTION_OUT,
+	TOKEN_OP_REDIRECTION_IN,
+	TOKEN_OP_REDIRECTION_APPEND,
 	TOKEN_OP_PIPE,
-	TOKEN_OP_HEREDOC, // <<
+	TOKEN_OP_HEREDOC,
 	TOKEN_SINGLE_QUOTES,
 	TOKEN_DOUBLE_QUOTES,
 	TOKEN_DOLLA,
@@ -79,6 +79,10 @@ int					lexer_main(t_lexer *lexer, t_tokenlist *tokenlist, char **envp);
 int					lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist, bool is_op, char **envp);
 void				lexer_skip_whitespace(t_lexer *lexer);
 char				*extract_quoted_string(t_lexer *lexer, char quote_char);
+bool				is_quotes(char c);
+bool				is_operator_token(char c);
+bool				is_word_token(char c);
+bool				is_quote_closed(t_lexer *lexer, char quote_char);
 
 /* Token functions */
 t_token		*token_create(enum e_token_type type, char *value);

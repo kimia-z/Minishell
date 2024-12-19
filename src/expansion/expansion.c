@@ -6,41 +6,13 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 17:17:33 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/10 23:55:27 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/12/19 14:33:26 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "parser.h"
 #include "minishell.h"
-
-char	*get_env_value(const char *var_name, char **envp)
-{
-	size_t len;
-	int		i;
-
-	i = 0;
-	len = ft_strlen(var_name);
-	while(envp[i])
-	{
-		if (ft_strncmp(envp[i], var_name, len) == 0 && envp[i][len] == '=')
-			return (ft_strdup(envp[i] + len + 1));
-		i++;
-		
-	}
-	return (ft_strdup(""));
-}
-
-char	*get_var_name(const char *var_start)
-{
-	const char	*var_end;
-
-	var_end = var_start + 1;
-	while (ft_isalnum(*var_end) || *var_end == '_')
-		var_end++;
-	return (ft_substr(var_start + 1, 0, var_end - var_start - 1));
-}
-
 
 char	*replace_variable(char *expanded, char *var_start, char *var_value)
 {
@@ -64,39 +36,53 @@ char	*replace_variable(char *expanded, char *var_start, char *var_value)
 	return (final_expanded);
 }
 
+static char	*skip_single_quotes(char *expanded, char *var_start)
+{
+    char	*single_quote_start;
+    char	*single_quote_end;
+
+    single_quote_start = ft_strchr(expanded, '\'');
+    if (single_quote_start && single_quote_start < var_start)
+    {
+        single_quote_end = ft_strchr(single_quote_start + 1, '\'');
+        if (single_quote_end && single_quote_end > var_start)
+        {
+            var_start = ft_strchr(single_quote_end + 1, '$');
+        }
+    }
+    return (var_start);
+}
+
+static char	*process_variable(char *expanded, char *var_start, char **envp)
+{
+    char	*var_name;
+    char	*var_value;
+
+    var_name = get_var_name(var_start);
+    var_value = get_env_value(var_name, envp);
+    free(var_name);
+    if (var_value)
+    {
+        expanded = replace_variable(expanded, var_start, var_value);
+        free(var_value);
+    }
+    return (expanded);
+}
 
 char	*expand_variables(const char *input, char **envp)
 {
-	char	*expanded;
-	char	*var_start;
-	char	*var_name;
-	char	*var_value;
-	char	*single_quote_start;
-	char	*single_quote_end;
+    char	*expanded;
+    char	*var_start;
 
-	expanded = ft_strdup(input);
-	var_start = ft_strchr(expanded, '$');
-	while (var_start)
-	{
-		single_quote_start = ft_strchr(expanded, '\'');
-		if (single_quote_start && single_quote_start < var_start)
-		{
-			single_quote_end = ft_strchr(single_quote_start + 1, '\'');
-			if (single_quote_end && single_quote_end > var_start)
-			{
-				var_start = ft_strchr(single_quote_end + 1, '$');
-				continue;
-			}
-		}
-		var_name = get_var_name(var_start);
-		var_value = get_env_value(var_name, envp);
-		free(var_name);
-		if (var_value)
-		{
-			expanded = replace_variable(expanded, var_start, var_value);
-			free(var_value);
-		}
-		var_start = ft_strchr(expanded, '$');
-	}
-	return (expanded);
+    expanded = ft_strdup(input);
+    var_start = ft_strchr(expanded, '$');
+    while (var_start)
+    {
+        var_start = skip_single_quotes(expanded, var_start);
+        if (!var_start)
+            break;
+        expanded = process_variable(expanded, var_start, envp);
+        var_start = ft_strchr(expanded, '$');
+    }
+    return (expanded);
 }

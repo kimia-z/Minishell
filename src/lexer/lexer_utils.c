@@ -6,20 +6,12 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/19 21:06:47 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 16:11:34 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 14:23:08 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-// NOTES:
-// when we do ctl d lexer inout becoems null
-
-
-/*
-Initialize lexer with the given input
-returns NULL for malloc failure
-*/
 t_lexer	*lexer_init(char *input)
 {
 	t_lexer	*lexer;
@@ -55,3 +47,7 @@ void	lexer_skip_whitespace(t_lexer *lexer)
 		lexer->position++;
 }
 
+bool	is_quote_closed(t_lexer *lexer, char quote_char)
+{
+	return (ft_strchr(lexer->input + lexer->position + 1, quote_char) != NULL);
+}

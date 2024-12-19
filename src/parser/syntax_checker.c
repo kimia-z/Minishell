@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 17:21:55 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/19 12:21:20 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 13:24:20 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static bool	is_invalid_position(size_t position, size_t token_count)
 
 static int	is_operator(enum e_token_type type)
 {
-	return (type == TOKEN_OP_PIPE || type == TOKEN_OP_REDIRECTION_OUT || type == TOKEN_OP_REDIRECTION_IN || type == TOKEN_OP_REDIRECTION_APPEND);
+	return (type == TOKEN_OP_PIPE);
 }
 
 static int	operator_checker(enum e_token_type type, size_t position, size_t token_count, enum e_token_type left_op)
@@ -29,7 +29,6 @@ static int	operator_checker(enum e_token_type type, size_t position, size_t toke
 	return (0);
 }
 
-/* preliminary synax checker - needs to be updated with all the cases */
 int	syntax_checker(t_tokenlist *tokenlist)
 {
 	t_token				*temp;

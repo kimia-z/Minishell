@@ -24,7 +24,10 @@ SRCS = src/expansion/expansion.c src/setup/history.c \
 		src/execution/builtins/unset.c src/execution/execute.c \
 		src/execution/extra_libft.c src/execution/pipe.c \
 		src/utils/free_functions.c src/execution/utils.c \
-		src/execution/builtins/export_utils.c src/execution/builtins/export_print.c
+		src/execution/builtins/export_utils.c \
+		src/execution/builtins/export_print.c \
+		src/setup/cmdline_2.c src/setup/history_2.c \
+		src/lexer/lexer_utils_2.c src/expansion/expansion_utils.c 
 
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 

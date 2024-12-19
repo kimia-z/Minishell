@@ -6,17 +6,13 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/26 18:52:18 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/19 12:29:33 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 12:46:49 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "parser.h"
 #include "minishell.h"
-
-// TODO
-// Implement realloc
-
 
 static char	*append_line_to_heredoc(char *heredoc_content, size_t \
 *heredoc_size, const char *line, ssize_t read)
@@ -47,7 +43,6 @@ static char	*read_heredoc_content(const char *delimiter)
 		free(heredoc_content);
 		return (NULL);
 	}
-	
 	while (1)
 	{
 		write(STDOUT_FILENO, "> ", 2);
@@ -65,9 +60,7 @@ static char	*read_heredoc_content(const char *delimiter)
 		heredoc_content = append_line_to_heredoc(heredoc_content, &heredoc_size, line, ft_strlen(line));
 		free(line);
 		if (!heredoc_content)
-		{
 			return (NULL);
-		}
 	}
 	return (heredoc_content);
 }
@@ -92,7 +85,6 @@ int	handle_heredoc(const char *delimiter)
 	}
 	write(temp_fd, heredoc_content, ft_strlen(heredoc_content));
 	free(heredoc_content);
-	//lseek(temp_fd, 0, SEEK_SET); //replace
 	close(temp_fd);
 	temp_fd = open(temp_filename, O_RDWR);
 	if (temp_fd == -1)

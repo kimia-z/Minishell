@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:00:24 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/05 22:03:02 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/12/19 14:20:12 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,11 @@ enum e_token_type	get_operator_type(char *value)
 		return (TOKEN_UNKNOWN);
 }
 
-void	*lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op, char **envp)
+static char	*collect_word(t_lexer *lexer)
 {
 	size_t	start;
 	size_t	len;
 	char	*word;
-	t_token	*token;
-	int		op_type;
-	char	*expanded_word;
-	char	*sign;
 
 	lexer_skip_whitespace(lexer);
 	start = lexer->position;
@@ -50,31 +46,57 @@ void	*lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op, ch
 		lexer->position++;
 	len = lexer->position - start;
 	word = ft_strndup(lexer->input + start, len);
-	if (!word)
-		return (NULL);
+	return (word);
+}
+
+static char	*expand_word(char *word, char **envp)
+{
+	char	*expanded_word;
+	char	*sign;
+
 	sign = ft_strchr(word, '$');
-    if (sign && ft_strncmp(sign + 1, "?", 1) != 0)
-    {
-        expanded_word = expand_variables(word, envp);
-        free(word);
-        word = expanded_word;
-    }
-	if (is_op == true)
+	if (sign && ft_strncmp(sign + 1, "?", 1) != 0)
+	{
+		expanded_word = expand_variables(word, envp);
+		free(word);
+		word = expanded_word;
+	}
+	return (word);
+}
+
+static t_token	*create_token(char *word, bool is_op)
+{
+	t_token	*token;
+	int	op_type;
+
+	if (is_op)
 	{
 		op_type = get_operator_type(word);
 		token = token_create(op_type, word);
-		if (!token)
-			return (free(word), NULL);
-		//printf("Collected operator token: %s, type: %d\n", word, op_type);
 	}
 	else
 	{
 		token = token_create(TOKEN_WORD, word);
-		if (!token)
-			return (free(word), NULL);
 	}
+	return (token);
+}
+
+void	*lexer_collect_token(t_lexer *lexer, t_tokenlist *tokenlist, bool is_op, char **envp)
+{
+	char	*word;
+	t_token	*token;
+
+	word = collect_word(lexer);
+	if (!word)
+		return (NULL);
+
+	word = expand_word(word, envp);
+	if (!word)
+		return (NULL);
+	token = create_token(word, is_op);
+	if (!token)
+		return (free(word), NULL);
 	tokenlist_add(tokenlist, token);
 	free(word);
 	return (token);
 }
-

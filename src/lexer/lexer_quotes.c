@@ -6,18 +6,13 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/12/05 22:03:33 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/10 18:26:28 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 14:34:30 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "parser.h"
 #include "minishell.h"
-
-static bool	is_quote_closed(t_lexer *lexer, char quote_char)
-{
-	return (ft_strchr(lexer->input + lexer->position + 1, quote_char) != NULL);
-}
 
 /* Calculates the length of the quoted section */
 static size_t	len_quotes(const char *value, char quote_char)
