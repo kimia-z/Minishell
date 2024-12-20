@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/19 21:07:57 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/19 16:56:14 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/20 12:09:28 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ bool				is_quotes(char c);
 bool				is_operator_token(char c);
 bool				is_word_token(char c);
 bool				is_quote_closed(t_lexer *lexer, char quote_char);
+char				*collect_word(t_lexer *lexer);
 
 /* Token functions */
 t_token				*token_create(enum e_token_type type, char *value);

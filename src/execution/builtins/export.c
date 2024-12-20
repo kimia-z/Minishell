@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kziari <kziari@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/09 13:18:32 by kziari            #+#    #+#             */
-/*   Updated: 2024/12/09 13:18:33 by kziari           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   export.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: kziari <kziari@42.fr>                        +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/12/09 13:18:32 by kziari        #+#    #+#                 */
+/*   Updated: 2024/12/20 11:50:06 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ static void	export_with_arg(t_command *cmds, t_data *data, int i)
 			if (export_helper(data, cmds, &i) == -1)
 				return (error_export("failed in memory", data));
 		}
+		else
+			return ;
 	}
 	data->exit_status = SUCCESS;
 }

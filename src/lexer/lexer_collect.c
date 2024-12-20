@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:00:24 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/19 14:44:32 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/20 12:09:04 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ enum e_token_type	get_operator_type(char *value)
 		return (TOKEN_UNKNOWN);
 }
 
-static char	*collect_word(t_lexer *lexer)
+char	*collect_word(t_lexer *lexer)
 {
 	size_t	start;
 	size_t	len;
