@@ -61,7 +61,9 @@ bool	add_node(t_env *env, char *key, char *value, bool is_with_sign);
 bool	print_export(t_data *data, int outfile);
 
 /* Utils */
-void	status_handler(t_data *data, t_exe *exec);
+bool	check_builtin(t_command *commands, t_data *data, int nb_pipes);
+void	cleanup_helper(t_data *data, char *error_msg, int exit_code);
+void	status_handler(t_data *data, int status);
 void	wait_helper(t_exe *exec);
 
 /* Pipe functions */

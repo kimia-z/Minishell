@@ -132,7 +132,7 @@ int	pipeline(t_data *data, int nb_pipes)
 	}
 	close (exec.read);
 	waitpid(exec.pid, &exec.status, 0);
-	status_handler(data, &exec);
+	status_handler(data, exec.status);
 	wait_helper(&exec);
 	return (data->exit_status);
 }
