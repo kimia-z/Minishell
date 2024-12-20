@@ -29,7 +29,7 @@ SRCS = src/expansion/expansion.c src/setup/history.c \
 		src/setup/cmdline_2.c src/setup/history_2.c \
 		src/lexer/lexer_utils_2.c src/expansion/expansion_utils.c \
 		src/parser/parse_redirection.c src/parser/parse_command.c \
-		src/execution/one_cmd.c
+		src/execution/one_cmd.c src/setup/space_putter.c
 
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 

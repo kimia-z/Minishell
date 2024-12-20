@@ -34,7 +34,8 @@ void	lexer_free(t_lexer *lexer)
 {
 	if (!lexer)
 		return ;
-	free(lexer->input);
+	if (lexer->input)
+		free(lexer->input);
 	free(lexer);
 }
 

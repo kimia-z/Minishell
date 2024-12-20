@@ -100,6 +100,7 @@ int			init_minishell(t_data *data, char **envp);
 char		*get_prompt(void);
 char		*get_commandline(t_data *data);
 int			process_cmdline(t_data *data, char *input);
+char		*space_putter(t_data *data, char *input);
 
 /* Envp functions */
 int			get_env(t_data *data, char **envp);

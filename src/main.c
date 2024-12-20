@@ -14,7 +14,6 @@
 #include "parser.h"
 #include "minishell.h"
 
-
 /* 
 -1 for failure: envp doesnt exist - malloc error
 0 for success: envp added - t_env created - hstory file opened
@@ -35,7 +34,6 @@ int	init_minishell(t_data *data, char **envp)
 	return (SUCCESS);
 }
 
-
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
@@ -54,10 +52,12 @@ int	main(int argc, char **argv, char **envp)
 			return (end_shell(&data), data.exit_status);
 		if (process_cmdline(&data, input) == -1)
 		{
-			free(input);
-			continue;
+			if (input)
+				free(input);
+			continue ;
 		}
-		free(input);
+		if (input)
+			free(input);
 	}
 	end_shell(&data);
 	return (data.exit_status);

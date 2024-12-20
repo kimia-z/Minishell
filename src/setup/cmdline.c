@@ -75,6 +75,7 @@ static int	handle_history(t_data *data, char *input)
 char	*get_commandline(t_data *data)
 {
 	char	*input;
+	char	*new_input;
 
 	while (1)
 	{
@@ -88,7 +89,15 @@ char	*get_commandline(t_data *data)
 		}
 		if (handle_history(data, input) == -1)
 			return (NULL);
+		new_input = space_putter(data, input);
+		if (input)
+			free(input);
+		if (!new_input)
+		{
+			data->exit_status = ERROR_GENERIC;
+			return (write_stderr("failed to putting space"), NULL);
+		}
 		break ;
 	}
-	return (input);
+	return (new_input);
 }
