@@ -1,7 +1,7 @@
 NAME := minishell
 CC := cc
-CFLAGS := -Wall -Werror
-LDFLAG := -lreadline -lncurses -g
+CFLAGS := -Wall -Werror -Wextra
+LDFLAG := -lreadline -lncurses
 INCLUDES := -I./include -I./lib/libft/include
 LIBFT := lib/libft/libft.a
 
@@ -16,7 +16,7 @@ SRCS = src/expansion/expansion.c src/setup/history.c \
 		src/parser/parse_utils.c src/parser/parser_main.c \
 		src/parser/syntax_checker.c src/execution/find_path.c \
 		src/setup/cmdline.c src/setup/env_var.c src/setup/signals.c \
-		src/utils/error_handling.c src/utils/test_functions.c \
+		src/utils/error_handling.c \
 		src/main.c src/setup/prompt.c src/parser/heredoc.c \
 		src/execution/builtins/cd.c src/execution/builtins/echo.c \
 		src/execution/builtins/env.c src/execution/builtins/exit.c \
@@ -29,7 +29,9 @@ SRCS = src/expansion/expansion.c src/setup/history.c \
 		src/setup/cmdline_2.c src/setup/history_2.c \
 		src/lexer/lexer_utils_2.c src/expansion/expansion_utils.c \
 		src/parser/parse_redirection.c src/parser/parse_command.c \
-		src/execution/one_cmd.c src/setup/space_putter.c
+		src/execution/one_cmd.c src/setup/space_putter.c \
+		src/setup/trim_quotes_tokens.c src/parser/parse_command_utils.c \
+		src/execution/builtins/echo_utils.c
 
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
@@ -55,9 +57,4 @@ fclean: clean
 
 re: fclean all
 
-memcheck:
-	valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
-
 .PHONY: $(LIBFT) all clean fclean re
-
-#-g -fsanitize=address

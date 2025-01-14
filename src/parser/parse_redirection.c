@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/12/19 16:05:38 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/19 16:18:03 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/23 13:14:51 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ t_token **current_token)
 	*current_token = (*current_token)->next;
 	if (*current_token && is_command((*current_token)->type))
 	{
-		command->redirect_append = ft_strdup((*current_token)->value);
-		command->outfile_fd = open(command->redirect_append, O_WRONLY | \
+		command->redirect_out = ft_strdup((*current_token)->value);
+		command->outfile_fd = open(command->redirect_out, O_WRONLY | \
 		O_CREAT | O_APPEND, 0644);
 		if (command->outfile_fd == -1)
-			return (-1);
+			perror("open failed");
 	}
 	return (0);
 }
@@ -38,7 +38,7 @@ static int	handle_redirection_out(t_command *command, t_token **current_token)
 		command->outfile_fd = open(command->redirect_out, O_WRONLY | O_CREAT \
 		| O_TRUNC, 0644);
 		if (command->outfile_fd == -1)
-			return (-1);
+			perror("open failed");
 	}
 	return (0);
 }
@@ -51,7 +51,7 @@ static int	handle_redirection_in(t_command *command, t_token **current_token)
 		command->redirect_in = ft_strdup((*current_token)->value);
 		command->infile_fd = open(command->redirect_in, O_RDONLY);
 		if (command->infile_fd == -1)
-			return (-1);
+			perror("open failed");
 	}
 	return (0);
 }

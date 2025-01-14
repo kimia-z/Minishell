@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/30 17:49:42 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/19 16:35:33 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/23 13:15:55 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ t_command *current_command, t_command **last_command)
 	*last_command = current_command;
 }
 
-static int	parse_command_list(t_cmdlist *cmdlist, t_token **current_token)
+int	parse_command_list(t_cmdlist *cmdlist, t_token **current_token, \
+						t_data *data)
 {
 	t_command	*last_command;
 	t_command	*current_command;
@@ -33,7 +34,7 @@ static int	parse_command_list(t_cmdlist *cmdlist, t_token **current_token)
 	last_command = NULL;
 	while (*current_token != NULL)
 	{
-		current_command = parse_command(current_token);
+		current_command = parse_command(current_token, data);
 		if (!current_command)
 		{
 			free_command_list(cmdlist);
@@ -46,7 +47,7 @@ static int	parse_command_list(t_cmdlist *cmdlist, t_token **current_token)
 	return (0);
 }
 
-t_cmdlist	*parser_main(t_tokenlist *tokenlist)
+t_cmdlist	*parser_main(t_tokenlist *tokenlist, t_data *data)
 {
 	t_cmdlist	*cmdlist;
 	t_token		*current_token;
@@ -55,7 +56,7 @@ t_cmdlist	*parser_main(t_tokenlist *tokenlist)
 	cmdlist = cmdlist_init();
 	if (!cmdlist)
 		return (NULL);
-	if (parse_command_list(cmdlist, &current_token) == -1)
+	if (parse_command_list(cmdlist, &current_token, data) == -1)
 		return (NULL);
 	return (cmdlist);
 }

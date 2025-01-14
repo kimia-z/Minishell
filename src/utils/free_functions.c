@@ -61,8 +61,6 @@ void	free_command(t_command *command)
 		free(command->redirect_in);
 	if (command->redirect_out != NULL)
 		free(command->redirect_out);
-	if (command->redirect_append != NULL)
-		free(command->redirect_append);
 	if (command->path != NULL)
 		free(command->path);
 	free(command);

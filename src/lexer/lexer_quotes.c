@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/12/05 22:03:33 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/20 12:39:02 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/23 13:10:45 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,21 @@ char **envp)
 	if (quote_char == '"')
 	{
 		expanded_value = expand_variables(token_value, envp);
-		free(token_value);
-		return (expanded_value);
+		if (expanded_value == NULL)
+		{
+			return (token_value);
+		}
+		else
+		{
+			free(token_value);
+			return (expanded_value);
+		}
 	}
 	return (token_value);
 }
 
-static int	create_and_add_token(t_tokenlist *tokenlist, char *token_value)
+int	create_and_add_token(t_tokenlist *tokenlist, char *token_value, \
+						char quote_char)
 {
 	t_token	*token;
 
@@ -63,13 +71,13 @@ static int	create_and_add_token(t_tokenlist *tokenlist, char *token_value)
 		free(token_value);
 		return (-1);
 	}
+	token->is_single_quotes = (quote_char == '\'');
 	tokenlist_add(tokenlist, token);
 	free(token_value);
 	return (0);
 }
 
-int	lexer_collect_quotes(t_lexer *lexer, char *value, t_tokenlist *tokenlist, \
-bool is_op, char **envp)
+int	lexer_collect_quotes(t_lexer *lexer, t_tokenlist *tokenlist, char **envp)
 {
 	char	*token_value;
 	char	quote_char;
@@ -79,7 +87,7 @@ bool is_op, char **envp)
 	if (!token_value)
 		return (-1);
 	token_value = expand_if_double_quotes(token_value, quote_char, envp);
-	if (create_and_add_token(tokenlist, token_value) == -1)
+	if (create_and_add_token(tokenlist, token_value, quote_char) == -1)
 		return (-1);
 	if (lexer->input[lexer->position] == '\'' || \
 	lexer->input[lexer->position] == '"')

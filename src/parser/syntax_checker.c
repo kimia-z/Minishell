@@ -6,11 +6,12 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 17:21:55 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/19 16:00:31 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/23 13:16:22 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "minishell.h"
 
 static bool	is_invalid_position(size_t position, size_t token_count)
 {
@@ -46,11 +47,7 @@ int	syntax_checker(t_tokenlist *tokenlist)
 		{
 			if (operator_checker(temp->type, i, \
 			tokenlist->token_count, left_op) == 1)
-				return (-1);
-		}
-		if (temp->type == TOKEN_UNKNOWN)
-		{
-			return (-1);
+				return (perror("syntax"), -1);
 		}
 		i++;
 		left_op = temp->type;

@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 17:17:33 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/19 14:38:47 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/23 13:10:13 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*replace_variable(char *expanded, char *var_start, char *var_value)
 	return (final_expanded);
 }
 
-static char	*skip_single_quotes(char *expanded, char *var_start)
+char	*skip_single_quotes(char *expanded, char *var_start)
 {
 	char	*single_quote_start;
 	char	*single_quote_end;
@@ -82,6 +82,11 @@ char	*expand_variables(const char *input, char **envp)
 		var_start = skip_single_quotes(expanded, var_start);
 		if (!var_start)
 			break ;
+		if (!ft_isalnum(*(var_start + 1)) && *(var_start + 1) != '_')
+		{
+			var_start = ft_strchr(var_start + 1, '$');
+			continue ;
+		}
 		expanded = process_variable(expanded, var_start, envp);
 		var_start = ft_strchr(expanded, '$');
 	}

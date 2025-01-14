@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kziari <kziari@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/09 11:18:27 by kziari            #+#    #+#             */
-/*   Updated: 2024/12/09 11:18:29 by kziari           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   exit.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: kziari <kziari@42.fr>                        +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/12/09 11:18:27 by kziari        #+#    #+#                 */
+/*   Updated: 2024/12/23 13:09:22 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void	exit_helper(t_data *data, char *cmd)
 static long long	ft_atoll(const char *str)
 {
 	long long	n;
-	int			is_negative;
+	bool		is_negative;
 
 	n = 0;
 	is_negative = false;
@@ -52,7 +52,8 @@ static long long	ft_atoll(const char *str)
 		str++;
 	if (*str == '+' || *str == '-')
 	{
-		is_negative = (*str == '-');
+		if (*str == '-')
+			is_negative = true;
 		str++;
 	}
 	while (*str && ft_isdigit(*str))
@@ -72,6 +73,8 @@ static bool	is_num(char *str)
 	i = 0;
 	while (str[i])
 	{
+		if (str[i] == '+' || str[i] == '-')
+			i++;
 		if (!(str[i] >= '0' && str[i] <= '9'))
 			return (false);
 		i++;

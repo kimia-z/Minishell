@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                         ::::::::           */
-/*   space_putter.c                                      :+:    :+:           */
-/*                                                      +:+                   */
-/*   By: kziari <marvin@42.fr>                         +#+                    */
-/*                                                    +#+                     */
-/*   Created: 2024/12/20 11:28:34 by kziari         #+#    #+#                */
-/*   Updated: 2024/12/20 11:28:35 by kziari         ########   odam.nl        */
+/*                                                        ::::::::            */
+/*   space_putter.c                                     :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: kziari <marvin@42.fr>                        +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/12/20 11:28:34 by kziari        #+#    #+#                 */
+/*   Updated: 2024/12/23 14:31:11 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static void	the_inserter(char *input, char *new_input, int *i, int *j)
 	return ;
 }
 
-char	*space_putter(t_data *data, char *input)
+char	*space_putter(char *input)
 {
 	char	*new_input;
 	int		i;

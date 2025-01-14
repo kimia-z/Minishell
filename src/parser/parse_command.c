@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/12/19 16:30:00 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/19 16:38:39 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/23 14:19:12 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,54 +14,7 @@
 #include "lexer.h"
 #include "minishell.h"
 
-static int	handle_first_arg(t_command *command, t_token *current_token)
-{
-	command->command = malloc(2 * sizeof(char *));
-	if (!command->command)
-		return (-1);
-	command->command[0] = ft_strdup(current_token->value);
-	if (!command->command[0])
-		return (free(command->command), -1);
-	command->command[1] = NULL;
-	return (0);
-}
-
-static int	handle_subsequent_args(t_command *command, \
-t_token *current_token, int command_count)
-{
-	char	**new_command;
-
-	new_command = ft_realloc(command->command, \
-	(command_count + 1) * sizeof(char *), (command_count + 2) * sizeof(char *));
-	if (!new_command)
-		return (-1);
-	command->command = new_command;
-	command->command[command_count] = ft_strdup(current_token->value);
-	if (!command->command[command_count])
-		return (-1);
-	command->command[command_count + 1] = NULL;
-	return (0);
-}
-
-static int	handle_command_args(t_command *command, \
-t_token **current_token, int *command_count)
-{
-	if (*command_count == 0)
-	{
-		if (handle_first_arg(command, *current_token) == -1)
-			return (-1);
-	}
-	else
-	{
-		if (handle_subsequent_args(command, *current_token, \
-		*command_count) == -1)
-			return (-1);
-	}
-	(*command_count)++;
-	return (0);
-}
-
-static int	handle_redirections(t_command *command, \
+int	handle_redirections(t_command *command, \
 t_token **current_token)
 {
 	if (is_redirection((*current_token)->type))
@@ -72,7 +25,51 @@ t_token **current_token)
 	return (0);
 }
 
-t_command	*parse_command(t_token **current_token)
+void	initialize_command(t_command *command)
+{
+	int	i;
+
+	i = 0;
+	ft_bzero(command, sizeof(t_command));
+	command->infile_fd = -2;
+	command->outfile_fd = -2;
+	command->is_quotes = malloc(sizeof(bool) * MAX_CMD_ARGS);
+	while (i < MAX_CMD_ARGS)
+		command->is_quotes[i++] = false;
+}
+
+int	process_command_args(t_command *command, t_token **current_token, \
+						int *command_count, t_data *data)
+{
+	if (handle_command_args(command, current_token, command_count) == -1)
+	{
+		data->exit_status = ERROR_GENERIC;
+		return (-1);
+	}
+	command->is_quotes[*command_count - 1] = (*current_token)->is_single_quotes;
+	return (0);
+}
+
+int	process_tokens(t_command *command, t_token **current_token, \
+					int *command_count, t_data *data)
+{
+	while (*current_token && (*current_token)->type != TOKEN_OP_PIPE)
+	{
+		if (is_command((*current_token)->type) || (*current_token)->type \
+			== TOKEN_UNKNOWN)
+		{
+			if (process_command_args(command, current_token,
+					command_count, data) == -1)
+				return (-1);
+		}
+		if (handle_redirections(command, current_token) == -1)
+			return (-1);
+		*current_token = (*current_token)->next;
+	}
+	return (0);
+}
+
+t_command	*parse_command(t_token **current_token, t_data *data)
 {
 	t_command	*command;
 	int			command_count;
@@ -81,20 +78,8 @@ t_command	*parse_command(t_token **current_token)
 	command = malloc(sizeof(t_command));
 	if (!command)
 		return (NULL);
-	ft_bzero(command, sizeof(t_command));
-	command->infile_fd = -2;
-	command->outfile_fd = -2;
-	while (*current_token && (*current_token)->type != TOKEN_OP_PIPE)
-	{
-		if (is_command((*current_token)->type))
-		{
-			if (handle_command_args(command, current_token, \
-			&command_count) == -1)
-				return (free_command_resources(command, command_count), NULL);
-		}
-		if (handle_redirections(command, current_token) == -1)
-			return (free_command_resources(command, command_count), NULL);
-		*current_token = (*current_token)->next;
-	}
+	initialize_command(command);
+	if (process_tokens(command, current_token, &command_count, data) == -1)
+		return (free_command_resources(command, command_count), (NULL));
 	return (command);
 }

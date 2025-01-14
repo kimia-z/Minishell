@@ -6,7 +6,7 @@
 /*   By: kziari <marvin@42.fr>                        +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/12/11 13:17:40 by kziari        #+#    #+#                 */
-/*   Updated: 2024/12/19 17:06:47 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/23 13:08:05 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	path_helper(t_data *data)
 	{
 		ft_putstr_fd(data->commands->head->command[0], 2);
 		ft_putendl_fd(": command not found", 2);
-		data->exit_status = ERROR_GENERIC;
+		data->exit_status = ERROR_CMD_NOT_FOUND;
 		return (-1);
 	}
 	return (0);

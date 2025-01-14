@@ -1,16 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   exit_minishell.c                                   :+:    :+:            */
+/*   ft_strncpy.c                                       :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
+/*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2024/10/29 11:05:22 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/10 17:56:16 by ykarimi       ########   odam.nl         */
+/*   Created: 2024/12/23 13:45:08 by ykarimi       #+#    #+#                 */
+/*   Updated: 2024/12/23 13:47:00 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
-#include "parser.h"
-#include "minishell.h"
+#include "libft.h"
 
+char	*ft_strcpy(char *dest, const char *src)
+{
+	char	*original_dest;
+
+	original_dest = dest;
+	while (*src)
+	{
+		*dest++ = *src++;
+	}
+	*dest = '\0';
+	return (original_dest);
+}

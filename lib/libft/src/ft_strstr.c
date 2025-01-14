@@ -1,38 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_realloc.c                                       :+:    :+:            */
+/*   ft_strstr.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2024/11/26 14:46:50 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/11/26 18:44:16 by ykarimi       ########   odam.nl         */
+/*   Created: 2024/12/23 13:52:31 by ykarimi       #+#    #+#                 */
+/*   Updated: 2024/12/23 14:09:10 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
+char	*ft_strstr(const char *haystack, const char *needle)
 {
-	void	*new_ptr;
-	size_t	min_size;
+	const char	*h;
+	const char	*h_sub;
+	const char	*n;
 
-	if (new_size == 0)
+	if (!*needle)
 	{
-		free(ptr);
-		return (NULL);
+		return ((char *)haystack);
 	}
-	new_ptr = malloc(new_size);
-	if (!new_ptr)
-		return (NULL);
-	if (ptr != NULL)
+	h = haystack;
+	while (*h)
 	{
-		if (old_size < new_size)
-			min_size = old_size;
-		else
-			min_size = new_size;
-		ft_memcpy(new_ptr, ptr, min_size);
-		free(ptr);
+		h_sub = h;
+		n = needle;
+		while (*h_sub && *n && *h_sub == *n)
+		{
+			h_sub++;
+			n++;
+		}
+		if (!*n)
+		{
+			return ((char *)h);
+		}
+		h++;
 	}
-	return (new_ptr);
+	return (NULL);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                         ::::::::           */
-/*   one_cmd.c                                           :+:    :+:           */
-/*                                                      +:+                   */
-/*   By: kziari <marvin@42.fr>                         +#+                    */
-/*                                                    +#+                     */
-/*   Created: 2024/12/19 17:23:13 by kziari         #+#    #+#                */
-/*   Updated: 2024/12/19 17:23:14 by kziari         ########   odam.nl        */
+/*                                                        ::::::::            */
+/*   one_cmd.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: kziari <marvin@42.fr>                        +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/12/19 17:23:13 by kziari        #+#    #+#                 */
+/*   Updated: 2024/12/23 14:25:43 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,18 @@
 static void	close_helper(int *pipefd, char *redirect_in)
 {
 	close(pipefd[0]);
-	write(pipefd[1], redirect_in, strlen(redirect_in));
+	write(pipefd[1], redirect_in, ft_strlen(redirect_in));
 	close(pipefd[1]);
+}
+
+static void	handle_fd(int src_fd, int dest_fd, t_data *data, char *error_msg)
+{
+	if (src_fd >= 0)
+	{
+		if (dup2(src_fd, dest_fd) == -1)
+			cleanup_helper(data, error_msg, EXIT_FAILURE);
+		close(src_fd);
+	}
 }
 
 static void	one_cmd_child(t_data *data, t_command *commands, int *pipefd)
@@ -25,26 +35,16 @@ static void	one_cmd_child(t_data *data, t_command *commands, int *pipefd)
 		cleanup_helper(data, "signal failed", EXIT_FAILURE);
 	if (commands->infile_fd == -1 || commands->outfile_fd == -1)
 		cleanup_helper(data, "Permission denied opening file", EXIT_FAILURE);
-	if (commands->infile_fd >= 0)
-	{
-		if (dup2(commands->infile_fd, STDIN_FILENO) == -1)
-			cleanup_helper(data, "dup2 failed", EXIT_FAILURE);
-	}
-	if (commands->outfile_fd >= 0)
-	{
-		if (dup2(commands->outfile_fd, STDOUT_FILENO) == -1)
-			cleanup_helper(data, "dup2 failed", EXIT_FAILURE);
-	}
-	if (commands->redirect_in)
+	handle_fd(commands->infile_fd, STDIN_FILENO, data, "dup2 failed");
+	if (commands->infile_fd < 0 && pipefd != NULL && pipefd[0] >= 0)
 	{
 		close(pipefd[1]);
-		dup2(pipefd[0], STDIN_FILENO);
-		close(pipefd[0]);
+		handle_fd(pipefd[0], STDIN_FILENO, data, "dup2 failed for pipe");
 	}
+	handle_fd(commands->outfile_fd, STDOUT_FILENO, data, "dup2 failed");
 	if (commands->path != NULL)
 		execve(commands->path, commands->command, data->envp);
-	else if (commands->path == NULL)
-		cleanup_helper(data, "command not found", ERROR_CMD_NOT_FOUND);
+	cleanup_helper(data, "command not found", ERROR_CMD_NOT_FOUND);
 }
 
 int	execute_one_cmd(t_data *data, t_command *commands)
@@ -53,11 +53,8 @@ int	execute_one_cmd(t_data *data, t_command *commands)
 	int	status;
 	int	pipefd[2];
 
-	if (commands->redirect_in)
-	{
-		if (pipe(pipefd) == -1)
-			return (write_stderr("failed in pipe"), ERROR_GENERIC);
-	}
+	if (pipe(pipefd) == -1)
+		return (write_stderr("failed in pipe"), ERROR_GENERIC);
 	pid = fork();
 	if (pid == -1)
 		return (write_stderr("failed in fork"), ERROR_GENERIC);

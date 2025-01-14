@@ -6,17 +6,20 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 16:47:59 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/19 16:48:42 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/23 14:04:37 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
+# include "minishell.h"
 # include "lexer.h"
+# define MAX_CMD_ARGS 1024
 
 /************************************************************/
 /*  Structs */
+typedef struct s_data	t_data;
 
 typedef struct s_command
 {
@@ -24,9 +27,9 @@ typedef struct s_command
 	char				*path;
 	char				*redirect_in;
 	char				*redirect_out;
-	char				*redirect_append;
 	int					infile_fd;
 	int					outfile_fd;
+	bool				*is_quotes;
 	struct s_command	*next;
 }						t_command;
 
@@ -41,11 +44,21 @@ typedef struct s_cmdlist
 int				syntax_checker(t_tokenlist *tokenlist);
 
 /* Parser Functions */
-t_cmdlist		*parser_main(t_tokenlist *tokenlist);
-t_command		*parse_command(t_token **current_token);
-int				parse_redirection(t_command *command, t_token **current_token);
+t_cmdlist		*parser_main(t_tokenlist *tokenlist, t_data *data);
+t_command		*parse_command(t_token **current_token, t_data *data);
+int				parse_redirection(t_command *command, \
+								t_token **current_token);
 t_cmdlist		*cmdlist_init(void);
-
+int				parse_command_list(t_cmdlist *cmdlist, \
+				t_token **current_token, t_data *data);
+int				handle_first_arg(t_command *command, \
+								t_token *current_token);
+int				handle_subsequent_args(t_command *command, t_token \
+				*current_token, int command_count);
+int				handle_command_args(t_command *command, t_token \
+									**current_token, int *command_count);
+int				handle_redirections(t_command *command, \
+									t_token **current_token);
 /* Command Path */
 char			*find_path(char *commandname);
 

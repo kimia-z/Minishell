@@ -6,17 +6,18 @@
 /*   By: kziari <kziari@42.fr>                        +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/12/09 11:10:16 by kziari        #+#    #+#                 */
-/*   Updated: 2024/12/10 18:57:20 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/23 14:24:38 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+#include <string.h>
 
 /* This function will check if the ECHO is called
 	with -n options 
 	example: echo -n hi
-			 echo -nnnnnn hi
-			 echo -n -n -n hi
+			echo -nnnnnn hi
+			echo -n -n -n hi
 */
 // doesnt handle special characters (\t for example)
 // doesnt handle invalid fd
@@ -83,10 +84,22 @@ static bool	check_newline(t_command *commands, int *pos, int count, bool nline)
 
 static void	print_echo(t_data *data, t_command *commands, int outfile, int *pos)
 {
-	if (ft_strncmp(commands->command[*pos], "$?", 2) == 0)
-		ft_putnbr_fd(data->exit_status, outfile);
+	char	*arg;
+	char	*exit_code_str;
+	char	*result;
+
+	arg = commands->command[*pos];
+	if (commands->is_quotes[*pos])
+		ft_putstr_fd(arg, outfile);
 	else
-		ft_putstr_fd(commands->command[*pos], outfile);
+	{
+		exit_code_str = ft_itoa(data->exit_status);
+		result = ft_strdup(arg);
+		handle_exit_code(&result, exit_code_str, arg);
+		ft_putstr_fd(result, outfile);
+		free(result);
+		free(exit_code_str);
+	}
 	if (commands->command[++(*pos)])
 		ft_putchar_fd(' ', outfile);
 }

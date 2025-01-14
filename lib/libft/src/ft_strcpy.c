@@ -1,38 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_realloc.c                                       :+:    :+:            */
+/*   ft_strcpy.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2024/11/26 14:46:50 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/11/26 18:44:16 by ykarimi       ########   odam.nl         */
+/*   Created: 2024/12/23 13:43:29 by ykarimi       #+#    #+#                 */
+/*   Updated: 2024/12/23 13:44:56 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
+char	*ft_strncpy(char *dest, const char *src, size_t n)
 {
-	void	*new_ptr;
-	size_t	min_size;
+	size_t	i;
 
-	if (new_size == 0)
+	i = 0;
+	while (i < n && src[i] != '\0')
 	{
-		free(ptr);
-		return (NULL);
+		dest[i] = src[i];
+		i++;
 	}
-	new_ptr = malloc(new_size);
-	if (!new_ptr)
-		return (NULL);
-	if (ptr != NULL)
+	while (i < n)
 	{
-		if (old_size < new_size)
-			min_size = old_size;
-		else
-			min_size = new_size;
-		ft_memcpy(new_ptr, ptr, min_size);
-		free(ptr);
+		dest[i] = '\0';
+		i++;
 	}
-	return (new_ptr);
+	return (dest);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   export_utils.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kziari <kziari@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/12 19:14:26 by kziari            #+#    #+#             */
-/*   Updated: 2024/12/12 19:14:28 by kziari           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   export_utils.c                                     :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: kziari <kziari@42.fr>                        +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/12/12 19:14:26 by kziari        #+#    #+#                 */
+/*   Updated: 2024/12/20 20:36:50 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,20 @@ void	f_env_list(t_env **env_list)
 
 bool	is_valid(t_data *data, char **current_cmd, int i)
 {
-	if (ft_isalpha(current_cmd[i][0]) == 0)
+	int	j;
+
+	j = 0;
+	while (current_cmd[i][j] && (current_cmd[i][j] != '=' || j == 0))
 	{
-		ft_putstr_fd("export: ", STDERR_FILENO);
-		ft_putstr_fd(current_cmd[i], STDERR_FILENO);
-		ft_putendl_fd(" : not a valid identifier", STDERR_FILENO);
-		data->exit_status = ERROR_GENERIC;
-		return (false);
+		if (ft_isalpha(current_cmd[i][j]) == 0)
+		{
+			ft_putstr_fd("export: ", STDERR_FILENO);
+			ft_putstr_fd(current_cmd[i], STDERR_FILENO);
+			ft_putendl_fd(" : not a valid identifier", STDERR_FILENO);
+			data->exit_status = ERROR_GENERIC;
+			return (false);
+		}
+		j++;
 	}
 	return (true);
 }

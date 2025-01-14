@@ -1,38 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_realloc.c                                       :+:    :+:            */
+/*   echo_utils.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2024/11/26 14:46:50 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/11/26 18:44:16 by ykarimi       ########   odam.nl         */
+/*   Created: 2024/12/23 14:13:48 by ykarimi       #+#    #+#                 */
+/*   Updated: 2024/12/23 14:24:50 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "execution.h"
 
-void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
+void	handle_exit_code(char **result, char *exit_code_str, char *arg)
 {
-	void	*new_ptr;
-	size_t	min_size;
+	char	*temp;
+	size_t	len;
 
-	if (new_size == 0)
+	temp = ft_strstr(*result, "$?");
+	while (temp != NULL)
 	{
-		free(ptr);
-		return (NULL);
+		len = temp - *result;
+		temp = ft_strjoin(ft_substr(*result, 0, len), exit_code_str);
+		free(*result);
+		*result = ft_strjoin(temp, arg + len + 2);
+		free(temp);
+		temp = ft_strstr(*result, "$?");
 	}
-	new_ptr = malloc(new_size);
-	if (!new_ptr)
-		return (NULL);
-	if (ptr != NULL)
-	{
-		if (old_size < new_size)
-			min_size = old_size;
-		else
-			min_size = new_size;
-		ft_memcpy(new_ptr, ptr, min_size);
-		free(ptr);
-	}
-	return (new_ptr);
 }

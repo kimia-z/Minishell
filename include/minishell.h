@@ -6,13 +6,14 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:58:32 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/19 16:53:02 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/23 14:31:33 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+// # include "libft"
 # include "lexer.h"
 # include "parser.h"
 # include <sys/wait.h>
@@ -49,10 +50,7 @@
 #  define HISTORY_MAX 100
 # endif
 
-extern int	g_exit_code;
-
-/************************************************************/
-/*  Structs */
+typedef struct s_cmdlist	t_cmdlist;
 
 typedef enum e_sig
 {
@@ -61,27 +59,27 @@ typedef enum e_sig
 	HERE_DOC,
 	IGNORE,
 	MINISHELL
-}		t_sig;
+}							t_sig;
 
 typedef struct s_historynode
 {
 	char					*command;
 	struct s_historynode	*next;
-}				t_historynode;
+}							t_historynode;
 
 typedef struct s_history
 {
 	t_historynode	*head;
 	t_historynode	*tail;
 	int				size;
-}			t_history;
+}							t_history;
 
 typedef struct s_env
 {
 	char			*key;
 	char			*value;
 	struct s_env	*next;
-}			t_env;
+}							t_env;
 
 typedef struct s_data
 {
@@ -91,7 +89,7 @@ typedef struct s_data
 	char			**envp;
 	int				signal;
 	int				exit_status;
-}					t_data;
+}							t_data;
 
 /************************************************************/
 /* Setup functions */
@@ -100,7 +98,11 @@ int			init_minishell(t_data *data, char **envp);
 char		*get_prompt(void);
 char		*get_commandline(t_data *data);
 int			process_cmdline(t_data *data, char *input);
-char		*space_putter(t_data *data, char *input);
+char		*space_putter(char *input);
+t_tokenlist	*tokenize_input(t_data *data, char *input);
+void		trim_quotes_from_tokenlist(t_tokenlist *tokenlist);
+void		trim_quotes_from_token(char **value);
+void		process_quotes(char **value, char *quote_start, char *quote_end);
 
 /* Envp functions */
 int			get_env(t_data *data, char **envp);
@@ -127,11 +129,5 @@ void		free_nullify(void **thing);
 void		cleanup_memory_alloc(t_data *data);
 void		write_stderr(char *errmsg);
 void		end_shell(t_data *data);
-
-/* Utils */
-void		print_envp(char **envp);
-void		print_env_list(t_env *env_list);
-void		print_command(t_command *command);
-void		print_command_list(t_cmdlist *commandlist);
 
 #endif

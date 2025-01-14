@@ -6,7 +6,7 @@
 #    By: yasamankarimi <yasamankarimi@student.co      +#+                      #
 #                                                    +#+                       #
 #    Created: 2024/01/05 16:29:24 by yasamankari   #+#    #+#                  #
-#    Updated: 2024/12/19 13:35:18 by ykarimi       ########   odam.nl          #
+#    Updated: 2024/12/23 13:53:38 by ykarimi       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,8 @@ SRCS :=	ft_toupper.c ft_tolower.c ft_substr.c ft_strtrim.c \
 		ft_lstdelone_bonus.c ft_lstclear_bonus.c \
 		ft_lstiter_bonus.c ft_lstmap_bonus.c \
 		get_next_line.c get_next_line_utils.c \
-		ft_strndup.c ft_realloc.c
+		ft_strndup.c ft_realloc.c ft_strncpy.c \
+		ft_strcpy.c ft_strstr.c
 
 OBJECTS := $(addprefix $(BUILD_DIR)/,$(SRCS:.c=.o))
 

@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:33:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/19 13:06:15 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/23 14:32:03 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,20 @@
 #include "parser.h"
 #include "minishell.h"
 #include "execution.h"
+
+t_tokenlist	*tokenize_input(t_data *data, char *input)
+{
+	t_tokenlist	*tokenlist;
+
+	tokenlist = tokenizer(data->envp, input);
+	if (!tokenlist)
+	{
+		data->exit_status = ERROR_GENERIC;
+		write_stderr("No such file or directory");
+		return (NULL);
+	}
+	return (tokenlist);
+}
 
 static int	no_input(char *str)
 {
@@ -89,9 +103,8 @@ char	*get_commandline(t_data *data)
 		}
 		if (handle_history(data, input) == -1)
 			return (NULL);
-		new_input = space_putter(data, input);
-		if (input)
-			free(input);
+		new_input = space_putter(input);
+		free(input);
 		if (!new_input)
 		{
 			data->exit_status = ERROR_GENERIC;

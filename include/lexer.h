@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/19 21:07:57 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/12/20 12:09:28 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/23 13:00:32 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <readline/history.h>
 # include <fcntl.h>
 # include <sys/wait.h>
+
 /***********************************************************************/
 /* Structs */
 
@@ -47,6 +48,7 @@ typedef struct s_token
 	enum e_token_type	type;
 	char				*value;
 	size_t				size;
+	bool				is_single_quotes;
 	struct s_token		*next;
 }				t_token;
 
@@ -77,8 +79,8 @@ void				*lexer_collect_token(t_lexer *lexer, t_tokenlist \
 					*tokenlist, bool is_op, char **envp);
 int					lexer_main(t_lexer *lexer, t_tokenlist \
 					*tokenlist, char **envp);
-int					lexer_collect_quotes(t_lexer *lexer, char *value, \
-					t_tokenlist *tokenlist, bool is_op, char **envp);
+int					lexer_collect_quotes(t_lexer *lexer, t_tokenlist *tokenlist \
+									, char **envp);
 void				lexer_skip_whitespace(t_lexer *lexer);
 char				*extract_quoted_string(t_lexer *lexer, char quote_char);
 bool				is_quotes(char c);
@@ -86,6 +88,9 @@ bool				is_operator_token(char c);
 bool				is_word_token(char c);
 bool				is_quote_closed(t_lexer *lexer, char quote_char);
 char				*collect_word(t_lexer *lexer);
+char				*skip_single_quotes(char *expanded, char *var_start);
+int					create_and_add_token(t_tokenlist *tokenlist, \
+					char *token_value, char quote_char);
 
 /* Token functions */
 t_token				*token_create(enum e_token_type type, char *value);
@@ -95,12 +100,12 @@ void				token_free(t_token *token);
 t_tokenlist			*tokenlist_init(void);
 void				tokenlist_free(t_tokenlist *list);
 void				tokenlist_add(t_tokenlist *list, t_token *token);
-void				tokenlist_print(t_token *head);
+//void				tokenlist_print(t_token *head);
 
 /* Expansion fucntions */
 char				*expand_variables(const char *input, char **envp);
-char				*replace_variable(char *expanded, char *var_start, \
-					char *var_value);
+char				*replace_variable(char *expanded, char *var_start,
+						char *var_value);
 char				*get_var_name(const char *var_start);
 char				*get_env_value(const char *var_name, char **envp);
 

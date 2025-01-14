@@ -6,7 +6,7 @@
 /*   By: kziari <kziari@42.fr>                        +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/12/09 13:18:32 by kziari        #+#    #+#                 */
-/*   Updated: 2024/12/20 11:50:06 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/23 14:28:14 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int	search_node(t_env *env, char *key, char *value, bool is_with_sign)
 	return (0);
 }
 
-static bool	k_with_v(t_data *data, t_env *env, char *cmd, char *temp)
+static bool	k_with_v(t_env *env, char *cmd, char *temp)
 {
 	char	*key;
 	char	*value;
@@ -79,7 +79,7 @@ static int	export_helper(t_data *data, t_command *cmds, int *i)
 	if (ft_strchr(cmds->command[*i], '=') != NULL)
 	{
 		temp = cmds->command[*i];
-		if (k_with_v(data, data->env, cmds->command[*i], temp) == false)
+		if (k_with_v(data->env, cmds->command[*i], temp) == false)
 			return (-1);
 	}
 	else

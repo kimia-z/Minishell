@@ -6,7 +6,7 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/12/19 13:04:10 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/12/19 16:14:31 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/23 14:08:46 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,8 @@ t_tokenlist	*tokenizer(char **envp, char *input)
 		tokenlist_free(tokenlist);
 		return (lexer_free(lexer), NULL);
 	}
+	trim_quotes_from_tokenlist(tokenlist);
 	lexer_free(lexer);
-	return (tokenlist);
-}
-
-static t_tokenlist	*tokenize_input(t_data *data, char *input)
-{
-	t_tokenlist	*tokenlist;
-
-	tokenlist = tokenizer(data->envp, input);
-	if (!tokenlist)
-	{
-		data->exit_status = ERROR_GENERIC;
-		write_stderr("Lexer failed");
-		return (NULL);
-	}
 	return (tokenlist);
 }
 
@@ -57,8 +44,7 @@ static int	check_syntax(t_data *data, t_tokenlist *tokenlist)
 {
 	if (syntax_checker(tokenlist) == -1)
 	{
-		data->exit_status = ERROR_GENERIC;
-		write_stderr("Not found");
+		data->exit_status = ERROR_CMD_NOT_FOUND;
 		tokenlist_free(tokenlist);
 		return (-1);
 	}
@@ -69,13 +55,12 @@ static t_cmdlist	*parse_tokens(t_data *data, t_tokenlist *tokenlist)
 {
 	t_cmdlist	*commandlist;
 
-	commandlist = parser_main(tokenlist);
+	commandlist = parser_main(tokenlist, data);
 	tokenlist_free(tokenlist);
 	if (!commandlist)
 	{
 		data->exit_status = ERROR_GENERIC;
-		write_stderr("Parser failed");
-		return (NULL);
+		write_stderr("No such file or directory");
 	}
 	return (commandlist);
 }

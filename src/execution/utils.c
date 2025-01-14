@@ -1,32 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kziari <kziari@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/12 14:12:36 by kziari            #+#    #+#             */
-/*   Updated: 2024/12/12 14:12:37 by kziari           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   utils.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: kziari <kziari@42.fr>                        +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/12/12 14:12:36 by kziari        #+#    #+#                 */
+/*   Updated: 2024/12/23 14:29:15 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-static t_builtin	get_builtin_command(const char *cmd)
+t_builtin	get_builtin_command(const char *cmd)
 {
-	if (!strcmp(cmd, "echo"))
+	if (!ft_strcmp(cmd, "echo"))
 		return (ECH);
-	if (!strcmp(cmd, "cd"))
+	if (!ft_strcmp(cmd, "cd"))
 		return (CD);
-	if (!strcmp(cmd, "pwd"))
+	if (!ft_strcmp(cmd, "pwd"))
 		return (PWD);
-	if (!strcmp(cmd, "env"))
+	if (!ft_strcmp(cmd, "env"))
 		return (ENV);
-	if (!strcmp(cmd, "export"))
+	if (!ft_strcmp(cmd, "export"))
 		return (EXPORT);
-	if (!strcmp(cmd, "unset"))
+	if (!ft_strcmp(cmd, "unset"))
 		return (UNSET);
-	if (!strcmp(cmd, "exit"))
+	if (!ft_strcmp(cmd, "exit"))
 		return (EXIT);
 	return (UNKNOWN);
 }
