@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/11/19 21:25:13 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/19 21:33:43 by yasamankari   ########   odam.nl         */
+/*   Updated: 2024/12/19 14:47:53 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_token	*token_create(enum e_token_type type, char *value)
 void	token_free(t_token *token)
 {
 	if (!token)
-		return;
+		return ;
 	free(token->value);
 	free(token);
 }

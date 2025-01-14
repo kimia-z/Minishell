@@ -6,72 +6,27 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:33:05 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 18:38:17 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/23 14:32:03 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "parser.h"
 #include "minishell.h"
+#include "execution.h"
 
-/*
-NULL for failure: lexer failure - tokenlist failure
-(doesnt need data)
-envp for heredoc ?
-*/
-t_tokenlist	*tokenizer(char **envp, char *input)
+t_tokenlist	*tokenize_input(t_data *data, char *input)
 {
-	t_lexer		*lexer;
-	t_tokenlist	*tokenlist;
-
-	lexer = lexer_init(input);
-	if (!lexer)
-		return (write_stderr("Lexer initialization failed"), NULL);
-	tokenlist = tokenlist_init();
-	if (!tokenlist)
-	{
-		lexer_free(lexer);
-		return (write_stderr("Tokenlist initialization failed"), NULL);
-	}
-	if (lexer_main(lexer, tokenlist) == -1)
-	{
-		write_stderr("Lexer failed");
-		tokenlist_free(tokenlist);
-		return (lexer_free(lexer), NULL);
-	}
-	lexer_free(lexer);
-	return (tokenlist);
-}
-
-
-/*
--l on failure - tokenizer fails 
-*/
-int	process_cmdline(t_data *data, char *input)
-{
-	//int	status; //to track exit code
-	t_cmdlist	*commandlist;
 	t_tokenlist	*tokenlist;
 
 	tokenlist = tokenizer(data->envp, input);
 	if (!tokenlist)
-		return (-1);
-	if (syntax_checker(tokenlist) == -1)
-		return (tokenlist_free(tokenlist), -1);
-	commandlist = NULL;
-	commandlist = parser(tokenlist);
-	tokenlist_free(tokenlist);
-	if (!commandlist)
 	{
-		write_stderr("Parser failed miserably.");
-		return (-1);
-	}	
-	//status = ft_execute(data, commandlist);
-
-	print_command_list(commandlist);
-	free_command_list(commandlist);
-	return (0); // status
-	
+		data->exit_status = ERROR_GENERIC;
+		write_stderr("No such file or directory");
+		return (NULL);
+	}
+	return (tokenlist);
 }
 
 static int	no_input(char *str)
@@ -90,37 +45,72 @@ static int	no_input(char *str)
 	return (-1);
 }
 
-/*
-NULL on failure: unable to read from commandline - saving/adding to history fails - prompt failed
-*/
+static char	*retrieve_input(t_data *data)
+{
+	char	*prompt;
+	char	*input;
+
+	prompt = get_prompt();
+	if (!prompt)
+	{
+		data->exit_status = ERROR_GENERIC;
+		write_stderr("failed to get prompt");
+		return (NULL);
+	}
+	input = readline(prompt);
+	free(prompt);
+	if (!input)
+	{
+		data->exit_status = SUCCESS;
+		return (NULL);
+	}
+	return (input);
+}
+
+static int	handle_history(t_data *data, char *input)
+{
+	add_history(input);
+	if (add_history_node(&data->history, input) == -1)
+	{
+		free(input);
+		data->exit_status = ERROR_GENERIC;
+		write_stderr("Adding commands to history failed");
+		return (-1);
+	}
+	if (save_history(&data->history, HISTORY_FILE) == -1)
+	{
+		data->exit_status = ERROR_GENERIC;
+		free(input);
+		return (-1);
+	}
+	return (0);
+}
+
 char	*get_commandline(t_data *data)
 {
 	char	*input;
-	char	*prompt;
+	char	*new_input;
 
 	while (1)
 	{
-		prompt = get_prompt();
-		if (!prompt)
-			return (write_stderr("failed to get prompt"), NULL);
-		input = readline(prompt);
-		free(prompt);
+		input = retrieve_input(data);
 		if (!input)
 			return (NULL);
 		if (no_input(input))
 		{
 			free(input);
-			continue;
+			continue ;
 		}
-		add_history(input);
-		if (add_history_node(&data->history, input) == -1)
+		if (handle_history(data, input) == -1)
+			return (NULL);
+		new_input = space_putter(input);
+		free(input);
+		if (!new_input)
 		{
-			free(input);
-			return (write_stderr("Adding commands to history failed"), NULL);
+			data->exit_status = ERROR_GENERIC;
+			return (write_stderr("failed to putting space"), NULL);
 		}
 		break ;
 	}
-	if (save_history(&data->history, HISTORY_FILE) == -1)
-		return (free(input), NULL);
-	return (input);
+	return (new_input);
 }

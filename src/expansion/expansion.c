@@ -6,70 +6,89 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 17:17:33 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/10/18 17:49:49 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/23 13:10:13 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "lexer.h"
 #include "parser.h"
 #include "minishell.h"
 
-int get_env_len(char *arg)
+char	*replace_variable(char *expanded, char *var_start, char *var_value)
 {
-    char    *env_var;
-    int     i;
-    i = 0;
-    // ignore the $ sign
-    env_var = ft_strchr(arg, '$') + 1;
-    while ((env_var[i] >= 'A' && env_var[i] <= 'Z') || (env_var[i] >= 'a' && env_var[i] <= 'z')
-        || (env_var[i] >= '0' && env_var[i] <= '9' && i != 0) || env_var[i] == '_')
-    {
-        i++;
-    }
-    if (i == 0 && (env_var[i] == '?' || env_var[i] == '$'))
-    {
-        i = 1;
-    }
-    return (i);
+	char	*before_var;
+	char	*after_var;
+	char	*new_expanded;
+	char	*final_expanded;
+	size_t	var_name_len;
+
+	var_name_len = 0;
+	while (ft_isalnum(var_start[var_name_len + 1]) || \
+	var_start[var_name_len + 1] == '_')
+		var_name_len++;
+	before_var = ft_substr(expanded, 0, var_start - expanded);
+	after_var = ft_strdup(var_start + var_name_len + 1);
+	new_expanded = ft_strjoin(before_var, var_value);
+	final_expanded = ft_strjoin(new_expanded, after_var);
+	free(before_var);
+	free(after_var);
+	free(new_expanded);
+	free(expanded);
+	return (final_expanded);
 }
-//exp: echo $USER | echo hello -> 23 -- echo kziari | echo hello -> 24
-char    *expand_env_var(char *arg)
+
+char	*skip_single_quotes(char *expanded, char *var_start)
 {
-    int     len;
-    char    *var_name;
-    char    *env_var;
-    char    *expand_str;
-    // length of the variable
-    len = get_env_len(arg);
-    if (len == 0)
-    {
-        //could not find $
-    }
-    var_name = malloc(len + 1);
-    if (!var_name)
-    {
-        // error
-    }
-    ft_strlcpy(var_name, ft_strchr(arg, '$') + 1, len + 1);
-    // var_name = "USER\n" -> 4
-    env_var = getenv(var_name);
-    // env_var = "kziari" -> 6
-    if (!env_var)
-    {
-        //could not find in env_var
-    }
-    expand_str = malloc(ft_strlen(env_var) + ft_strlen(arg) - (ft_strlen(var_name) + 1));
-    if (!expand_str)
-    {
-        //failed
-    }
-    ft_strlcpy(expand_str, arg, ft_strchr(arg, '$') - arg + 1);
-    // expand_str = echo
-    ft_strlcpy(expand_str + (ft_strchr(arg, '$') - arg), env_var, ft_strlen(env_var) + 1);
-    // expand_str = echo kziari
-    ft_strlcpy(expand_str + (ft_strchr(arg, '$') - arg) + ft_strlen(env_var), (ft_strchr(arg, '$') + ft_strlen(var_name) + 1), ft_strlen(ft_strchr(arg, '$') + ft_strlen(var_name)) + 1);
-    // expand_str = echo kziari | echo hello
-    free (arg);
-    return (expand_str);
+	char	*single_quote_start;
+	char	*single_quote_end;
+
+	single_quote_start = ft_strchr(expanded, '\'');
+	if (single_quote_start && single_quote_start < var_start)
+	{
+		single_quote_end = ft_strchr(single_quote_start + 1, '\'');
+		if (single_quote_end && single_quote_end > var_start)
+		{
+			var_start = ft_strchr(single_quote_end + 1, '$');
+		}
+	}
+	return (var_start);
+}
+
+static char	*process_variable(char *expanded, char *var_start, char **envp)
+{
+	char	*var_name;
+	char	*var_value;
+
+	var_name = get_var_name(var_start);
+	var_value = get_env_value(var_name, envp);
+	free(var_name);
+	if (var_value)
+	{
+		expanded = replace_variable(expanded, var_start, var_value);
+		free(var_value);
+	}
+	return (expanded);
+}
+
+char	*expand_variables(const char *input, char **envp)
+{
+	char	*expanded;
+	char	*var_start;
+
+	expanded = ft_strdup(input);
+	var_start = ft_strchr(expanded, '$');
+	while (var_start)
+	{
+		var_start = skip_single_quotes(expanded, var_start);
+		if (!var_start)
+			break ;
+		if (!ft_isalnum(*(var_start + 1)) && *(var_start + 1) != '_')
+		{
+			var_start = ft_strchr(var_start + 1, '$');
+			continue ;
+		}
+		expanded = process_variable(expanded, var_start, envp);
+		var_start = ft_strchr(expanded, '$');
+	}
+	return (expanded);
 }

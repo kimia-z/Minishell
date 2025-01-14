@@ -6,11 +6,12 @@
 /*   By: ykarimi <ykarimi@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/12 17:21:55 by ykarimi       #+#    #+#                 */
-/*   Updated: 2024/11/26 13:31:49 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/23 13:16:22 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "minishell.h"
 
 static bool	is_invalid_position(size_t position, size_t token_count)
 {
@@ -19,17 +20,18 @@ static bool	is_invalid_position(size_t position, size_t token_count)
 
 static int	is_operator(enum e_token_type type)
 {
-	return (type == TOKEN_OP_PIPE || type == TOKEN_OP_REDIRECTION_OUT || type == TOKEN_OP_REDIRECTION_IN || type == TOKEN_OP_REDIRECTION_APPEND);
+	return (type == TOKEN_OP_PIPE);
 }
 
-static int	operator_checker(enum e_token_type type, size_t position, size_t token_count, enum e_token_type left_op)
+static int	operator_checker(enum e_token_type type, size_t position, size_t \
+token_count, enum e_token_type left_op)
 {
-	if (is_operator(type) && (is_invalid_position(position, token_count) || is_operator(left_op)))
+	if (is_operator(type) && (is_invalid_position(position, token_count) \
+	|| is_operator(left_op)))
 		return (1);
 	return (0);
 }
 
-/* preliminary synax checker - needs to be updated with all the cases */
 int	syntax_checker(t_tokenlist *tokenlist)
 {
 	t_token				*temp;
@@ -43,12 +45,9 @@ int	syntax_checker(t_tokenlist *tokenlist)
 	{
 		if (is_operator(temp->type))
 		{
-			if (operator_checker(temp->type, i, tokenlist->token_count, left_op) == 1)
-				return (-1);
-		}
-		else if (temp->type == TOKEN_UNKNOWN)
-		{
-			return (-1);
+			if (operator_checker(temp->type, i, \
+			tokenlist->token_count, left_op) == 1)
+				return (perror("syntax"), -1);
 		}
 		i++;
 		left_op = temp->type;

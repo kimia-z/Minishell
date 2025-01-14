@@ -6,7 +6,7 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 15:54:56 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 17:50:13 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 16:11:39 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 #include "parser.h"
 #include "minishell.h"
 
-// Function to get the PATH directories
-static char	**path_variable()
+static char	**path_variable(void)
 {
 	char	**directories;
 	char	*path;
@@ -23,13 +22,11 @@ static char	**path_variable()
 	path = getenv("PATH");
 	if (path == NULL)
 	{
-		//perror("Error extracting the PATH variable");
 		return (NULL);
 	}
 	directories = ft_split(path, ':');
 	if (directories == NULL)
 	{
-		//perror("Error getting the PATH directories from ft_split");
 		return (NULL);
 	}
 	return (directories);
@@ -58,30 +55,21 @@ static char	*construct_command(char *commandname)
 		len = ft_strlen(path_v[i]) + ft_strlen(commandname) + 2;
 		command_path = malloc(len * sizeof(char));
 		if (!command_path)
-		{
-			free_2d((void ***)&path_v);
-			return (NULL);
-		}
+			return (free_2d((void ***)&path_v), NULL);
 		ft_strlcpy(command_path, path_v[i], len);
 		ft_strlcat(command_path, "/", len);
 		ft_strlcat(command_path, commandname, len);
 		if (is_command_legit(command_path))
-			break;
-	    // if (is_command_legit(command_path))
-        // {
-        //     free_2d((void ***)&path_v);
-        //     return (command_path);
-        // }
+			break ;
 		free(command_path);
 		command_path = NULL;
 		i++;
 	}
-	free_2d((void ***)&path_v);
-	return (command_path);
+	return (free_2d((void ***)&path_v), command_path);
 }
 
 /* returns command's full path */
-char	*find_command_path(char *commandname)
+char	*find_path(char *commandname)
 {
 	char	*command_path;
 
@@ -91,10 +79,9 @@ char	*find_command_path(char *commandname)
 		return (NULL);
 	}
 	if (commandname[0] == '/' && is_command_legit(commandname))
-	    return (ft_strdup(commandname));
+		return (ft_strdup(commandname));
 	if (ft_strncmp(commandname, "./", 2) == 0)
-	    return (ft_strdup(commandname));
-	
+		return (ft_strdup(commandname));
 	command_path = construct_command(commandname);
 	if (command_path == NULL)
 		return (NULL);

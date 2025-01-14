@@ -6,18 +6,13 @@
 /*   By: yasamankarimi <yasamankarimi@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/29 11:12:43 by yasamankari   #+#    #+#                 */
-/*   Updated: 2024/11/26 16:00:19 by ykarimi       ########   odam.nl         */
+/*   Updated: 2024/12/19 14:50:47 by ykarimi       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "parser.h"
 #include "minishell.h"
-
-// TODO:
-// probably need a function to make a copy of it for builtins - verify
-// implement proper error handling - DONE
-// check for leaks
 
 void	free_env_list(t_env *env_list)
 {
@@ -27,17 +22,12 @@ void	free_env_list(t_env *env_list)
 	{
 		temp = env_list;
 		env_list = env_list->next;
-		//printf("Freeing key: %s, value: %s\n", temp->key, temp->value); // Debug statement
 		free(temp->key);
 		free(temp->value);
 		free(temp);
 	}
 }
 
-/*
-NULL on failure: malloc fail - delimiter (=) not found - error from strndup and ft_strdup - mem alrady cleaned up on failure
-node on success
-*/
 static t_env	*create_env_node(const char *env_var)
 {
 	t_env	*node;
@@ -61,8 +51,6 @@ static t_env	*create_env_node(const char *env_var)
 		return (free(node), NULL);
 	}
 	node->next = NULL;
-	// if (!node->key || !node->value)
-	// 	return (NULL);
 	return (node);
 }
 
@@ -70,13 +58,14 @@ static t_env	*create_env_node(const char *env_var)
 -l on failure: if node creation failed
 0 on success
 */
-static int	add_env_node(t_env **env_list, t_env **last_node, const char *env_var)
+static int	add_env_node(t_env **env_list, t_env **last_node, \
+const char *env_var)
 {
 	t_env	*new_node;
 
 	new_node = create_env_node(env_var);
 	if (!new_node)
-		return (-1); //cleanup for data->envp
+		return (-1);
 	if (!*env_list)
 		*env_list = new_node;
 	else
@@ -112,17 +101,12 @@ int	add_env_to_data(t_data *data, char **envp)
 		}
 		i++;
 	}
-	data->envp[env_count] = NULL; // delete?
+	data->envp[env_count] = NULL;
 	return (0);
 }
 
-/*
--1 for failure: envp null - malloc fail - no cleanup necessary upon failure from the callin function
-0 for success: envp nodes created and char **envp added 
-*/
 int	get_env(t_data *data, char **envp)
 {
-
 	t_env	*env_list;
 	t_env	*last_node;
 	int		i;
@@ -131,14 +115,13 @@ int	get_env(t_data *data, char **envp)
 	last_node = NULL;
 	i = 0;
 	if (!envp || add_env_to_data(data, envp) == -1)
-		return (write_stderr("No envp was provided"), -1); // no cleanup
+		return (-1);
 	while (envp[i])
 	{
 		if (add_env_node(&env_list, &last_node, envp[i]) == -1)
 		{
-			//free_env_list(env_list); //alrady cleaned up in function
 			free_2d((void ***)&data->envp);
-			return (write_stderr("Failure to make envp nodes"), -1);
+			return (-1);
 		}
 		i++;
 	}
